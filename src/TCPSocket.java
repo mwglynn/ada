@@ -1,4 +1,5 @@
-public abstract interface TCPSocket {
-    abstract void WriteToSocket(String msg);
-    abstract void Close();
+public interface TCPSocket {
+    void WriteToSocket(String msg);
+    String ReadFromSocket();
+    void Close();
 }

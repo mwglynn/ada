@@ -1,7 +1,7 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
 
-public class TCPMessageSender {
+class TCPMessageSender {
 
     private ConcurrentLinkedQueue<String> outgoingMessages;
     private volatile boolean shouldProcessSendQueue;
@@ -9,7 +9,7 @@ public class TCPMessageSender {
     private Thread sendingThread;
 
 
-    public TCPMessageSender(TCPSocket socket) {
+    TCPMessageSender(TCPSocket socket) {
         outgoingMessages = new ConcurrentLinkedQueue<String>();
         shouldProcessSendQueue = true;
         clientSocket = socket;
@@ -17,7 +17,7 @@ public class TCPMessageSender {
         sendingThread.start();
     }
 
-    public void SendMessage(String msg) {
+    void SendMessage(String msg) {
         if (shouldProcessSendQueue) {
             outgoingMessages.add(msg);
         }
