@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 
 public class AdaMain {
 
@@ -5,6 +7,7 @@ public class AdaMain {
         TCPSocketClient client = new TCPSocketClient("localhost", 6259);
         TCPMessageSender sender = new TCPMessageSender(client);
         TCPMessageReader reader = new TCPMessageReader(client);
+
         sender.SendMessage("Test");
 
         String s = null;
