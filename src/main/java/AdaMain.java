@@ -1,12 +1,17 @@
-import java.util.Scanner;
-
-
 public class AdaMain {
 
     public static void main(String[] args) {
-        TCPSocketClient client = new TCPSocketClient("localhost", 6259);
-        TCPMessageSender sender = new TCPMessageSender(client);
-        TCPMessageReader reader = new TCPMessageReader(client);
+        TCPHost host = new TCPHost(6259);
+
+        Thread hostThread = new Thread(() -> {
+            while (host.Tick());
+            host.Close();
+        });
+        hostThread.start();
+
+        NetworkSocketClient client = new NetworkSocketClient("localhost", 6259);
+        NetworkSender sender = new NetworkSender(client);
+        NetworkReader reader = new NetworkReader(client);
 
         sender.SendMessage("Test");
 
@@ -14,9 +19,14 @@ public class AdaMain {
         while (s == null) {
             s = reader.ReadMessage();
         }
-        System.out.println(s);
+        sender.SendMessage("\\q");
         sender.Close();
         reader.Close();
         client.Close();
+        try {
+            hostThread.join();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 }

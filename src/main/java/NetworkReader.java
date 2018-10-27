@@ -1,17 +1,16 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
-import java.util.function.Function;
 
-public class TCPMessageReader {
+public class NetworkReader {
 
     private ConcurrentLinkedQueue<String> incomingMessages;
     private volatile boolean shouldProcessReceiveQueue;
-    private TCPSocket clientSocket;
+    private NetworkSocket clientSocket;
     private Thread receivingThread;
 
 
-    TCPMessageReader(TCPSocket socket) {
-        incomingMessages = new ConcurrentLinkedQueue<String>();
+    NetworkReader(NetworkSocket socket) {
+        incomingMessages = new ConcurrentLinkedQueue<>();
         shouldProcessReceiveQueue = true;
         clientSocket = socket;
         receivingThread = new Thread(this::ReadAvailable);

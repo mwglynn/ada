@@ -1,16 +1,16 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
 
-class TCPMessageSender {
+class NetworkSender {
 
     private ConcurrentLinkedQueue<String> outgoingMessages;
     private volatile boolean shouldProcessSendQueue;
-    private TCPSocket clientSocket;
+    private NetworkSocket clientSocket;
     private Thread sendingThread;
 
 
-    TCPMessageSender(TCPSocket socket) {
-        outgoingMessages = new ConcurrentLinkedQueue<String>();
+    NetworkSender(NetworkSocket socket) {
+        outgoingMessages = new ConcurrentLinkedQueue<>();
         shouldProcessSendQueue = true;
         clientSocket = socket;
         sendingThread = new Thread(this::SendAvailable);
@@ -32,7 +32,7 @@ class TCPMessageSender {
     }
 
     /* Closest thing to a destructor in Java */
-    public void Close() {
+    void Close() {
         shouldProcessSendQueue = false;
         try {
             sendingThread.join();

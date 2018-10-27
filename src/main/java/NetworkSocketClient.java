@@ -4,13 +4,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 
-public class TCPSocketClient implements TCPSocket {
+public class NetworkSocketClient implements NetworkSocket {
 
     private Socket clientSocket;
     private DataOutputStream clientOutputStream;
     private BufferedReader clientInputStream;
 
-    TCPSocketClient(String ip, int port) {
+    NetworkSocketClient(Socket socket) {
+        try {
+            clientSocket = socket;
+            clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+            clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    NetworkSocketClient(String ip, int port) {
         try {
             clientSocket = new Socket(ip, port);
             clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
