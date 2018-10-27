@@ -35,6 +35,7 @@ class TCPHost {
         while (shouldListen) {
             Socket newConnection = null;
             try {
+                /* This line blocks until a client connects */
                 newConnection = serverSocket.accept();
 
                 System.out.println("Server got connection");
