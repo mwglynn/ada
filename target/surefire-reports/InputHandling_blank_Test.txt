@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: EmptyTest
+Test set: InputHandling_blank_Test
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.03 s - in EmptyTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 s - in InputHandling_blank_Test

@@ -12,6 +12,7 @@ This is a first-phase MVP of the chat-app! The app sets up a simple client and s
 ### Software Engineering Principles 
 [![Build Status](https://travis-ci.org/LooseScruz/ada.svg?branch=master)](https://travis-ci.org/LooseScruz/ada)
 
+
 ```$xslt
 Version Control:            Github
 Build Tool:                 Maven 

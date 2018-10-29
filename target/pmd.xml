@@ -2,7 +2,7 @@
 <pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.8.0" timestamp="2018-10-29T09:40:48.456">
+    version="6.8.0" timestamp="2018-10-29T10:27:37.818">
 <file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/AdaMain.java">
 <violation beginline="15" endline="15" begincolumn="32" endcolumn="32" rule="EmptyWhileStmt" ruleset="Error Prone" class="AdaMain" method="main" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#emptywhilestmt" priority="3">
 Avoid empty while statements

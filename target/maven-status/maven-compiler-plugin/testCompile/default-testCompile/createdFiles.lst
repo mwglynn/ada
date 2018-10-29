@@ -1,2 +1,5 @@
-EmptyTest.class
+InputHandling_emoji_Test.class
+InputHandling_longMessage_Test.class
 TimeoutTest.class
+EmptyTest.class
+InputHandling_blank_Test.class

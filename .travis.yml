@@ -3,4 +3,4 @@ language: java
 sudo: false
 
 script:
-- mvn clean checkstyle:checkstyle pmd:pmd validate compile verify
+- mvn clean validate compile verify

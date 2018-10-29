@@ -1,7 +1,7 @@
 import org.junit.Test;
 
 
-public class InputHandlingTest {
+public class InputHandling_emoji_Test {
 
     @Test
     public void nullTest() {
