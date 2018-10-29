@@ -1,13 +1,19 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
 
+/**
+ * main sending functionality.
+ */
 class NetworkSender {
 
+    /**
+     * An unbounded thread-safe queue based on linked nodes.
+     * This queue orders elements FIFO (first-in-first-out).
+     */
     private ConcurrentLinkedQueue<String> outgoingMessages;
     private volatile boolean shouldProcessSendQueue;
     private NetworkSocket clientSocket;
     private Thread sendingThread;
-
 
     NetworkSender(NetworkSocket socket) {
         outgoingMessages = new ConcurrentLinkedQueue<>();
@@ -31,7 +37,9 @@ class NetworkSender {
         }
     }
 
-    /* Closest thing to a destructor in Java */
+    /**
+     * Closest thing to a destructor in Java.
+     */
     void Close() {
         shouldProcessSendQueue = false;
         try {

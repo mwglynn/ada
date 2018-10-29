@@ -2,12 +2,5 @@ language: java
 
 sudo: false
 
-## this won't work because it is gui
-#before_install:
-#- wget https://sourceforge.net/projects/sockettest/files/latest/download
-#- unzip download
-#- chmod 777 SocketTest.sh
-#- ./SocketTest.sh
-
 script:
-    - mvn clean validate compile verify
+- mvn clean checkstyle:checkstyle pmd:pmd validate compile verify

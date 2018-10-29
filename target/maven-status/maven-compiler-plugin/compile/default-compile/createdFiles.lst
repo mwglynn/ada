@@ -1,5 +1,8 @@
-TCPSocket.class
-TCPMessageReader.class
+NetworkReader.class
+NetworkSocket.class
 AdaMain.class
-TCPMessageSender.class
-TCPSocketClient.class
+NetworkSocketClient.class
+TCPHost.class
+NetworkSender.class
+TCPHost$NetworkHandle.class
+TCPHost$1.class

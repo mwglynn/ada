@@ -1,8 +1,15 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
 
+/**
+ * main reader for incoming messages.
+ */
 public class NetworkReader {
 
+    /**
+     * An unbounded thread-safe queue based on linked nodes.
+     * This queue orders elements FIFO (first-in-first-out).
+     */
     private ConcurrentLinkedQueue<String> incomingMessages;
     private volatile boolean shouldProcessReceiveQueue;
     private NetworkSocket clientSocket;
@@ -19,15 +26,15 @@ public class NetworkReader {
 
 
     String ReadMessage() {
-        if (shouldProcessReceiveQueue) {
-            if (!incomingMessages.isEmpty()) {
-                return incomingMessages.poll();
-            }
+        if (shouldProcessReceiveQueue && !incomingMessages.isEmpty()) {
+            return incomingMessages.poll();
         }
         return null;
     }
 
-
+    /**
+     * Incoming messages are streams.
+     */
     private void ReadAvailable() {
         while (shouldProcessReceiveQueue) {
             String s = clientSocket.ReadFromSocket();
@@ -37,7 +44,9 @@ public class NetworkReader {
         }
     }
 
-    /* Closest thing to a destructor in Java */
+    /**
+     * Closest thing to a destructor in Java.
+     */
     public void Close() {
         shouldProcessReceiveQueue = false;
         try {

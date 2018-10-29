@@ -1,14 +1,19 @@
+import org.junit.Assert;
+import org.junit.Test;
+import java.util.concurrent.TimeUnit;
+
 /**
- * Main class, connecting client and server.
+ * Checks equivalence test of long-running server.
+ * - sets up server and client
+ * - sends initial message
+ * - sits for 5 seconds
+ * - exits
  */
-public class AdaMain {
-    /**
-     * simple create, send, destroy.
-     * create host with random port
-     * client sits on 127.0.0.1
-     * @param args --will be used later?
-     */
-    public static void main(String[] args) {
+public class TimeoutTest {
+
+    @Test
+    public void nullTest() {
+
         TCPHost host = new TCPHost(6259);
 
         Thread hostThread = new Thread(() -> {
@@ -21,11 +26,18 @@ public class AdaMain {
         NetworkSender sender = new NetworkSender(client);
         NetworkReader reader = new NetworkReader(client);
 
-        sender.SendMessage("Test");
+        sender.SendMessage("simple quick message");
 
         String s = null;
         while (s == null) {
             s = reader.ReadMessage();
+        }
+        System.out.println("--------------sleeping for 5 seconds--------------");
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch(InterruptedException e) {
+            System.out.println("got interrupted!");
         }
 
         /* quitting message, terminates server */
@@ -40,5 +52,10 @@ public class AdaMain {
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
+
     }
+
+
+
+
 }

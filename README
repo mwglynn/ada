@@ -1,9 +1,0 @@
-To view the current pieces working together:
-Download and extract the SocketTest zip: https://sourceforge.net/projects/sockettest/files/latest/download
-Run SocktTest (sh SocketTest.sh on linux and you might need to be root to have socket access)
-Click on the Server tab and set 6259 in the porty (It's the arbitrary port I chose)
-Click Start Listening
-Run Ada
-See the message appear in the SocketTest window
-Type a message in the SocketTest text area 
-Click Send
