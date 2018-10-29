@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: TimeoutTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.005 s - in TimeoutTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.003 s - in TimeoutTest
