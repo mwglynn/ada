@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
+    version="6.8.0" timestamp="2018-10-29T09:40:48.456">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/AdaMain.java">
+<violation beginline="15" endline="15" begincolumn="32" endcolumn="32" rule="EmptyWhileStmt" ruleset="Error Prone" class="AdaMain" method="main" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#emptywhilestmt" priority="3">
+Avoid empty while statements
+</violation>
+</file>
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkReader.java">
+<violation beginline="2" endline="2" begincolumn="1" endcolumn="24" rule="DontImportJavaLang" ruleset="Code Style" class="NetworkReader" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_codestyle.html#dontimportjavalang" priority="4">
+Avoid importing anything from the package java.lang
+</violation>
+</file>
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkSender.java">
+<violation beginline="2" endline="2" begincolumn="1" endcolumn="24" rule="DontImportJavaLang" ruleset="Code Style" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_codestyle.html#dontimportjavalang" priority="4">
+Avoid importing anything from the package java.lang
+</violation>
+</file>
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/TCPHost.java">
+<violation beginline="48" endline="50" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Error Prone" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#emptycatchblock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+</pmd>
