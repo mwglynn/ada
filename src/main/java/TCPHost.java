@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+
 class TCPHost {
     private ServerSocket serverSocket;
     private ArrayList<NetworkHandle> connectedSockets;
@@ -70,7 +71,7 @@ class TCPHost {
                         if (i != j) {
                             connectedSockets.get(j).sender.SendMessage(msg);
                         } else {
-                            connectedSockets.get(j).sender.SendMessage("Got your message");
+                            connectedSockets.get(j).sender.SendMessage("Got your message!");
                         }
                     }
                 }

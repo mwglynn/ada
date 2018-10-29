@@ -28,6 +28,15 @@ public class AdaMain {
             s = reader.ReadMessage();
         }
 
+        /* this is where we can save to database too */
+        System.out.println(s);
+
+        /* audio recording thanks for google text-to-speech */
+        /* uncomment me to pull in audio file */
+//        Speaker speak = new Speaker();
+//        speak.ReadMessage(s);
+
+
         /* quitting message, terminates server */
         sender.SendMessage("\\q");
 
