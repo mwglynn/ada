@@ -29,13 +29,15 @@ Post-commit:                    TravisCI
 ### 3. Reporting
 
 ```$xslt
-PMD static analysis             /target/site/pmd.html           
-google style checker            /target/checkstyle-checker.xml 
-unit testing                    /target/surefire-reports/  
+PMD static analysis output      /target/site/pmd.html 
+Build tool                      /POM.xml
+Continuous Integration          /.travis.yml          
+google style checker output     /target/checkstyle-checker.xml 
+unit testing output             /target/surefire-reports/  
 ```
 
 
 ### Build Instructions
 - Build and run AdaServer
 - Build and run *more than one* AdaClient
-    - use keyboard input communicate among the clients
+    - use keyboard input to communicate among the clients
