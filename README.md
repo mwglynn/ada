@@ -21,8 +21,10 @@ Unit Testing:                   Junit
 
 ```$xslt
 Pre-commit:                     git hooks on google java style checker 
-                                see /.git/hooks/pre-commit executable
+                                - see /.git/hooks/pre-commit executable
+                                - see https://github.com/cristianoliveira/java-checkstyle
 Post-commit:                    TravisCI 
+                                - mvn clean validate compile verify
 ```
 
 
