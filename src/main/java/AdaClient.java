@@ -31,7 +31,7 @@ public class AdaClient {
       if (s.isPresent()) {
         System.out.println("-" + s.get());
         if (s.get().equals("exit")) {
-          break;
+            break;
         }
       }
     } while (true);
