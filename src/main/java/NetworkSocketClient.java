@@ -21,10 +21,18 @@ public class NetworkSocketClient implements NetworkSocket {
   }
 
   NetworkSocketClient(String ip, int port) {
+    if (port < 1 || port > 65535) {
+      throw new IllegalArgumentException();
+    }
     try {
       clientSocket = new Socket(ip, port);
       clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
       clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    } catch (ConnectException e) {
+      e.printStackTrace();
+    } catch (UnknownHostException e) {
+      System.out.println("Please use 127.0.0.1!");
+      /* e.printStackTrace(); */
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }

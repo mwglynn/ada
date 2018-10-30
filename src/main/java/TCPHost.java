@@ -19,6 +19,10 @@ class TCPHost {
   }
 
   TCPHost(int port) {
+    if (port < 1 || port > 65535) {
+      throw new IllegalArgumentException();
+    }
+
     connectedSockets = new ArrayList<>();
     newConnections = new ConcurrentLinkedQueue<>();
     try {
@@ -73,7 +77,6 @@ class TCPHost {
         }
       } while (msg.isPresent());
     }
-
     return true;
   }
 
