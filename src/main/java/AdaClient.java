@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Optional;
 
 /** {@code AdaClient} reads messages from and sends Messages to {@link AdaServer}. */
 public class AdaClient {
@@ -26,12 +27,12 @@ public class AdaClient {
         });
         sendMessages.start();
         
-        String s = null;
+        Optional<String> s = Optional.empty();
         do {
             s = reader.ReadMessage();
-            if (s != null) {
-                System.out.println("-" + s);
-                if(s.equals("exit")) {
+            if (s.isPresent()) {
+                System.out.println("-" + s.get());
+                if(s.get().equals("exit")) {
                     break;
                 }
             }
@@ -42,6 +43,7 @@ public class AdaClient {
         sender.Close();
         reader.Close();
         client.Close();
+
         try {
             sendMessages.join();
         } catch (InterruptedException ie) {

@@ -1,5 +1,6 @@
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.lang.Thread;
+import java.util.Optional;
 
 /**
  * main reader for incoming messages.
@@ -25,11 +26,11 @@ public class NetworkReader {
     }
 
 
-    String ReadMessage() {
+    Optional<String> ReadMessage() {
         if (shouldProcessReceiveQueue && !incomingMessages.isEmpty()) {
-            return incomingMessages.poll();
+            return Optional.ofNullable(incomingMessages.poll());
         }
-        return null;
+        return Optional.empty();
     }
 
     /**

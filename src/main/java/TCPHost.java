@@ -3,7 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
+import java.util.Optional;
 
 class TCPHost {
     private ServerSocket serverSocket;
@@ -59,20 +59,20 @@ class TCPHost {
         }
 
         for (int i = 0; i < connectedSockets.size(); i++) {
-            String msg;
+            Optional<String> msg;
             do {
                 msg = connectedSockets.get(i).reader.ReadMessage();
-                if (msg != null) {
-                    if (msg.equals("\\q")) {
+                if (msg.isPresent()) {
+                    if (msg.get().equals("\\q")) {
                         return false;
                     }
                     for (int j = 0; j < connectedSockets.size(); j++) {
                         if (i != j) {
-                            connectedSockets.get(j).sender.SendMessage(msg);
+                            connectedSockets.get(j).sender.SendMessage(msg.get());
                         } 
                     }
                 }
-            } while (msg != null);
+            } while (msg.isPresent());
         }
 
         return true;
