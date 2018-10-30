@@ -32,7 +32,7 @@ public class NetworkSocketClient implements NetworkSocket {
 
     public void WriteToSocket(String msg) {
         try {
-            clientOutputStream.writeBytes(msg + "\n");
+            clientOutputStream.writeBytes(msg + "\n");  
             clientOutputStream.flush();
         } catch (IOException ioe) {
             ioe.printStackTrace();

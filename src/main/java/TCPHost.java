@@ -66,13 +66,10 @@ class TCPHost {
                     if (msg.equals("\\q")) {
                         return false;
                     }
-
                     for (int j = 0; j < connectedSockets.size(); j++) {
                         if (i != j) {
                             connectedSockets.get(j).sender.SendMessage(msg);
-                        } else {
-                            connectedSockets.get(j).sender.SendMessage("Got your message!");
-                        }
+                        } 
                     }
                 }
             } while (msg != null);
