@@ -36,6 +36,8 @@ public class AdaClient {
       }
     } while (true);
 
+    System.out.println("closing out");
+
     /* clean exit */
     sender.Close();
     reader.Close();
