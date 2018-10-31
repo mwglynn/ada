@@ -24,7 +24,8 @@ Pre-commit:                     see /PRECOMMIT
                                 git hooks on google java style checker 
                                 - see /.git/hooks/pre-commit executable
                                 - see https://github.com/cristianoliveira/java-checkstyle
-Post-commit:                    TravisCI 
+Post-commit:			see /POSTCOMMIT
+				TravisCI 
                                 - mvn clean validate compile verify
 ```
 
