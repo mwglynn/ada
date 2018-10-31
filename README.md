@@ -25,7 +25,7 @@ Pre-commit:                     see /PRECOMMIT
                                 - see /.git/hooks/pre-commit executable
                                 - see https://github.com/cristianoliveira/java-checkstyle
 Post-commit:			see /POSTCOMMIT
-				TravisCI 
+				.travis.yml 
                                 - mvn clean validate compile verify
 ```
 
