@@ -20,7 +20,8 @@ Unit Testing:                   Junit
 ### 2. pre-commit and post-commit
 
 ```$xslt
-Pre-commit:                     git hooks on google java style checker 
+Pre-commit:                     see /PRECOMMIT
+                                git hooks on google java style checker 
                                 - see /.git/hooks/pre-commit executable
                                 - see https://github.com/cristianoliveira/java-checkstyle
 Post-commit:                    TravisCI 
