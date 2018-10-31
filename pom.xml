@@ -57,6 +57,12 @@
             <artifactId>google-cloud-texttospeech</artifactId>
             <version>0.56.0-beta</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>

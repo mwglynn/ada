@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="5.5">
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkSocketClient.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/NetworkSocketClient.java">
 <error line="0" severity="error" message="Missing package-info.java file." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
 <error line="5" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - java.net.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
 <error line="7" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
@@ -26,13 +26,13 @@
 <error line="62" column="3" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
 <error line="62" column="15" severity="error" message="Name &apos;Close&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/AdaServer.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/AdaServer.java">
 <error line="13" column="15" severity="error" message="Got an exception - expecting EOF, found &apos;host&apos;" source="com.puppycrawl.tools.checkstyle.TreeWalker"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkSender.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/NetworkSender.java">
 <error line="21" column="5" severity="error" message="Got an exception - expecting EOF, found &apos;sendingThread&apos;" source="com.puppycrawl.tools.checkstyle.TreeWalker"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkSocket.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/NetworkSocket.java">
 <error line="1" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
 <error line="2" column="3" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
 <error line="2" column="8" severity="error" message="Name &apos;WriteToSocket&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
@@ -41,13 +41,13 @@
 <error line="6" column="3" severity="error" message="Missing a Javadoc comment." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
 <error line="6" column="8" severity="error" message="Name &apos;Close&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MethodNameCheck"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/TCPHost.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/TCPHost.java">
 <error line="36" column="5" severity="error" message="Got an exception - expecting EOF, found &apos;listenForConnectionsThread&apos;" source="com.puppycrawl.tools.checkstyle.TreeWalker"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/NetworkReader.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/NetworkReader.java">
 <error line="22" column="5" severity="error" message="Got an exception - expecting EOF, found &apos;receivingThread&apos;" source="com.puppycrawl.tools.checkstyle.TreeWalker"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/TextToSpeech/Speaker.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/TextToSpeech/Speaker.java">
 <error line="0" severity="error" message="Missing package-info.java file." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
 <error line="20" severity="error" message="Using the &apos;.*&apos; form of import should be avoided - com.google.cloud.texttospeech.v1.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
 <error line="28" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
@@ -64,7 +64,7 @@
 <error line="70" column="35" severity="error" message="Inner assignments should be avoided." source="com.puppycrawl.tools.checkstyle.checks.coding.InnerAssignmentCheck"/>
 <error line="72" severity="error" message="Line is longer than 80 characters." source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/ada/src/main/java/AdaClient.java">
+<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/AdaClient.java">
 <error line="21" column="17" severity="error" message="Got an exception - expecting EOF, found &apos;}&apos;" source="com.puppycrawl.tools.checkstyle.TreeWalker"/>
 </file>
 </checkstyle>

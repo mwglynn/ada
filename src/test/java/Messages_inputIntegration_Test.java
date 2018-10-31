@@ -1,8 +1,12 @@
 import org.junit.Test;
 import org.junit.Assert;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-public class Messages_inputLong_Test {
+/**
+ * tests both long message and emoji input.
+ */
+public class Messages_inputIntegration_Test {
 
     private static final int port = 6259;
 
@@ -60,6 +64,7 @@ public class Messages_inputLong_Test {
                 new Thread(
                         () -> {
                             sender1.SendMessage(longMessage);
+                            sender1.SendMessage("\uD83D\uDE0A");
                         });
         sendMessages.start();
 
@@ -68,15 +73,15 @@ public class Messages_inputLong_Test {
             s2 = reader2.ReadMessage();
             if (s2.isPresent()) {
                 Assert.assertEquals(longMessage, s2.get());
+                Assert.assertNotEquals("\uD83D\uDE0A", s2.get());
                 break;
             }
         } while (true);
 
-
         sendMessages.interrupt();
         hostThread.interrupt();
-//        System.exit(0);
 
     }
+
 
 }
