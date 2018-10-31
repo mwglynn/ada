@@ -1,2 +1,5 @@
-NetworkSocketClient_Test.class
+Messages_setup_Test.class
 TCPHost_Test.class
+NetworkSocketClient_Test.class
+Messages_inputLong_Test.class
+Messages_inputEmoji_Test.class
