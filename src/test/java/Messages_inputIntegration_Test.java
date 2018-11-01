@@ -1,5 +1,6 @@
 import org.junit.Test;
 import org.junit.Assert;
+
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +18,9 @@ public class Messages_inputIntegration_Test {
         Thread hostThread =
                 new Thread(
                         () -> {
-                            while (host.Tick()) ;
+                            //noinspection StatementWithEmptyBody
+                            while (host.Tick()) {
+                            }
                             host.Close();
                         });
         hostThread.start();
@@ -68,7 +71,7 @@ public class Messages_inputIntegration_Test {
                         });
         sendMessages.start();
 
-        Optional<String> s2 = Optional.empty();
+        Optional<String> s2;
         do {
             s2 = reader2.ReadMessage();
             if (s2.isPresent()) {

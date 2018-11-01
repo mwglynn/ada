@@ -1,7 +1,7 @@
-public interface NetworkSocket {
-  void WriteToSocket(String msg);
+interface NetworkSocket {
+    void WriteToSocket(String msg);
 
-  String ReadFromSocket();
+    String ReadFromSocket();
 
-  void Close();
+    void Close();
 }

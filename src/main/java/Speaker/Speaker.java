@@ -1,4 +1,4 @@
-/*
+package Speaker;/*
  * Copyright 2018 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@
 //package com.example.texttospeech;
 
 // Imports the Google Cloud client library
+
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
 
@@ -24,16 +25,16 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 /**
- * Google Cloud TextToSpeech API sample application.
+ * Google Cloud Speaker API sample application.
  * setup: https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries#client-libraries-install-java
  * sdk install: https://cloud.google.com/sdk/docs/
  * - sign up for text-to-speech service and get credentials JSON
  * - make sure you set the environment variable configuration ("GOOGLE_APPLICATION_CREDENTIALS")
- *     - see drop-down configuration and https://stackoverflow.com/a/13749192
+ * - see drop-down configuration and https://stackoverflow.com/a/13749192
  */
 
 
-public class Speaker {
+class Speaker {
 
     void ReadMessage(String message) {
 
@@ -73,13 +74,10 @@ public class Speaker {
             }
 
         } catch (Exception e) {
-        e.printStackTrace();
-    }
+            e.printStackTrace();
+        }
 
     }
-
-
-
 
 
 }
