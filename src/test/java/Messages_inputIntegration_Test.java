@@ -28,7 +28,7 @@ public class Messages_inputIntegration_Test {
         NetworkSocketClient client1 = new NetworkSocketClient("localhost", port);
         NetworkSender sender1 = new NetworkSender(client1);
         NetworkSocketClient client2 = new NetworkSocketClient("localhost", port);
-        NetworkReader reader2 = new NetworkReader(client2);
+        NetworkReader reader2 = new NetworkReader(client1);
 
         String longMessage = "" +
                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAG0klEQVR4X" +
@@ -63,13 +63,9 @@ public class Messages_inputIntegration_Test {
                 "oAAgRoBwapZlUEJEBAsN0CAQI2AYNWsyqAECAiWGyBAoEZAsGpWZVACBATLDRAgUCMgWDWrMigBAoLl" +
                 "BggQqBEQrJpVGZQAAcFyAwQI1Aj8B6OmqZcZSyd8AAAAAElFTkSuQmCC";
 
-        Thread sendMessages =
-                new Thread(
-                        () -> {
-                            sender1.SendMessage(longMessage);
-                            sender1.SendMessage("\uD83D\uDE0A");
-                        });
-        sendMessages.start();
+        
+        sender1.SendMessage(longMessage);
+        sender1.SendMessage("\uD83D\uDE0A");
 
         Optional<String> s2;
         do {
