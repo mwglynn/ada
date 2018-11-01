@@ -2,6 +2,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 /** {@code AdaClient} reads messages from and sends Messages to {@link AdaServer}. */
+@SuppressWarnings("WeakerAccess")
 public class AdaClient {
 
   private static final int port = 6259;
@@ -15,7 +16,7 @@ public class AdaClient {
     Thread sendMessages =
         new Thread(
             () -> {
-              while (true) {
+              while (!Thread.interrupted()) {
                 if (input.hasNext()) {
                   sender.SendMessage(input.nextLine());
                 } else {
@@ -25,7 +26,7 @@ public class AdaClient {
             });
     sendMessages.start();
 
-    Optional<String> s = Optional.empty();
+    Optional<String> s;
     do {
       s = reader.ReadMessage();
       if (s.isPresent()) {

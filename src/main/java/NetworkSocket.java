@@ -1,4 +1,4 @@
-public interface NetworkSocket {
+interface NetworkSocket {
   void WriteToSocket(String msg);
 
   String ReadFromSocket();

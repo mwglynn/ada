@@ -2,17 +2,17 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /** main reader for incoming messages. */
-public class NetworkReader {
+class NetworkReader {
 
   /**
    * An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO
    * (first-in-first-out).
    */
-  private ConcurrentLinkedQueue<String> incomingMessages;
+  private final ConcurrentLinkedQueue<String> incomingMessages;
 
   private volatile boolean shouldProcessReceiveQueue;
-  private NetworkSocket clientSocket;
-  private Thread receivingThread;
+  private final NetworkSocket clientSocket;
+  private final Thread receivingThread;
 
   NetworkReader(NetworkSocket socket) {
     incomingMessages = new ConcurrentLinkedQueue<>();

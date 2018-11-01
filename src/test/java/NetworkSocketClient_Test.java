@@ -1,5 +1,3 @@
-import java.io.*;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class NetworkSocketClient_Test {

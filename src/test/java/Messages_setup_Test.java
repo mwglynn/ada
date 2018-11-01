@@ -1,11 +1,11 @@
 import org.junit.Assert;
 import org.junit.Test;
-import java.util.Optional;
 
 public class Messages_setup_Test {
 
     private static final int port = 6259;
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Test
     public void manyNetworkClients() {
         TCPHost host = new TCPHost(port);
@@ -13,7 +13,8 @@ public class Messages_setup_Test {
         Thread hostThread =
                 new Thread(
                         () -> {
-                            while (host.Tick()) ;
+                            while (host.Tick()) {
+                            }
                             host.Close();
                         });
         hostThread.start();

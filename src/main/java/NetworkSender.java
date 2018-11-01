@@ -7,11 +7,11 @@ class NetworkSender {
    * An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO
    * (first-in-first-out).
    */
-  private ConcurrentLinkedQueue<String> outgoingMessages;
+  private final ConcurrentLinkedQueue<String> outgoingMessages;
 
   private volatile boolean shouldProcessSendQueue;
-  private NetworkSocket clientSocket;
-  private Thread sendingThread;
+  private final NetworkSocket clientSocket;
+  private final Thread sendingThread;
 
   NetworkSender(NetworkSocket socket) {
     outgoingMessages = new ConcurrentLinkedQueue<>();

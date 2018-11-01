@@ -6,6 +6,7 @@ public class Messages_inputEmoji_Test {
 
     private static final int port = 6259;
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Test
     public void messagesemoji() {
         TCPHost host = new TCPHost(port);
@@ -13,7 +14,7 @@ public class Messages_inputEmoji_Test {
         Thread hostThread =
                 new Thread(
                         () -> {
-                            while (host.Tick()) ;
+                            while (host.Tick()) {}
                             host.Close();
                         });
         hostThread.start();
@@ -27,13 +28,13 @@ public class Messages_inputEmoji_Test {
         Thread sendMessages =
                 new Thread(
                         () -> {
-                            while (true) {
+                            while (!Thread.interrupted()) {
                                 sender1.SendMessage("\uD83D\uDE0A");
                             }
                         });
         sendMessages.start();
 
-        Optional<String> s2 = Optional.empty();
+        Optional<String> s2;
         do {
             s2 = reader2.ReadMessage();
             if (s2.isPresent()) {

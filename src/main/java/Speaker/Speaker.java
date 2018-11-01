@@ -1,4 +1,4 @@
-/*
+package Speaker;/*
  * Copyright 2018 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 /**
- * Google Cloud TextToSpeech API sample application.
+ * Google Cloud Speaker API sample application.
  * setup: https://cloud.google.com/text-to-speech/docs/quickstart-client-libraries#client-libraries-install-java
  * sdk install: https://cloud.google.com/sdk/docs/
  * - sign up for text-to-speech service and get credentials JSON
@@ -33,7 +33,7 @@ import java.io.OutputStream;
  */
 
 
-public class Speaker {
+class Speaker {
 
     void ReadMessage(String message) {
 

@@ -13,7 +13,8 @@ public class Messages_inputLong_Test {
         Thread hostThread =
                 new Thread(
                         () -> {
-                            while (host.Tick()) ;
+                            //noinspection StatementWithEmptyBody
+                            while (host.Tick()) {}
                             host.Close();
                         });
         hostThread.start();
@@ -58,12 +59,10 @@ public class Messages_inputLong_Test {
 
         Thread sendMessages =
                 new Thread(
-                        () -> {
-                            sender1.SendMessage(longMessage);
-                        });
+                        () -> sender1.SendMessage(longMessage));
         sendMessages.start();
 
-        Optional<String> s2 = Optional.empty();
+        Optional<String> s2;
         do {
             s2 = reader2.ReadMessage();
             if (s2.isPresent()) {
