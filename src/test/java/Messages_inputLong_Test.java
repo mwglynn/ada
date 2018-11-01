@@ -1,5 +1,6 @@
 import org.junit.Test;
 import org.junit.Assert;
+
 import java.util.Optional;
 
 public class Messages_inputLong_Test {
@@ -14,7 +15,8 @@ public class Messages_inputLong_Test {
                 new Thread(
                         () -> {
                             //noinspection StatementWithEmptyBody
-                            while (host.Tick()) {}
+                            while (host.Tick()) {
+                            }
                             host.Close();
                         });
         hostThread.start();

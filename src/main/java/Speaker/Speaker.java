@@ -17,6 +17,7 @@ package Speaker;/*
 //package com.example.texttospeech;
 
 // Imports the Google Cloud client library
+
 import com.google.cloud.texttospeech.v1.*;
 import com.google.protobuf.ByteString;
 
@@ -29,7 +30,7 @@ import java.io.OutputStream;
  * sdk install: https://cloud.google.com/sdk/docs/
  * - sign up for text-to-speech service and get credentials JSON
  * - make sure you set the environment variable configuration ("GOOGLE_APPLICATION_CREDENTIALS")
- *     - see drop-down configuration and https://stackoverflow.com/a/13749192
+ * - see drop-down configuration and https://stackoverflow.com/a/13749192
  */
 
 
@@ -73,13 +74,10 @@ class Speaker {
             }
 
         } catch (Exception e) {
-        e.printStackTrace();
-    }
+            e.printStackTrace();
+        }
 
     }
-
-
-
 
 
 }
