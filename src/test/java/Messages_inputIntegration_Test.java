@@ -77,7 +77,6 @@ public class Messages_inputIntegration_Test {
             }
         } while (true);
 
-        sendMessages.interrupt();
         hostThread.interrupt();
 
     }
