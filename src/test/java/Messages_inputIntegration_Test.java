@@ -28,7 +28,7 @@ public class Messages_inputIntegration_Test {
         NetworkSocketClient client1 = new NetworkSocketClient("localhost", port);
         NetworkSender sender1 = new NetworkSender(client1);
         NetworkSocketClient client2 = new NetworkSocketClient("localhost", port);
-        NetworkReader reader2 = new NetworkReader(client1);
+        NetworkReader reader2 = new NetworkReader(client2);
 
         String longMessage = "" +
                 "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAG0klEQVR4X" +
