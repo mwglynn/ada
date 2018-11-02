@@ -4,7 +4,7 @@ This is a first-phase MVP of the chat-app! The app sets up a simple client and s
 
 
 ### 1. Software Engineering Principles 
-[![Build Status](https://travis-ci.org/LooseScruz/ada.svg?branch=master)](https://travis-ci.org/LooseScruz/ada)
+[![Build Status](https://travis-ci.org/LooseScruz/ada.svg?branch=develop)](https://travis-ci.org/LooseScruz/ada)
 
 
 ```$xslt
