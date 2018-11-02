@@ -63,13 +63,11 @@ public class Messages_inputIntegration_Test {
                 "oAAgRoBwapZlUEJEBAsN0CAQI2AYNWsyqAECAiWGyBAoEZAsGpWZVACBATLDRAgUCMgWDWrMigBAoLl" +
                 "BggQqBEQrJpVGZQAAcFyAwQI1Aj8B6OmqZcZSyd8AAAAAElFTkSuQmCC";
 
-        
-        sender1.SendMessage(longMessage);
-        sender1.SendMessage("\uD83D\uDE0A");
-
         Optional<String> s2;
         do {
             s2 = reader2.ReadMessage();
+            sender1.SendMessage(longMessage);
+            sender1.SendMessage("\uD83D\uDE0A");
             if (s2.isPresent()) {
                 Assert.assertEquals(longMessage, s2.get());
                 Assert.assertNotEquals("\uD83D\uDE0A", s2.get());
