@@ -1,9 +1,9 @@
 NetworkReader.class
 NetworkSocket.class
 NetworkSocketClient.class
-Speaker.class
-TCPHost.class
+Speaker\Speaker.class
 NetworkSender.class
+TCPHost.class
 TCPHost$NetworkHandle.class
 AdaServer.class
 AdaClient.class
