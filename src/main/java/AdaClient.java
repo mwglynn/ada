@@ -7,10 +7,10 @@ import java.util.Scanner;
 @SuppressWarnings("WeakerAccess")
 public class AdaClient {
 
-    private static final int port = 6259;
+    private static final int PORT = 6259;
 
     public static void main(String[] args) {
-        NetworkSocketClient client = new NetworkSocketClient("localhost", port);
+        NetworkSocketClient client = new NetworkSocketClient("localhost", PORT);
         NetworkSender sender = new NetworkSender(client);
         NetworkReader reader = new NetworkReader(client);
         Scanner input = new Scanner(System.in);

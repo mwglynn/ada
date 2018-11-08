@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd xmlns="http://pmd.sourceforge.net/report/2.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://pmd.sourceforge.net/report/2.0.0 http://pmd.sourceforge.net/report_2_0_0.xsd"
-    version="6.8.0" timestamp="2018-10-31T08:29:36.958">
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/AdaServer.java">
-<violation beginline="12" endline="12" begincolumn="35" endcolumn="35" rule="EmptyWhileStmt" ruleset="Error Prone" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#emptywhilestmt" priority="3">
+<pmd version="5.6.1" timestamp="2018-11-07T00:03:01.042">
+<file name="C:\Users\riva\Documents\ada\src\main\java\AdaServer.java">
+<violation beginline="16" endline="17" begincolumn="49" endcolumn="29" rule="EmptyWhileStmt" ruleset="Empty Code" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
 Avoid empty while statements
 </violation>
 </file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/TCPHost.java">
-<violation beginline="53" endline="55" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Error Prone" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-6.8.0/pmd_rules_java_errorprone.html#emptycatchblock" priority="3">
+<file name="C:\Users\riva\Documents\ada\src\main\java\TCPHost.java">
+<violation beginline="53" endline="55" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Empty Code" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
 </file>

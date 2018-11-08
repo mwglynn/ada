@@ -1,7 +1,9 @@
+import java.util.Optional;
+
 interface NetworkSocket {
     void WriteToSocket(String msg);
 
-    String ReadFromSocket();
+    Optional<String> ReadFromSocket();
 
     void Close();
 }

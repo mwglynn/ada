@@ -36,17 +36,14 @@ class NetworkReader {
      */
     private void ReadAvailable() {
         while (shouldProcessReceiveQueue) {
-            String s = clientSocket.ReadFromSocket();
-            if (s != null) {
-                incomingMessages.add(s);
-            }
+            clientSocket.ReadFromSocket().ifPresent(incomingMessages::add);
         }
     }
 
     /**
      * Closest thing to a destructor in Java.
      */
-    public void Close() {
+    void Close() {
         shouldProcessReceiveQueue = false;
         try {
             receivingThread.join();

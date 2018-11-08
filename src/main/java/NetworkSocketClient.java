@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.*;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Optional;
 
 public class NetworkSocketClient implements NetworkSocket {
 
@@ -38,6 +41,7 @@ public class NetworkSocketClient implements NetworkSocket {
         }
     }
 
+    @Override
     public void WriteToSocket(String msg) {
         try {
             clientOutputStream.writeBytes(msg + "\n");
@@ -47,18 +51,20 @@ public class NetworkSocketClient implements NetworkSocket {
         }
     }
 
-    public String ReadFromSocket() {
+    @Override
+    public Optional<String> ReadFromSocket() {
         try {
             if (clientInputStream.ready()) {
-                return clientInputStream.readLine();
+                return Optional.ofNullable(clientInputStream.readLine());
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return null;
+        return Optional.empty();
     }
 
     /* Closest thing to a destructor in Java */
+    @Override
     public void Close() {
         try {
             clientSocket.close();
