@@ -6,12 +6,18 @@ import java.awt.event.ActionListener;
 public class AdaServerForm {
     private JButton starButton;
     private JPanel serverPanel;
+    private AdaServer server;
 
     public AdaServerForm() {
         starButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Server Started");
+                if (server == null) {
+                    server = new AdaServer();
+                    server.main(null);
+                }else{
+                    JOptionPane.showMessageDialog(null,"Server Already Started");
+                }
             }
         });
     }
