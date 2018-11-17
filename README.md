@@ -46,7 +46,7 @@ unit testing output             /target/surefire-reports/
 - Build and run **more than one** AdaClient
     - use keyboard input to communicate among the clients
 
-### Databse 
+### Database 
 
 Postgre will be used. It should be installed for the database to function properly
 
