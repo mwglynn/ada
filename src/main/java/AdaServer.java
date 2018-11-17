@@ -10,6 +10,10 @@ public class AdaServer {
     public static void main(String[] args) {
         TCPHost host = new TCPHost(port);
 
+        /* setup tables */
+        new PostgreSQLJDBC();
+        PostgreSQLJDBC.main();
+
         Thread hostThread =
                 new Thread(
                         () -> {

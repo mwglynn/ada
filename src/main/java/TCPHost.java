@@ -44,6 +44,7 @@ class TCPHost {
                 newConnection = serverSocket.accept();
 
                 System.out.println("Server got connection");
+
                 NetworkHandle netHandle = new NetworkHandle();
                 netHandle.socket = new NetworkSocketClient(newConnection);
                 netHandle.reader = new NetworkReader(netHandle.socket);

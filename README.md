@@ -45,3 +45,43 @@ unit testing output             /target/surefire-reports/
 - Build and run AdaServer
 - Build and run **more than one** AdaClient
     - use keyboard input to communicate among the clients
+
+### Databse 
+
+Postgre will be used. It should be installed for the database to function properly
+
+```$sql
+---------------------------------------------------/* Creation */
+
+CREATE TABLE IF NOT EXISTS adaUser (
+	ID SERIAL NOT NULL,			-- unique identification 
+	userName VARCHAR(255) UNIQUE NOT NULL, 	-- user picks, pulled from other source (per GUI?)
+						-- TODO: check on default if none
+						-- TODO: may want to remove unique constraint? 
+	PRIMARY KEY (ID, userName)		-- we may have multiple users with the same userName
+);
+
+CREATE TABLE IF NOT EXISTS adaChat (
+	ID SERIAL NOT NULL,			-- a unique identifier
+	time_stamp TIME NOT NULL,	 
+	message TEXT,		
+	sender VARCHAR(255),			-- one sender
+	receiver VARCHAR(255)[],		-- mulitple receivers, this cannot be foreign key (i.e., you can send messages to non-users)
+	PRIMARY KEY (ID),
+	FOREIGN KEY (sender) REFERENCES adaUser(userName) ON DELETE NO ACTION		-- may want to change to CASCADE
+);
+
+---------------------------------------------------/* Simple Insertion Example */
+
+INSERT INTO adaUser (ID, userName) VALUES 
+	(1, 'nathan'),
+	(2, 'kevin'),
+	(3, 'sally')
+;
+
+INSERT INTO adaChat (ID, time_stamp, message, sender, receiver) VALUES 
+	(1, '02:03:04', 'hi there buddy', 'nathan', '{kevin, sally}'),
+	(2, '02:03:05', 'oh nice too yo', 'kevin', '{nathan}'),
+	(3, '02:03:06', 'hi there buddy', 'nathan', '{sally}')
+;
+```

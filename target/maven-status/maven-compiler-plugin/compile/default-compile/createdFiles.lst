@@ -1,9 +1,10 @@
 NetworkReader.class
 NetworkSocket.class
 NetworkSocketClient.class
-Speaker\Speaker.class
-NetworkSender.class
+PostgreSQLJDBC.class
+Speaker/Speaker.class
 TCPHost.class
+NetworkSender.class
 TCPHost$NetworkHandle.class
 AdaServer.class
 AdaClient.class
