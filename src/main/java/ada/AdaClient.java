@@ -1,8 +1,10 @@
+package ada;
+
 import java.util.Optional;
 import java.util.Scanner;
 
 /**
- * {@code AdaClient} reads messages from and sends Messages to {@link AdaServer}.
+ * {@code ada.AdaClient} reads messages from and sends Messages to {@link AdaServer}.
  */
 @SuppressWarnings("WeakerAccess")
 public class AdaClient {
