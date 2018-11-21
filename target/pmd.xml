@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<pmd version="5.6.1" timestamp="2018-11-16T22:03:21.800">
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/AdaServer.java">
-<violation beginline="20" endline="21" begincolumn="49" endcolumn="29" rule="EmptyWhileStmt" ruleset="Empty Code" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
-Avoid empty while statements
-</violation>
-</file>
-<file name="/Users/hugo/MEGA/Work/- Columbia/Class/2018/Fall/Advanced Software Engineering/homework/ada_group/src/main/java/TCPHost.java">
-<violation beginline="54" endline="56" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Empty Code" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
-=======
-<pmd version="5.6.1" timestamp="2018-11-21T01:12:07.717">
+<pmd version="5.6.1" timestamp="2018-11-21T02:15:41.478">
 <file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\AdaServer.java">
-<violation beginline="18" endline="19" begincolumn="49" endcolumn="29" rule="EmptyWhileStmt" ruleset="Empty Code" package="ada" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
+<violation beginline="22" endline="23" begincolumn="49" endcolumn="29" rule="EmptyWhileStmt" ruleset="Empty Code" package="ada" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
 Avoid empty while statements
 </violation>
 </file>
 <file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\TCPHost.java">
 <violation beginline="55" endline="57" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Empty Code" package="ada" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
->>>>>>> master
 Avoid empty catch blocks
 </violation>
 </file>
