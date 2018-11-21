@@ -1,3 +1,5 @@
+package ada;
+
 import java.util.Optional;
 
 interface NetworkSocket {

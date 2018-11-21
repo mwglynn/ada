@@ -1,5 +1,7 @@
+package ada;
+
 /**
- * AdaServer houses the main for our Chat Server.
+ * ada.AdaServer houses the main for our Chat Server.
  */
 @SuppressWarnings("WeakerAccess")
 public class AdaServer {
