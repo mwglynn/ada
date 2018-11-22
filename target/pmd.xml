@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="5.6.1" timestamp="2018-11-21T02:15:41.478">
+<pmd version="5.6.1" timestamp="2018-11-22T11:43:10.782">
 <file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\AdaServer.java">
 <violation beginline="22" endline="23" begincolumn="49" endcolumn="29" rule="EmptyWhileStmt" ruleset="Empty Code" package="ada" class="AdaServer" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
 Avoid empty while statements
@@ -8,6 +8,11 @@ Avoid empty while statements
 <file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\TCPHost.java">
 <violation beginline="55" endline="57" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Empty Code" package="ada" class="TCPHost" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
+</violation>
+</file>
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\texttospeech\TextToSpeechClient.java">
+<violation beginline="40" endline="40" begincolumn="38" endcolumn="58" rule="UnusedPrivateMethod" ruleset="Unused Code" package="ada.texttospeech" class="TextToSpeechClient" method="getAudio" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/unusedcode.html#UnusedPrivateMethod" priority="3">
+Avoid unused private methods such as 'getAudio(String)'.
 </violation>
 </file>
 </pmd>

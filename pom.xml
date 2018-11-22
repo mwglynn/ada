@@ -61,7 +61,11 @@
             <artifactId>google-http-client</artifactId>
             <version>1.22.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-texttospeech -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.0</version>
+        </dependency>        <!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-texttospeech -->
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-texttospeech</artifactId>

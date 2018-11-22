@@ -3,12 +3,15 @@ package ada;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.Optional;
 
 /**
- * tests both long message and emoji input.
+ * Tests of message inputs.
  */
+@RunWith(JUnit4.class)
 public class Messages_inputIntegration_Test {
 
     private static final int PORT = 6259;
