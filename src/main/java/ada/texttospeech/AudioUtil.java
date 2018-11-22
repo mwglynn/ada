@@ -4,7 +4,7 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-public final class AudioUtil {
+final class AudioUtil {
 
     static void play(AudioInputStream audio) {
         try {
@@ -19,8 +19,8 @@ public final class AudioUtil {
             clip.open(audio);
             clip.start();
             latch.await();
-        } catch (LineUnavailableException | IOException | InterruptedException ex) {
-            System.out.println(ex);
+        } catch (LineUnavailableException | IOException | InterruptedException | NullPointerException ex) {
+            System.out.println("Error playing audio: " + ex);
         }
     }
 }

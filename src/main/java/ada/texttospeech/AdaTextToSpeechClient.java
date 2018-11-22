@@ -15,8 +15,8 @@ import java.util.Optional;
  * Text to speech client class for getting audio (via the text to speech client). Branched from
  * Google Cloud TextToSpeech API sample application.
  */
-public class TextToSpeechClient {
-  private com.google.cloud.texttospeech.v1.TextToSpeechClient client;
+final class AdaTextToSpeechClient {
+  private TextToSpeechClient client;
   private static final VoiceSelectionParams voice =
           VoiceSelectionParams.newBuilder()
                   .setLanguageCode("en-US")
@@ -28,7 +28,7 @@ public class TextToSpeechClient {
   /**
    * Text to Speech Client for interfacing with Cloud TTS.
    */
-  private TextToSpeechClient(com.google.cloud.texttospeech.v1.TextToSpeechClient client) {
+  AdaTextToSpeechClient(TextToSpeechClient client) {
     this.client = client;
   }
 
@@ -37,13 +37,13 @@ public class TextToSpeechClient {
     return client.synthesizeSpeech(input, voice, audioConfig);
   }
 
-  private Optional<AudioInputStream> getAudio(String text) {
+  Optional<AudioInputStream> getAudio(String text) {
     try {
       return Optional.of(
               AudioSystem.getAudioInputStream(
                       new ByteArrayInputStream(getAudioResponse(text).getAudioContent().toByteArray())));
-    } catch (UnsupportedAudioFileException | IOException e) {
-      System.out.println(e);
+    } catch (UnsupportedAudioFileException | IOException | NullPointerException e) {
+      System.out.println("Warning: " + e);
       return Optional.empty();
     }
   }
