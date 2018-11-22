@@ -1,5 +1,7 @@
-import org.junit.Test;
+package ada;
+
 import org.junit.Assert;
+import org.junit.Test;
 
 public class TCPHost_Test {
 
@@ -25,6 +27,4 @@ public class TCPHost_Test {
             Assert.assertNotNull(host);
         }
     }
-
-
 }

@@ -1,7 +1,9 @@
+package ada;
+
 import java.sql.Connection;
 import java.sql.Statement;
 
-import static java.sql.DriverManager.*;
+import static java.sql.DriverManager.getConnection;
 
 /**
  * creation of the tables
@@ -16,7 +18,7 @@ public class PostgreSQLJDBC {
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
             c = getConnection("jdbc:postgresql://localhost:5432/public",
-                            "postgres", "postgres");
+                    "postgres", "postgres");
             System.out.println("Opened database successfully");
 
             /* execute creation of user */

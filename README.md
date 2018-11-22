@@ -42,8 +42,8 @@ unit testing output             /target/surefire-reports/
 
 
 ### Build Instructions
-- Build and run AdaServer
-- Build and run **more than one** AdaClient
+- Build and run ada.AdaServer
+- Build and run **more than one** ada.AdaClient
     - use keyboard input to communicate among the clients
 
 ### Database 
