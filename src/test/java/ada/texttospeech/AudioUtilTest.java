@@ -1,5 +1,6 @@
 package ada.texttospeech;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,5 +36,10 @@ public class AudioUtilTest {
   public void play_validAudio_Succeeds() {
     System.out.println("Playing: \"King Arthur\"");
     AudioUtil.play(validAudio);
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    validAudio.close();
   }
 }
