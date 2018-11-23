@@ -5,6 +5,4 @@ script:
 before_install:
 - openssl aes-256-cbc -K $encrypted_6ce9b8886f1a_key -iv $encrypted_6ce9b8886f1a_iv
   -in ada-creds.json.enc -out ada-creds.json -d
-- openssl aes-256-cbc -K $encrypted_70eef1a01a20_key -iv $encrypted_70eef1a01a20_iv
-  -in ada-creds.json.enc -out ada-creds.json -d
 - export GOOGLE_APPLICATION_CREDENTIALS=$PWD/ada-creds.json
