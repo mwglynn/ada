@@ -4,9 +4,9 @@ ada\PostgreSQLJDBC.class
 ada\TCPHost$1.class
 ada\TCPHost.class
 ada\texttospeech\AudioUtil.class
-ada\texttospeech\TextToSpeechClient.class
 ada\TCPHost$NetworkHandle.class
 ada\AdaServer.class
 ada\NetworkSocketClient.class
 ada\NetworkReader.class
 ada\NetworkSocket.class
+ada\texttospeech\AdaTextToSpeechClient.class

@@ -1,6 +1,9 @@
 language: java
-
 sudo: false
-
 script:
 - mvn clean validate compile verify
+before_install:
+- export GOOGLE_APPLICATION_CREDENTIALS=$PWD/ada-creds.json
+- openssl aes-256-cbc -K $encrypted_70eef1a01a20_key -iv $encrypted_70eef1a01a20_iv
+  -in ada-creds.json.enc -out ada-creds.json
+  -d
