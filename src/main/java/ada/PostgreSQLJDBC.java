@@ -17,7 +17,7 @@ public class PostgreSQLJDBC {
 
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432/public",
+            c = getConnection("jdbc:postgresql://localhost:5432",
                     "postgres", "postgres");
             System.out.println("Opened database successfully");
 

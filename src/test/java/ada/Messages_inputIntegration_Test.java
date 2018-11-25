@@ -1,5 +1,6 @@
 package ada;
 
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class Messages_inputIntegration_Test {
         } while (!s2.isPresent());
         hostThread.interrupt();
 
-        Assert.assertEquals(LONG_MESSAGE, s2.get());
+        Assert.assertEquals(LONG_MESSAGE, new JSONObject(s2.get()).getString("msg"));
         Assert.assertNotEquals("\uD83D\uDE0A", s2.get());
     }
 }

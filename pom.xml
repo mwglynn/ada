@@ -97,11 +97,17 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+
         <!--postgresql-->
         <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>9.0-801.jdbc4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>

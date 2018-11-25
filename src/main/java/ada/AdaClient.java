@@ -2,6 +2,7 @@ package ada;
 
 import java.util.Optional;
 import java.util.Scanner;
+import org.json.*;
 
 /**
  * {@code ada.AdaClient} reads messages from and sends Messages to {@link AdaServer}.
@@ -17,6 +18,9 @@ public class AdaClient {
         NetworkReader reader = new NetworkReader(client);
         Scanner input = new Scanner(System.in);
 
+        System.out.print("Please enter a username: ");
+        String username = input.nextLine();
+
         Thread sendMessages =
                 new Thread(
                         () -> {
@@ -29,13 +33,16 @@ public class AdaClient {
                             }
                         });
         sendMessages.start();
-
+        sender.SendMessage("\\username " + username);
         Optional<String> s;
         do {
             s = reader.ReadMessage();
             if (s.isPresent()) {
-                System.out.println("-" + s.get());
-                if (s.get().equals("exit")) {
+                JSONObject jobj = new JSONObject(s.get());
+                String parsedSender = jobj.getString("sender");
+                String parsedMsg = jobj.getString("msg");
+                System.out.println(parsedSender + ": " + parsedMsg);
+                if (parsedMsg.equals("exit")) {
                     break;
                 }
             }
