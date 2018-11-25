@@ -109,14 +109,20 @@
             <artifactId>json</artifactId>
             <version>20180813</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.0.0-M1</version>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <excludes>
+                        <!-- exclude tests here -->
+                        <exclude>src/test/java/ada/texttospeech/AudioUtilTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <!--this makes checkstyle part of validate build-->
                 <groupId>org.apache.maven.plugins</groupId>
