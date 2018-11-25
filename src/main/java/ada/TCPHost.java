@@ -1,9 +1,12 @@
 package ada;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -13,6 +16,7 @@ class TCPHost {
   private ConcurrentLinkedQueue<NetworkHandle> newConnections;
   private volatile boolean shouldListen;
   private Thread listenForConnectionsThread;
+  private Hashtable<NetworkHandle, String> usernameMap;
 
   private class NetworkHandle {
     NetworkSocket socket;
@@ -24,7 +28,7 @@ class TCPHost {
     if (port < 1 || port > 65535) {
       throw new IllegalArgumentException();
     }
-
+    usernameMap = new Hashtable<NetworkHandle, String>();
     connectedSockets = new ArrayList<>();
     newConnections = new ConcurrentLinkedQueue<>();
     try {
@@ -52,6 +56,7 @@ class TCPHost {
         netHandle.sender = new NetworkSender(netHandle.socket);
 
         newConnections.add(netHandle);
+        usernameMap.put(netHandle, "Unnamed");
       } catch (IOException ioe) {
         /* We will hit this whenever the server is shutdown */
       }
@@ -71,9 +76,19 @@ class TCPHost {
           if (msg.get().equals("\\q")) {
             return false;
           }
-          for (int j = 0; j < connectedSockets.size(); j++) {
-            if (i != j) {
-              connectedSockets.get(j).sender.SendMessage(msg.get());
+          else if (msg.get().contains("\\username")) {
+            String newUsername = msg.get().split("\\s+")[1]; //Currently I'm assuming this is well formed
+            usernameMap.put(connectedSockets.get(i), newUsername);
+          }
+          else {
+            JSONObject jobj = new JSONObject();
+            jobj.put("sender", usernameMap.get(connectedSockets.get(i)));
+            jobj.put("msg", msg.get());
+            String jsonMsg = jobj.toString();
+            for (int j = 0; j < connectedSockets.size(); j++) {
+              if (i != j) {
+                connectedSockets.get(j).sender.SendMessage(jsonMsg);
+              }
             }
           }
         }
