@@ -68,11 +68,10 @@ public class AdaTextToSpeechClientTest {
     }
 
     @Test
-    public void getAudio_nullInput_isEmpty() throws Exception {
-        AdaTextToSpeechClient textToSpeechClient =
-                new AdaTextToSpeechClient(TextToSpeechClient.create());
+    public void getAudio_nullInput_isEmpty() {
+        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any())).thenReturn(null);
 
-        Optional<AudioInputStream> response = textToSpeechClient.getAudio(null);
+        Optional<AudioInputStream> response = clientUnderTest.getAudio(null);
 
         assertThat(response).isEmpty();
     }
