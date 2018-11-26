@@ -1,7 +1,5 @@
 language: java
 sudo: false
-ignore:
-- test/java/ada/texttospeech/AudioUtilTest.java
 script:
 - mvn clean validate compile verify
 before_install:

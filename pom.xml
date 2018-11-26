@@ -118,8 +118,8 @@
                 <version>3.0.0-M1</version>
                 <configuration>
                     <excludes>
-                        <!-- exclude tests here -->
-                        <exclude>src/test/java/ada/texttospeech/AudioUtilTest.java</exclude>
+                        <!-- Excluding purely audio tests from travis -->
+                        <exclude>**/*AudioUtilTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
