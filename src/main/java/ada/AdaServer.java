@@ -12,7 +12,7 @@ public class AdaServer {
     public static void main(String[] args) {
         TCPHost host = new TCPHost(port);
 
-        /* setup tables */
+        /* DB: create tables if not exist */
         new PostgreSQLJDBC();
         PostgreSQLJDBC.main();
 

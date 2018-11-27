@@ -1,5 +1,7 @@
 package ada;
 
+import org.json.JSONObject;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -27,7 +29,20 @@ class NetworkSender {
 
     void SendMessage(String msg) {
         if (shouldProcessSendQueue) {
-            outgoingMessages.add(msg);
+
+            /* DB: check for history command */
+            if (msg.equals(":history:")) {
+                System.out.println("coming soon!");
+//                new PostgreSQL_queryHistory();
+//                PostgreSQL_queryHistory.main(msg);
+            }
+            else {
+                /** we don't want to send
+                 * our own request for history
+                 */
+                outgoingMessages.add(msg);
+            }
+
         }
     }
 
