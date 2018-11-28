@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="ada.TCPHost_Test" time="0.022" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="ada.DB_Test" time="0.191" tests="7" errors="0" skipped="0" failures="0">
   <properties>
     <property name="gopherProxySet" value="false"/>
     <property name="awt.toolkit" value="sun.lwawt.macosx.LWCToolkit"/>
@@ -62,8 +62,11 @@
     <property name="java.class.version" value="55.0"/>
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase name="testConnectManyHostsSucceeds" classname="ada.TCPHost_Test" time="0.021"/>
-  <testcase name="testIllegalArgumentPortNegativeFails" classname="ada.TCPHost_Test" time="0"/>
-  <testcase name="testIllegalArgumentPortLowFails" classname="ada.TCPHost_Test" time="0"/>
-  <testcase name="testIllegalArgumentPortHighFails" classname="ada.TCPHost_Test" time="0"/>
+  <testcase name="testIllegalUsername" classname="ada.DB_Test" time="0.105"/>
+  <testcase name="testYesMatchName" classname="ada.DB_Test" time="0.031"/>
+  <testcase name="testWrongPort" classname="ada.DB_Test" time="0.009"/>
+  <testcase name="testWrongUser" classname="ada.DB_Test" time="0.004"/>
+  <testcase name="noUsername" classname="ada.DB_Test" time="0.016"/>
+  <testcase name="testNoMatchName" classname="ada.DB_Test" time="0.008"/>
+  <testcase name="testDoubleInsert" classname="ada.DB_Test" time="0.013"/>
 </testsuite>
