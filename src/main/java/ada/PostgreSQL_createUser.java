@@ -35,7 +35,7 @@ public class PostgreSQL_createUser {
             c.commit();
             c.close();
         } catch (Exception e) {
-//            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             if (flag.equals("n")) {
                 System.out.println("user name taken!");
                 return false;
@@ -65,7 +65,7 @@ public class PostgreSQL_createUser {
         try {
             Class.forName("org.postgresql.Driver");
             c = getConnection("jdbc:postgresql://" + host + ":5432",
-                    "postgres", "postgres");
+                    "postgres", "quiteoddg");
             c.setAutoCommit(false);
 
             safe_args = args.replace("'", "");

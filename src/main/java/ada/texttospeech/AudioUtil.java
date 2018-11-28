@@ -4,9 +4,9 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-final class AudioUtil {
+public final class AudioUtil {
 
-    static void play(AudioInputStream audio) {
+    public static void play(AudioInputStream audio) {
         CountDownLatch syncLatch = new CountDownLatch(1);
         try {
             Clip clip = AudioSystem.getClip();

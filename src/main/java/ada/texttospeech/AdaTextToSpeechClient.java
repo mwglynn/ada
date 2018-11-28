@@ -15,7 +15,7 @@ import java.util.Optional;
  * Text to speech client class for getting audio (via the text to speech client). Branched from
  * Google Cloud TextToSpeech API sample application.
  */
-final class AdaTextToSpeechClient {
+public final class AdaTextToSpeechClient {
   private TextToSpeechClient client;
   private static final VoiceSelectionParams voice =
           VoiceSelectionParams.newBuilder()
@@ -28,7 +28,7 @@ final class AdaTextToSpeechClient {
   /**
    * Text to Speech Client for interfacing with Cloud TTS.
    */
-  AdaTextToSpeechClient(TextToSpeechClient client) {
+  public AdaTextToSpeechClient(TextToSpeechClient client) {
     this.client = client;
   }
 
@@ -37,7 +37,7 @@ final class AdaTextToSpeechClient {
     return client.synthesizeSpeech(input, voice, audioConfig);
   }
 
-  Optional<AudioInputStream> getAudio(String text) {
+  public Optional<AudioInputStream> getAudio(String text) {
     try {
       return Optional.of(
               AudioSystem.getAudioInputStream(
