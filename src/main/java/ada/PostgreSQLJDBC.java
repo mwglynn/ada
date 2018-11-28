@@ -8,7 +8,7 @@ import static java.sql.DriverManager.getConnection;
  * creation of the tables
  */
 public class PostgreSQLJDBC {
-    public static void main() {
+    public static void InitPostgres() {
         Connection c = null;
         Statement stmt = null;
         try {
@@ -16,7 +16,7 @@ public class PostgreSQLJDBC {
 
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432",
+            c = getConnection("jdbc:postgresql://104.236.175.127:5432",
                     "postgres", "postgres");
             System.out.println("Opened database successfully");
 

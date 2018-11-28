@@ -11,6 +11,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.8.16" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.8.16" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-jxr-plugin:maven-plugin:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-jxr:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.velocity:velocity:1.5" level="project" />

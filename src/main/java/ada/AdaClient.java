@@ -16,7 +16,9 @@ public class AdaClient {
     private static final int PORT = 6259;
 
     public static void main(String[] args) {
-        NetworkSocketClient client = new NetworkSocketClient("localhost", PORT);
+        String host = "localhost";
+        if (args.length == 2) host = args[1];
+        NetworkSocketClient client = new NetworkSocketClient(host, PORT);
         NetworkSender sender = new NetworkSender(client);
         NetworkReader reader = new NetworkReader(client);
         Scanner input = new Scanner(System.in);
@@ -40,8 +42,7 @@ public class AdaClient {
                 flag = "n";
                 System.out.print("Please enter a username: ");
                 username = input.nextLine();
-                new PostgreSQL_createUser();
-                Boolean ret = PostgreSQL_createUser.main(username, flag);
+                Boolean ret = PostgreSQL_createUser.Create(host, username, flag);
                 if (ret.equals(false)) {
                     System.out.println("please try again!");
                 } else {
@@ -54,7 +55,7 @@ public class AdaClient {
                 /* check if in system */
                 username = input.nextLine();
                 new PostgreSQL_createUser();
-                Boolean ret = PostgreSQL_createUser.checkUser(username, flag);
+                Boolean ret = PostgreSQL_createUser.checkUser(host, username, flag);
                 if (ret.equals(true)) {
                     System.out.println("username validated");
                     break;
@@ -88,8 +89,7 @@ public class AdaClient {
                 String parsedMsg = jobj.getString("msg");
 
                 /* DB: SQL insertion */
-                new PostgreSQL_insertChat();
-                PostgreSQL_insertChat.main(jobj, username);
+                PostgreSQL_insertChat.Insert(host, jobj, username);
 
                 System.out.println(parsedSender + ": " + parsedMsg);
                 if (parsedMsg.equals("exit")) {

@@ -13,12 +13,12 @@ import java.sql.Timestamp;
 import static java.sql.DriverManager.getConnection;
 
 public class PostgreSQL_insertChat {
-    public static void main(JSONObject jobj, String receiver) {
+    public static void Insert(String host, JSONObject jobj, String receiver) {
         Connection c = null;
         Statement stmt = null;
         try {
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432",
+            c = getConnection("jdbc:postgresql://" + host + ":5432",
                     "postgres", "postgres");
             c.setAutoCommit(false);
 

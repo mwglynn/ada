@@ -13,8 +13,7 @@ public class AdaServer {
         TCPHost host = new TCPHost(port);
 
         /* DB: create tables if not exist */
-        new PostgreSQLJDBC();
-        PostgreSQLJDBC.main();
+        PostgreSQLJDBC.InitPostgres();
 
         Thread hostThread =
                 new Thread(

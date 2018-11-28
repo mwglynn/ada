@@ -11,13 +11,13 @@ import java.sql.Statement;
 import static java.sql.DriverManager.getConnection;
 
 public class PostgreSQL_createUser {
-    public static boolean main(String args, String flag) {
+    public static boolean Create(String host, String args, String flag) {
         Connection c = null;
         Statement stmt = null;
 
         try {
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432",
+            c = getConnection("jdbc:postgresql://" + host + ":5432",
                     "postgres", "postgres");
             c.setAutoCommit(false);
 
@@ -35,6 +35,7 @@ public class PostgreSQL_createUser {
             c.commit();
             c.close();
         } catch (Exception e) {
+            e.printStackTrace();
 //            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             if (flag.equals("n")) {
                 System.out.println("user name taken!");
@@ -55,7 +56,7 @@ public class PostgreSQL_createUser {
     }
 
 
-    public static boolean checkUser(String args, String flag) {
+    public static boolean checkUser(String host, String args, String flag) {
         Connection c = null;
         Statement stmt = null;
         String result = null;
@@ -64,7 +65,7 @@ public class PostgreSQL_createUser {
 
         try {
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432",
+            c = getConnection("jdbc:postgresql://" + host + ":5432",
                     "postgres", "postgres");
             c.setAutoCommit(false);
 
