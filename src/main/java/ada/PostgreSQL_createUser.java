@@ -65,7 +65,7 @@ public class PostgreSQL_createUser {
         try {
             Class.forName("org.postgresql.Driver");
             c = getConnection("jdbc:postgresql://" + host + ":5432",
-                    "postgres", "quiteoddg");
+                    "postgres", "postgres");
             c.setAutoCommit(false);
 
             safe_args = args.replace("'", "");
