@@ -17,7 +17,7 @@ public class AdaClient {
 
     public static void main(String[] args) {
         String host = "localhost";
-        if (args.length == 2) host = args[1];
+        if (args.length > 0) host = args[0];
         NetworkSocketClient client = new NetworkSocketClient(host, PORT);
         NetworkSender sender = new NetworkSender(client);
         NetworkReader reader = new NetworkReader(client);

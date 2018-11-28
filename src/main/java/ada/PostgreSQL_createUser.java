@@ -35,7 +35,6 @@ public class PostgreSQL_createUser {
             c.commit();
             c.close();
         } catch (Exception e) {
-            e.printStackTrace();
 //            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
             if (flag.equals("n")) {
                 System.out.println("user name taken!");
