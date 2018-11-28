@@ -1,13 +1,8 @@
 package ada;
 
-import org.json.JSONObject;
-
 import java.sql.Connection;
-import static java.sql.DriverManager.getConnection;
-
 import java.sql.ResultSet;
 import java.sql.Statement;
-
 
 import static java.sql.DriverManager.getConnection;
 

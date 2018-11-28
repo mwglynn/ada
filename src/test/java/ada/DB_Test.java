@@ -1,12 +1,10 @@
 package ada;
 
-import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.sql.*;
+import java.sql.Connection;
 
 import static java.sql.DriverManager.getConnection;
 
@@ -17,7 +15,7 @@ public class DB_Test {
      *
      */
     @Test
-    public void testWrongPort() throws Exception {
+    public void testWrongPort() {
         Connection c = null;
         try {
             Class.forName("org.postgresql.Driver");
@@ -30,7 +28,7 @@ public class DB_Test {
     }
 
     @Test
-    public void testWrongUser() throws Exception {
+    public void testWrongUser() {
         Connection c = null;
         try {
             Class.forName("org.postgresql.Driver");
