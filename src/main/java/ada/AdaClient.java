@@ -1,8 +1,11 @@
 package ada;
 
+import java.sql.Time;
 import java.util.Optional;
 import java.util.Scanner;
+import java.sql.Timestamp;
 import org.json.*;
+
 
 /**
  * {@code ada.AdaClient} reads messages from and sends Messages to {@link AdaServer}.
@@ -13,13 +16,56 @@ public class AdaClient {
     private static final int PORT = 6259;
 
     public static void main(String[] args) {
-        NetworkSocketClient client = new NetworkSocketClient("localhost", PORT);
+        String host = "localhost";
+        if (args.length > 0) host = args[0];
+        NetworkSocketClient client = new NetworkSocketClient(host, PORT);
         NetworkSender sender = new NetworkSender(client);
         NetworkReader reader = new NetworkReader(client);
         Scanner input = new Scanner(System.in);
 
-        System.out.print("Please enter a username: ");
-        String username = input.nextLine();
+        /* DB: log user if new */
+        String username = null;
+        String answer = null;
+        String flag = null;
+
+        /** DB: known bug - multiple logins same person allowed
+         * this is not fully a bug because no two people can have
+         * the same username, so someone would have to lie and say
+         * that they do have an account when the really do not and
+         * then use an existing username as their own
+         * reach goal: implement authorization mechanism
+         */
+        while (true) {
+            System.out.print("Do you already have an account (y/n):  ");
+            answer = input.nextLine();
+            if (answer.equals("n")) {
+                flag = "n";
+                System.out.print("Please enter a username: ");
+                username = input.nextLine();
+                Boolean ret = PostgreSQL_createUser.Create(host, username, flag);
+                if (ret.equals(false)) {
+                    System.out.println("please try again!");
+                } else {
+                    System.out.println("user created in database!");
+                    break;
+                }
+            } else if (answer.equals("y")) {
+                flag = "y";
+                System.out.print("Please enter *your* username: ");
+                /* check if in system */
+                username = input.nextLine();
+                new PostgreSQL_createUser();
+                Boolean ret = PostgreSQL_createUser.checkUser(host, username, flag);
+                if (ret.equals(true)) {
+                    System.out.println("username validated");
+                    break;
+                } else {
+                    System.out.println("username not in system, try again");
+                }
+            } else {
+                System.out.println("incorrect selection, please try again!");
+            }
+        }
 
         Thread sendMessages =
                 new Thread(
@@ -41,6 +87,10 @@ public class AdaClient {
                 JSONObject jobj = new JSONObject(s.get());
                 String parsedSender = jobj.getString("sender");
                 String parsedMsg = jobj.getString("msg");
+
+                /* DB: SQL insertion */
+                PostgreSQL_insertChat.Insert(host, jobj, username);
+
                 System.out.println(parsedSender + ": " + parsedMsg);
                 if (parsedMsg.equals("exit")) {
                     break;

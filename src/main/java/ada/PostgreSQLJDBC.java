@@ -2,14 +2,13 @@ package ada;
 
 import java.sql.Connection;
 import java.sql.Statement;
-
 import static java.sql.DriverManager.getConnection;
 
 /**
  * creation of the tables
  */
 public class PostgreSQLJDBC {
-    public static void main() {
+    public static void InitPostgres(String host) {
         Connection c = null;
         Statement stmt = null;
         try {
@@ -17,7 +16,7 @@ public class PostgreSQLJDBC {
 
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
-            c = getConnection("jdbc:postgresql://localhost:5432",
+            c = getConnection("jdbc:postgresql://" + host + ":5432",
                     "postgres", "postgres");
             System.out.println("Opened database successfully");
 
@@ -28,20 +27,21 @@ public class PostgreSQLJDBC {
                     "userName VARCHAR(255) UNIQUE NOT NULL," +
                     "PRIMARY KEY (ID, userName))";
             stmt.executeUpdate(sql);
-            System.out.println("adaUser executed");
+            System.out.println("- adaUser executed");
 
             /* execute creation of chat */
             sql = "CREATE TABLE IF NOT EXISTS adaChat (" +
                     "ID SERIAL NOT NULL," +
-                    "time_stamp TIME NOT NULL," +
+                    "time TIME NOT NULL," +
+                    "date DATE NOT NULL," +
                     "message TEXT," +
                     "sender VARCHAR(255)," +
-                    "receiver VARCHAR(255)[]," +
+                    "receiver VARCHAR(255)," +
                     "PRIMARY KEY (ID)," +
                     "FOREIGN KEY (sender) REFERENCES adaUser(userName) ON DELETE NO ACTION)";
             stmt.executeUpdate(sql);
             stmt.close();
-            System.out.println("adaChat executed");
+            System.out.println("- adaChat executed");
 
             c.close();
         } catch (Exception e) {
