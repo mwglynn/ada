@@ -1,17 +1,13 @@
 package ada;
 
-import java.io.IOException;
-import java.sql.Time;
-import java.util.Optional;
-import java.util.Scanner;
-import java.sql.Timestamp;
-
 import ada.texttospeech.AdaTextToSpeechClient;
 import ada.texttospeech.AudioUtil;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import org.json.*;
+import org.json.JSONObject;
 
-import javax.sound.sampled.AudioInputStream;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Scanner;
 
 /** {@code ada.AdaClient} reads messages from and sends Messages to {@link AdaServer}. */
 @SuppressWarnings("WeakerAccess")
@@ -19,21 +15,24 @@ public class AdaClient {
 
   private static final int PORT = 6259;
 
-  public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-    AdaTextToSpeechClient textToSpeechClient =
-        new AdaTextToSpeechClient(TextToSpeechClient.create());
-    String host = "localhost";
-    if (args.length > 0) host = args[0];
+        AdaTextToSpeechClient textToSpeechClient;
+        try {
+            textToSpeechClient = new AdaTextToSpeechClient(TextToSpeechClient.create());
+        } catch (IOException e) {
+            textToSpeechClient = null;
+        }
+        String host = args[0] != null ? args[0] : "localhost";
     NetworkSocketClient client = new NetworkSocketClient(host, PORT);
     NetworkSender sender = new NetworkSender(client);
     NetworkReader reader = new NetworkReader(client);
     Scanner input = new Scanner(System.in);
 
     /* DB: log user if new */
-    String username = null;
-    String answer = null;
-    String flag = null;
+        String username;
+        String answer;
+        String flag;
 
     /**
      * DB: known bug - multiple logins same person allowed this is not fully a bug because no two
@@ -95,7 +94,9 @@ public class AdaClient {
         String parsedMsg = jobj.getString("msg");
 
         System.out.println(parsedSender + ": " + parsedMsg);
-        textToSpeechClient.getAudio(parsedMsg).ifPresent(a -> AudioUtil.play(a));
+          if (textToSpeechClient != null) {
+              textToSpeechClient.getAudio(parsedMsg).ifPresent(AudioUtil::play);
+          }
         /* DB: SQL insertion */
         PostgreSQL_insertChat.Insert(host, jobj, username);
 

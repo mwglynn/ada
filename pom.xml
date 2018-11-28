@@ -156,6 +156,7 @@
                         </goals>
                         <configuration>
                             <mainClass>ada.AdaClient</mainClass>
+                            <arguments>104.236.175.127</arguments>
                         </configuration>
                     </execution>
                 </executions>
