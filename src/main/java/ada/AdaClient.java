@@ -23,7 +23,7 @@ public class AdaClient {
         } catch (IOException e) {
             textToSpeechClient = null;
         }
-        String host = args[0] != null ? args[0] : "localhost";
+        String host = args.length > 0 ? args[0] : "localhost";
     NetworkSocketClient client = new NetworkSocketClient(host, PORT);
     NetworkSender sender = new NetworkSender(client);
     NetworkReader reader = new NetworkReader(client);
