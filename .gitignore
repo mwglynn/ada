@@ -5,7 +5,8 @@
 *.iml
 
 # Maven target files
-*/target/**
+target/
+
 
 # CMake
 cmake-build-*/

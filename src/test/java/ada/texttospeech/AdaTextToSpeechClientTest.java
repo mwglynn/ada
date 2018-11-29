@@ -1,5 +1,6 @@
 package ada.texttospeech;
 
+import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 import com.google.protobuf.ByteString;
@@ -20,8 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
 public class AdaTextToSpeechClientTest {
@@ -44,6 +44,7 @@ public class AdaTextToSpeechClientTest {
 
     @Test
     public void getAudio_validAudio_Succeeds() throws Exception {
+        reset(mockCloudTTSClient);
         when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
                 .thenReturn(SynthesizeSpeechResponse.newBuilder().setAudioContent(validTestAudio).build());
 
@@ -58,6 +59,7 @@ public class AdaTextToSpeechClientTest {
 
     @Test
     public void getAudio_invalidAudio_isEmpty() {
+        reset(mockCloudTTSClient);
         when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
                 .thenReturn(
                         SynthesizeSpeechResponse.newBuilder().setAudioContent(ByteString.EMPTY).build());
@@ -69,6 +71,7 @@ public class AdaTextToSpeechClientTest {
 
     @Test
     public void getAudio_nullInput_isEmpty() {
+        reset(mockCloudTTSClient);
         when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any())).thenReturn(null);
 
         Optional<AudioInputStream> response = clientUnderTest.getAudio(null);
@@ -76,14 +79,15 @@ public class AdaTextToSpeechClientTest {
         assertThat(response).isEmpty();
     }
 
-//    @Test
-//    @SuppressWarnings("InvalidArgument")
-//    public void getAudio_invalidArgument_isEmpty() {
-//        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
-//                .thenThrow(InvalidArgumentException.class);
-//
-//        Optional<AudioInputStream> response = clientUnderTest.getAudio("Whatever");
-//
-//        assertThat(response).isEmpty();
-//    }
+    @Test
+    @SuppressWarnings("InvalidArgument")
+    public void getAudio_invalidArgument_isEmpty() {
+        reset(mockCloudTTSClient);
+        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
+                .thenThrow(InvalidArgumentException.class);
+
+        Optional<AudioInputStream> response = clientUnderTest.getAudio("Whatever");
+
+        assertThat(response).isEmpty();
+    }
 }
