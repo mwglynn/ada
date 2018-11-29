@@ -156,7 +156,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>ada.AdaClient</mainClass>
+                            <mainClass>ada.AdaClientMain</mainClass>
                             <arguments>104.236.175.127</arguments>
                         </configuration>
                     </execution>
@@ -263,7 +263,7 @@
                 <version>3.0.0-M1</version>
                 <configuration>
                     <showSuccess>true</showSuccess>
-                    <argLine>-Xmx1024M ${argLine}</argLine>
+                    <!--<argLine>-Xmx1024M ${argLine}</argLine>-->
                 </configuration>
             </plugin>
             <!--add this to travisCI ==> mvn checkstyle:checkstyle <== -->

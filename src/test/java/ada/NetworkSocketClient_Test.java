@@ -4,26 +4,29 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 @RunWith(JUnit4.class)
 public class NetworkSocketClient_Test {
 
-  @Test
-  public void unknownHostSucceeds() {
+  @Test(expected = UnknownHostException.class)
+  public void unknownHostFails() throws IOException {
     NetworkSocketClient client = new NetworkSocketClient("9999.9999999.0.0", 9090);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testIllegalArgumentPortHighFails() {
+  public void testIllegalArgumentPortHighFails() throws IOException {
     NetworkSocketClient client = new NetworkSocketClient("localhost", 65536);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testIllegalArgumentPortLowFails() {
+  public void testIllegalArgumentPortLowFails() throws IOException {
     NetworkSocketClient client = new NetworkSocketClient("localhost", 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testIllegalArgumentPortNegativeFails() {
+  public void testIllegalArgumentPortNegativeFails() throws IOException {
     NetworkSocketClient client = new NetworkSocketClient("localhost", -1);
   }
 }

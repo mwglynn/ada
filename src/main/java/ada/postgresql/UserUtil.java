@@ -8,7 +8,7 @@ import java.sql.Statement;
 import static java.sql.DriverManager.getConnection;
 
 public class UserUtil {
-    public static boolean Create(String host, String args, String flag) {
+    public static boolean createUser(String host, String args) {
         Connection c;
         Statement stmt;
 
@@ -29,27 +29,16 @@ public class UserUtil {
             stmt.close();
             c.commit();
             c.close();
+
+            return true;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            if (flag.equals("n")) {
-                System.out.println("user name taken!");
-                return false;
-            } else if (flag.equals("y")) {
-                System.out.println("user verified in database");
-                return true;
-            }
-        }
-        if (flag.equals("n")) {
-            return true;
-        } else if (flag.equals("y")) {
+            System.out.println("user name taken!");
             return false;
         }
-        /* end of logic, exit if reached */
-        System.exit(1);
-        return false;
     }
 
-    public static boolean checkUser(String host, String args, String flag) {
+    public static boolean checkUser(String host, String args) {
         Connection c;
         Statement stmt;
         String result = "";

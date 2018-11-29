@@ -1,12 +1,12 @@
 package ada;
 
+import com.google.common.base.Preconditions;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Optional;
 
 public class NetworkSocketClient implements NetworkSocket {
@@ -15,32 +15,23 @@ public class NetworkSocketClient implements NetworkSocket {
   private DataOutputStream clientOutputStream;
   private BufferedReader clientInputStream;
 
-  NetworkSocketClient(Socket socket) {
-    try {
-      clientSocket = socket;
-      clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
-      clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
+  NetworkSocketClient(Socket socket) throws IOException {
+    clientSocket = socket;
+    clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+    clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+    Preconditions.checkNotNull(clientInputStream);
+    Preconditions.checkNotNull(clientOutputStream);
+    Preconditions.checkNotNull(clientSocket);
   }
 
-  NetworkSocketClient(String ip, int port) {
+  NetworkSocketClient(String ip, int port) throws IOException {
     if (port < 1 || port > 65535) {
       throw new IllegalArgumentException();
     }
-    try {
-      clientSocket = new Socket(ip, port);
-      clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
-      clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-    } catch (ConnectException e) {
-      e.printStackTrace();
-    } catch (UnknownHostException e) {
-      System.out.println("Please use 127.0.0.1!");
-      /* e.printStackTrace(); */
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
+    clientSocket = new Socket(ip, port);
+    clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
+    clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
   }
 
   @Override
@@ -56,6 +47,9 @@ public class NetworkSocketClient implements NetworkSocket {
   @Override
   public Optional<String> ReadFromSocket() {
     try {
+      if (clientInputStream == null) {
+        System.out.println("CLIENTINPUTSTREAM IS NULL");
+      }
       if (clientInputStream.ready()) {
         return Optional.ofNullable(clientInputStream.readLine());
       }

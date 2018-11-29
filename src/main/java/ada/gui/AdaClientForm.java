@@ -1,6 +1,6 @@
 package ada.gui;
 
-import ada.AdaClient;
+import ada.AdaClientMain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class AdaClientForm {
     private JPanel clientPanel;
     private JButton buttonStart;
-    private AdaClient client;
+    private AdaClientMain client;
 
     public AdaClientForm() {
         buttonStart.addActionListener(new ActionListener() {
@@ -19,7 +19,7 @@ public class AdaClientForm {
                 if (client == null) {
                     JOptionPane.showMessageDialog(null, "Client Started");
                     try {
-                        client = new AdaClient();
+                        client = new AdaClientMain();
                         client.main(null);
                     } catch (Exception excp) {
                         JOptionPane.showMessageDialog(null, "Error ins starting client");
