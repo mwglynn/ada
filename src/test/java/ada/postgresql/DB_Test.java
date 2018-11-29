@@ -12,6 +12,8 @@ import static java.sql.DriverManager.getConnection;
 @RunWith(JUnit4.class)
 public class DB_Test {
 
+    private static final String TEST_USER = "postgres";
+    private static final String TEST_PASSWORD = "postgres";
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
@@ -21,15 +23,19 @@ public class DB_Test {
     @Test(expected = PSQLException.class)
     public void getConnection_wrongPort_throwsPSQLException() throws Exception {
         Class.forName("org.postgresql.Driver");
-        getConnection("jdbc:postgresql://localhost:5555", "postgres", "postgres");
+        getConnection("jdbc:postgresql://localhost:5555", TEST_USER, TEST_PASSWORD);
+    }
+
+    @Test(expected = PSQLException.class)
+    public void test_wrongUser_throwsPasswordException() throws Exception {
+        Class.forName("org.postgresql.Driver");
+        getConnection("jdbc:postgresql://localhost:5432", ".", TEST_PASSWORD);
     }
 
     @Test
-    public void test_wrongUser_throwsPasswordException() throws Exception {
-        expectedException.expect(PSQLException.class);
-        expectedException.expectMessage("password authentication failed");
+    public void test_validUser_Succeeds() throws Exception {
         Class.forName("org.postgresql.Driver");
-        getConnection("jdbc:postgresql://localhost:5432", ".", "postgres");
+        getConnection("jdbc:postgresql://localhost:5432", TEST_USER, TEST_PASSWORD);
     }
 
     //    /** test user names (manually remove entries later)
