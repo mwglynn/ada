@@ -263,7 +263,7 @@
                 <version>3.0.0-M1</version>
                 <configuration>
                     <showSuccess>true</showSuccess>
-                    <!--<argLine>-Xmx1024M ${argLine}</argLine>-->
+                    <argLine>-Xmx1024M ${argLine}</argLine>
                 </configuration>
             </plugin>
             <!--add this to travisCI ==> mvn checkstyle:checkstyle <== -->
