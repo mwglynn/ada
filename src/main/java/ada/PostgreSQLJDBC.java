@@ -2,7 +2,6 @@ package ada;
 
 import java.sql.Connection;
 import java.sql.Statement;
-
 import static java.sql.DriverManager.getConnection;
 
 /**

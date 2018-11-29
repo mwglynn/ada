@@ -1,11 +1,10 @@
 package ada.gui;
 
-import ada.AdaServer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import ada.AdaServer;
 
 public class AdaServerForm {
     private JButton starButton;
