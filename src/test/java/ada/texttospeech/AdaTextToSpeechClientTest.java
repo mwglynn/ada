@@ -75,4 +75,15 @@ public class AdaTextToSpeechClientTest {
 
         assertThat(response).isEmpty();
     }
+
+//    @Test
+//    @SuppressWarnings("InvalidArgument")
+//    public void getAudio_invalidArgument_isEmpty() {
+//        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
+//                .thenThrow(InvalidArgumentException.class);
+//
+//        Optional<AudioInputStream> response = clientUnderTest.getAudio("Whatever");
+//
+//        assertThat(response).isEmpty();
+//    }
 }

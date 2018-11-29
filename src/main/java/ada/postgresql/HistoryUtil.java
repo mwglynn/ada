@@ -1,4 +1,4 @@
-package ada;
+package ada.postgresql;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -6,10 +6,10 @@ import java.sql.Statement;
 
 import static java.sql.DriverManager.getConnection;
 
-public class PostgreSQL_queryHistory {
-    public void Query(String host, String username) {
-        Connection c = null;
-        Statement stmt = null;
+public class HistoryUtil {
+    public static void Query(String host, String username) {
+        Connection c;
+        Statement stmt;
         try {
             Class.forName("org.postgresql.Driver");
             c = getConnection("jdbc:postgresql://" + host + ":5432",

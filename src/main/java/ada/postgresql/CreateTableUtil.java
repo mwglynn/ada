@@ -1,4 +1,4 @@
-package ada;
+package ada.postgresql;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -8,10 +8,10 @@ import static java.sql.DriverManager.getConnection;
 /**
  * creation of the tables
  */
-public class PostgreSQLJDBC {
+public class CreateTableUtil {
     public static void InitPostgres(String host) {
-        Connection c = null;
-        Statement stmt = null;
+        Connection c;
+        Statement stmt;
         try {
             /* TODO: put connection in separate part == repeat code */
 

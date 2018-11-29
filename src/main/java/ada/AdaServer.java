@@ -1,5 +1,7 @@
 package ada;
 
+import ada.postgresql.CreateTableUtil;
+
 /**
  * ada.AdaServer houses the main for our Chat Server.
  */
@@ -13,7 +15,7 @@ public class AdaServer {
         TCPHost host = new TCPHost(port);
 
         /* DB: create tables if not exist */
-        PostgreSQLJDBC.InitPostgres("localhost");
+        CreateTableUtil.InitPostgres("localhost");
 
         Thread hostThread =
                 new Thread(

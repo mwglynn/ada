@@ -1,4 +1,4 @@
-package ada;
+package ada.postgresql;
 
 import org.json.JSONObject;
 
@@ -8,10 +8,10 @@ import java.sql.Statement;
 
 import static java.sql.DriverManager.getConnection;
 
-public class PostgreSQL_insertChat {
+public class ChatUtil {
     public static void Insert(String host, JSONObject jobj, String receiver) {
-        Connection c = null;
-        Statement stmt = null;
+        Connection c;
+        Statement stmt;
         try {
             Class.forName("org.postgresql.Driver");
             c = getConnection("jdbc:postgresql://" + host + ":5432",

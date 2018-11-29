@@ -2,6 +2,7 @@ package ada.texttospeech;
 
 // Imports the Google Cloud client library
 
+import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.cloud.texttospeech.v1.*;
 
 import javax.sound.sampled.AudioInputStream;
@@ -42,7 +43,10 @@ public final class AdaTextToSpeechClient {
       return Optional.of(
               AudioSystem.getAudioInputStream(
                       new ByteArrayInputStream(getAudioResponse(text).getAudioContent().toByteArray())));
-    } catch (UnsupportedAudioFileException | IOException | NullPointerException e) {
+    } catch (InvalidArgumentException
+            | UnsupportedAudioFileException
+            | IOException
+            | NullPointerException e) {
       System.out.println("Warning: " + e);
       return Optional.empty();
     }
