@@ -1,6 +1,6 @@
 package ada;
 
-import ada.postgresql.CreateTableUtil;
+import ada.postgresql.AdaDB;
 
 /**
  * ada.AdaServer houses the main for our Chat Server.
@@ -8,28 +8,29 @@ import ada.postgresql.CreateTableUtil;
 @SuppressWarnings("WeakerAccess")
 public class AdaServer {
 
-    private static final int port = 6259;
+  private static final int port = 6259;
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    public static void main(String[] args) {
-        TCPHost host = new TCPHost(port);
+  public static void main(String[] args) {
+    TCPHost host = new TCPHost(port);
 
-        /* DB: create tables if not exist */
-        CreateTableUtil.InitPostgres("localhost");
+    try (AdaDB db = new AdaDB("localhost", "ada")) {
+      /* DB: create tables if not exist */
+      db.initPostgres();
 
-        Thread hostThread =
-                new Thread(
-                        () -> {
-                            while (host.Tick()) {
-                            }
-                            host.Close();
-                        });
-        hostThread.start();
+      Thread hostThread =
+              new Thread(
+                      () -> {
+                        while (host.Tick()) {
+                        }
+                        host.Close();
+                      });
+      hostThread.start();
 
-        try {
-            hostThread.join();
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
+      try {
+        hostThread.join();
+      } catch (InterruptedException ie) {
+        ie.printStackTrace();
+      }
     }
+  }
 }

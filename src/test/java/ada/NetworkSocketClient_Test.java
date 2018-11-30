@@ -12,21 +12,21 @@ public class NetworkSocketClient_Test {
 
   @Test(expected = UnknownHostException.class)
   public void unknownHostFails() throws IOException {
-    NetworkSocketClient client = new NetworkSocketClient("9999.9999999.0.0", 9090);
+    new NetworkSocketClient("9999.9999999.0.0", 9090);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalArgumentPortHighFails() throws IOException {
-    NetworkSocketClient client = new NetworkSocketClient("localhost", 65536);
+    new NetworkSocketClient("localhost", 65536);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalArgumentPortLowFails() throws IOException {
-    NetworkSocketClient client = new NetworkSocketClient("localhost", 0);
+    new NetworkSocketClient("localhost", 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testIllegalArgumentPortNegativeFails() throws IOException {
-    NetworkSocketClient client = new NetworkSocketClient("localhost", -1);
+    new NetworkSocketClient("localhost", -1);
   }
 }

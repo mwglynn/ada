@@ -47,9 +47,6 @@ public class NetworkSocketClient implements NetworkSocket {
   @Override
   public Optional<String> ReadFromSocket() {
     try {
-      if (clientInputStream == null) {
-        System.out.println("CLIENTINPUTSTREAM IS NULL");
-      }
       if (clientInputStream.ready()) {
         return Optional.ofNullable(clientInputStream.readLine());
       }
