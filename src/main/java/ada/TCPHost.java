@@ -1,7 +1,5 @@
 package ada;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -9,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.json.JSONObject;
 
 class TCPHost {
   private ServerSocket serverSocket;
@@ -75,12 +74,11 @@ class TCPHost {
         if (msg.isPresent()) {
           if (msg.get().equals("\\q")) {
             return false;
-          }
-          else if (msg.get().contains("\\username")) {
-            String newUsername = msg.get().split("\\s+")[1]; //Currently I'm assuming this is well formed
+          } else if (msg.get().contains("\\username")) {
+            String newUsername =
+                msg.get().split("\\s+")[1]; // Currently I'm assuming this is well formed
             usernameMap.put(connectedSockets.get(i), newUsername);
-          }
-          else {
+          } else {
             JSONObject jobj = new JSONObject();
             jobj.put("sender", usernameMap.get(connectedSockets.get(i)));
             jobj.put("msg", msg.get());
