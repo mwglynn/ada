@@ -13,8 +13,9 @@ import java.util.Scanner;
 @SuppressWarnings("WeakerAccess")
 public class AdaClient {
 
-  private static final int PORT = 6259;
+    private static final int PORT = 6259;
 
+    /** Main method for the AdaClient. */
     public static void main(String[] args) {
 
         AdaTextToSpeechClient textToSpeechClient;
