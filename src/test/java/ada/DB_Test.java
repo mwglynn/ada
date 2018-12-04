@@ -46,7 +46,7 @@ public class DB_Test {
      *
      */
     @Test
-    public void userNameInsertion() {
+    public void login_newUser() {
         /**
          * this test tries to create a username with a special character
          * the test should pass because we do not yet have restrictions
@@ -109,32 +109,70 @@ public class DB_Test {
         Assert.assertEquals(true, ret);
     }
 
-//    /** insert illegal message
-//     *
-//     */
-//    @Test
-//    public void noUsername() throws Exception {
-//        String username = null;
-//        String receiver = null;
-//        String flag = null;
-//
-//        username = "one";
-//        String random = Double.toString(Math.random());
-//        username = username + random;
-//        flag = "n";
-//        new PostgreSQL_createUser();
-//        Boolean ret = PostgreSQL_createUser.main(username, flag);
-//        Assert.assertEquals(true, ret);
-//
-//        receiver = username;
-//
-//        JSONObject jobj = new JSONObject();
-//        jobj.put("sender", "somthing'illegal'");
-//        jobj.put("msg", "DROP table adaUser CASCADE");
-//
-//        new PostgreSQL_insertChat();
-//        PostgreSQL_insertChat.main(jobj, receiver);
-//
-//    }
+
+
+    @Test
+    public void message_longAndShortMessage() {
+        /**
+         * insert long message, still need to put better junit assert around it
+         */
+        String userName1 = null;
+        String userName2 = null;
+        String host = "localhost";
+        String flag = null;
+        String random = Double.toString(Math.random());
+
+        userName1 = "rainbows";
+        userName1 = userName1 + random;
+        flag = "n";
+        new PostgreSQL_createUser();
+        Boolean ret = PostgreSQL_createUser.Create(host, userName1, flag);
+        /* should pass now because the user is new */
+        Assert.assertEquals(true, ret);
+
+        userName2 = "butterflies";
+        userName2 = userName2 + random;
+        flag = "n";
+        new PostgreSQL_createUser();
+        ret = PostgreSQL_createUser.Create(host, userName2, flag);
+        /* should pass now because the user is new */
+        Assert.assertEquals(true, ret);
+
+        String message = null;
+        message = "start ";
+        int count = 0;
+        Boolean end = false;
+        // send a really long message to test length
+        while (end != true) {
+            if (count == 10000) {
+                end = true;
+            } else {
+                message = message + Double.toString(Math.random());
+                count += 1;
+            }
+        }
+        message = message + " end";
+        System.out.println(message);
+        String sender = userName1;
+        String receiver = userName2;
+        JSONObject jobj = new JSONObject();
+        jobj.put("sender", sender);
+        jobj.put("msg", message);
+
+        String almost_empty = "";
+
+        // long
+        try {
+            new PostgreSQL_insertChat();
+            // long message
+            PostgreSQL_insertChat.Insert(host, jobj, receiver);
+            // short message
+            jobj.put("msg", almost_empty);
+            PostgreSQL_insertChat.Insert(host, jobj, receiver);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
 
 }
