@@ -8,6 +8,7 @@ This is a first-phase MVP of the chat-app! The app sets up a simple client and s
 
 
 ```$xslt
+Code Coverage			Jacoco
 Version Control:                Github
 Build Tool:                     Maven 
 Continuous Integration:         TravisCI
