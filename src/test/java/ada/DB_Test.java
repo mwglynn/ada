@@ -152,7 +152,6 @@ public class DB_Test {
             }
         }
         message = message + " end";
-        System.out.println(message);
         String sender = userName1;
         String receiver = userName2;
         JSONObject jobj = new JSONObject();
