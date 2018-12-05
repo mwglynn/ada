@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Messages_inputIntegration_Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jacoco.exec</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">Messages_inputIntegration_Test.java</span></div><h1>Messages_inputIntegration_Test.java</h1><pre class="source lang-java linenums">package ada;
+
+import org.json.JSONObject;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.util.Optional;
+
+/**
+ * Tests of message inputs.
+ */
+@RunWith(JUnit4.class)
+<span class="fc" id="L16">public class Messages_inputIntegration_Test {</span>
+
+    private static final int PORT = 6259;
+    private static final String LONG_MESSAGE =
+            &quot;&quot;
+                    + &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACWCAYAAABkW7XSAAAG0klEQVR4X&quot;
+                    + &quot;u3dTYjtcxzH8c+VEopYoDyUlJ2HKBRZsLCQp53CQtl4Kiyk7EgRGw8lG12JhZWEUuQhkiSUsvJQimQh&quot;
+                    + &quot;kqcF+tW5NU13xjln7tzz/5z7mo3NOed+5/X99m5m7rljT3wQIECgRGBPyZzGJECAQATLERAgUCMgWDW&quot;
+                    + &quot;rMigBAoLlBggQqBGYUrBOS3JJktNnel8neT/JdzWaBiVAYFcFphCsc5I8lOTUJK8lGaEaH2ckuTLJN0&quot;
+                    + &quot;nuT/LFrkp4cQIEJi8wgnV5kpt2cdIHk3y1xevfkuSuJHckeWeLx1yW5MkkjybZu4tzemkCBCYuMIJ1e&quot;
+                    + &quot;5KndnHOi5J8tJ/XvybJPUmuSvLr//z5xyZ5Nckjs//u4rhemgCBqQqsKlgnzr6iGl89/TAnzslJ3kxy&quot;
+                    + &quot;aZKf5nyOhxEgsEYCm4P1ZZIXDsDnd2+SY2avs7+vsMbPpMZXVeNbvUU+7k5yRJKHF3mSxxIgsB4Cm4P&quot;
+                    + &quot;1cpLrDsCnNv5m75RtgjV+gH5xkl8W/LOOS/JukrMXfJ6HEyCwBgKrCNZRs7crnLek3+dJLkjy15LP9z&quot;
+                    + &quot;QCBEoFVhGsM5M8luTqJc1en/2t4r63Pyz5Mp5GgECbwCqCdXySt5OM918t8/FZkgt9hbUMnecQ6BZYR&quot;
+                    + &quot;bCG2I9JxjvbF/227sgkHyY5t5vd9AQILCOwqmA9k+SlJG8tOPQVSa5PcvOCz/NwAgTWQGBVwTprFqzx&quot;
+                    + &quot;g/c/5nQ8OskHSa5N8u2cz/EwAgTWSGBVwRqEDyQZb1O4c07Pp5OM94k9MefjPYwAgTUTWGWwDkvyYpL&quot;
+                    + &quot;Dk9y6zbvXT0gyvoX8fha3f9ZsBz4dAgTmFFhlsPaNOGI13sH+XJJPknyaZMRs/GD9/CQ3JrkvyXhTqw&quot;
+                    + &quot;8CBA5hgSkEa/CPn0/dMPt3guMd8H8neWX2BtP3kvx8CO/Ip06AwExgKsHauJDx7wx/S/K4LREgQGCjg&quot;
+                    + &quot;GC5BwIEagQEq2ZVBiVAYHOw3kgyfgvoTj8+TnLS7EW2+gV+W/0ZviXcqb7nE1hTgVX9Ar/tOAVrTY/N&quot;
+                    + &quot;p0VgpwKCtVNBzydA4KAJrCpYz27z62XGP3D+N8mfWyg8P3vf1kFD8gcRIDANgSn8b742S/iWcBq3YQo&quot;
+                    + &quot;CkxMQrMmtxEAECGwlIFhugwCBGgHBqlmVQQkQECw3QIBAjYBg1azKoAQITDFYtyX5Pcle6yFAgMBGgS&quot;
+                    + &quot;kGy4YIECCwXwHBchgECNQICFbNqgxKgIBguQECBGoEBKtmVQYlQECw3AABAjUCglWzKoMSICBYboAAg&quot;
+                    + &quot;RoBwapZlUEJEBAsN0CAQI2AYNWsyqAECAiWGyBAoEZAsGpWZVACBATLDRAgUCMgWDWrMigBAoLlBggQ&quot;
+                    + &quot;qBEQrJpVGZQAAcFyAwQI1AgIVs2qDEqAgGC5AQIEagQEq2ZVBiVAQLDcAAECNQKCVbMqgxIgIFhugAC&quot;
+                    + &quot;BGgHBqlmVQQkQECw3QIBAjYBg1azKoAQICJYbIECgRkCwalZlUAIEBMsNECBQIyBYNasyKAECguUGCB&quot;
+                    + &quot;CoERCsmlUZlAABwXIDBAjUCAhWzaoMSoCAYLkBAgRqBASrZlUGJUBAsNwAAQI1AoJVsyqDEiAgWG6AA&quot;
+                    + &quot;IEaAcGqWZVBCRAQLDdAgECNgGDVrMqgBAgIlhsgQKBGQLBqVmVQAgQEyw0QIFAjIFg1qzIoAQKC5QYI&quot;
+                    + &quot;EKgREKyaVRmUAAHBcgMECNQICFbNqgxKgIBguQECBGoEBKtmVQYlQECw3AABAjUCglWzKoMSICBYboA&quot;
+                    + &quot;AgRoBwapZlUEJEBAsN0CAQI2AYNWsyqAECAiWGyBAoEZAsGpWZVACBATLDRAgUCMgWDWrMigBAoLlBg&quot;
+                    + &quot;gQqBEQrJpVGZQAAcFyAwQI1AgIVs2qDEqAgGC5AQIEagQEq2ZVBiVAQLDcAAECNQKCVbMqgxIgIFhug&quot;
+                    + &quot;ACBGgHBqlmVQQkQECw3QIBAjYBg1azKoAQICJYbIECgRkCwalZlUAIEBMsNECBQIyBYNasyKAECguUG&quot;
+                    + &quot;CBCoERCsmlUZlAABwXIDBAjUCAhWzaoMSoCAYLkBAgRqBASrZlUGJUBAsNwAAQI1AoJVsyqDEiAgWG6&quot;
+                    + &quot;AAIEaAcGqWZVBCRAQLDdAgECNgGDVrMqgBAgIlhsgQKBGQLBqVmVQAgQEyw0QIFAjIFg1qzIoAQKC5Q&quot;
+                    + &quot;YIEKgREKyaVRmUAAHBcgMECNQICFbNqgxKgIBguQECBGoEBKtmVQYlQECw3AABAjUCglWzKoMSICBYb&quot;
+                    + &quot;oAAgRoBwapZlUEJEBAsN0CAQI2AYNWsyqAECAiWGyBAoEZAsGpWZVACBATLDRAgUCMgWDWrMigBAoLl&quot;
+                    + &quot;BggQqBEQrJpVGZQAAcFyAwQI1Aj8B6OmqZcZSyd8AAAAAElFTkSuQmCC&quot;;
+
+    private TCPHost host;
+    private NetworkSender sender1;
+    private NetworkReader reader2;
+
+    @Before
+    public void setUp() {
+<span class="fc" id="L59">        host = new TCPHost(PORT);</span>
+<span class="fc" id="L60">        NetworkSocketClient client1 = new NetworkSocketClient(&quot;localhost&quot;, PORT);</span>
+<span class="fc" id="L61">        sender1 = new NetworkSender(client1);</span>
+<span class="fc" id="L62">        NetworkSocketClient client2 = new NetworkSocketClient(&quot;localhost&quot;, PORT);</span>
+<span class="fc" id="L63">        reader2 = new NetworkReader(client2);</span>
+<span class="fc" id="L64">    }</span>
+
+    @Test
+    public void sendMessage_longInput_succeeds() {
+<span class="fc" id="L68">        Thread hostThread =</span>
+                new Thread(
+                        () -&gt; {
+                            //noinspection StatementWithEmptyBody
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                            while (host.Tick()) {</span>
+                            }
+<span class="nc" id="L74">                            host.Close();</span>
+<span class="nc" id="L75">                        });</span>
+<span class="fc" id="L76">        hostThread.start();</span>
+
+        Optional&lt;String&gt; s2;
+        do {
+<span class="fc" id="L80">            s2 = reader2.ReadMessage();</span>
+<span class="fc" id="L81">            sender1.SendMessage(LONG_MESSAGE);</span>
+<span class="fc" id="L82">            sender1.SendMessage(&quot;\uD83D\uDE0A&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        } while (!s2.isPresent());</span>
+<span class="fc" id="L84">        hostThread.interrupt();</span>
+
+<span class="fc" id="L86">        Assert.assertEquals(LONG_MESSAGE, new JSONObject(s2.get()).getString(&quot;msg&quot;));</span>
+<span class="fc" id="L87">        Assert.assertNotEquals(&quot;\uD83D\uDE0A&quot;, s2.get());</span>
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DB_Test.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jacoco.exec</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">DB_Test.java</span></div><h1>DB_Test.java</h1><pre class="source lang-java linenums">package ada;
+
+import org.json.JSONObject;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import java.sql.*;
+
+import static java.sql.DriverManager.getConnection;
+
+@RunWith(JUnit4.class)
+<span class="fc" id="L14">public class DB_Test {</span>
+
+    /** test setup
+     *
+     */
+    @Test
+    public void testWrongPort() throws Exception {
+<span class="fc" id="L21">        Connection c = null;</span>
+        try {
+<span class="fc" id="L23">            Class.forName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="nc" id="L24">            c = getConnection(&quot;jdbc:postgresql://localhost:5555&quot;,</span>
+                    &quot;postgres&quot;, &quot;postgres&quot;);
+
+<span class="fc" id="L27">        } catch (Exception e) {</span>
+<span class="fc" id="L28">            System.err.println(e);</span>
+<span class="nc" id="L29">        }</span>
+<span class="fc" id="L30">    }</span>
+
+    @Test
+    public void testWrongUser() throws Exception {
+<span class="fc" id="L34">        Connection c = null;</span>
+        try {
+<span class="fc" id="L36">            Class.forName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="fc" id="L37">            c = getConnection(&quot;jdbc:postgresql://localhost:5432&quot;,</span>
+                    &quot;postgres&quot;, &quot;postgres&quot;);
+
+<span class="nc" id="L40">        } catch (Exception e) {</span>
+<span class="nc" id="L41">            System.err.println(e);</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">    }</span>
+
+    /** test user names (manually remove entries later)
+     *
+     */
+    @Test
+    public void login_newUser() {
+        /**
+         * this test tries to create a username with a special character
+         * the test should pass because we do not yet have restrictions
+         * on characters that may be used for usernames
+         *
+         * The test then checks a double insertion (trying to create a
+         * username that already exists) and should fail
+         */
+<span class="fc" id="L58">        String userName = null;</span>
+<span class="fc" id="L59">        String host = &quot;localhost&quot;;</span>
+<span class="fc" id="L60">        String flag = null;</span>
+<span class="fc" id="L61">        String random = Double.toString(Math.random());</span>
+
+<span class="fc" id="L63">        userName = &quot;l'sa&quot;;</span>
+<span class="fc" id="L64">        userName = userName + random;</span>
+<span class="fc" id="L65">        flag = &quot;n&quot;;</span>
+<span class="fc" id="L66">        PostgreSQLJDBC.InitPostgres(&quot;localhost&quot;);</span>
+<span class="fc" id="L67">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L68">        Boolean ret = PostgreSQL_createUser.Create(host, userName, flag);</span>
+<span class="fc" id="L69">        Assert.assertEquals(true, ret);</span>
+
+        /* try to create the same username again */
+<span class="fc" id="L72">        ret = PostgreSQL_createUser.Create(host, userName, flag);</span>
+<span class="fc" id="L73">        Assert.assertEquals(false, ret);</span>
+
+<span class="fc" id="L75">    }</span>
+
+
+    @Test
+    public void login_existingUser() {
+        /**
+         * test looks as using an existing username.
+         * the test first fails because the username does not exist
+         * then passes on inserting the new username
+         * then returns true for checking that the new username exists
+         */
+<span class="fc" id="L86">        String userName = null;</span>
+<span class="fc" id="L87">        String host = &quot;localhost&quot;;</span>
+<span class="fc" id="L88">        String flag = null;</span>
+<span class="fc" id="L89">        String random = Double.toString(Math.random());</span>
+
+<span class="fc" id="L91">        userName = &quot;katz&quot;;</span>
+<span class="fc" id="L92">        userName = userName + random;</span>
+<span class="fc" id="L93">        flag = &quot;y&quot;;</span>
+<span class="fc" id="L94">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L95">        Boolean ret = PostgreSQL_createUser.checkUser(host, userName, flag);</span>
+        /* should fail because the user does not exist yet */
+<span class="fc" id="L97">        Assert.assertEquals(false, ret);</span>
+
+<span class="fc" id="L99">        flag = &quot;n&quot;;</span>
+<span class="fc" id="L100">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L101">        ret = PostgreSQL_createUser.Create(host, userName, flag);</span>
+        /* should pass now because the user is new */
+<span class="fc" id="L103">        Assert.assertEquals(true, ret);</span>
+
+<span class="fc" id="L105">        flag = &quot;y&quot;;</span>
+<span class="fc" id="L106">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L107">        ret = PostgreSQL_createUser.checkUser(host, userName, flag);</span>
+        /* should pass now because the user is new */
+<span class="fc" id="L109">        Assert.assertEquals(true, ret);</span>
+<span class="fc" id="L110">    }</span>
+
+
+
+    @Test
+    public void message_longAndShortMessage() {
+        /**
+         * insert long message, still need to put better junit assert around it
+         */
+<span class="fc" id="L119">        String userName1 = null;</span>
+<span class="fc" id="L120">        String userName2 = null;</span>
+<span class="fc" id="L121">        String host = &quot;localhost&quot;;</span>
+<span class="fc" id="L122">        String flag = null;</span>
+<span class="fc" id="L123">        String random = Double.toString(Math.random());</span>
+
+<span class="fc" id="L125">        userName1 = &quot;rainbows&quot;;</span>
+<span class="fc" id="L126">        userName1 = userName1 + random;</span>
+<span class="fc" id="L127">        flag = &quot;n&quot;;</span>
+<span class="fc" id="L128">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L129">        Boolean ret = PostgreSQL_createUser.Create(host, userName1, flag);</span>
+        /* should pass now because the user is new */
+<span class="fc" id="L131">        Assert.assertEquals(true, ret);</span>
+
+<span class="fc" id="L133">        userName2 = &quot;butterflies&quot;;</span>
+<span class="fc" id="L134">        userName2 = userName2 + random;</span>
+<span class="fc" id="L135">        flag = &quot;n&quot;;</span>
+<span class="fc" id="L136">        new PostgreSQL_createUser();</span>
+<span class="fc" id="L137">        ret = PostgreSQL_createUser.Create(host, userName2, flag);</span>
+        /* should pass now because the user is new */
+<span class="fc" id="L139">        Assert.assertEquals(true, ret);</span>
+
+<span class="fc" id="L141">        String message = null;</span>
+<span class="fc" id="L142">        message = &quot;start &quot;;</span>
+<span class="fc" id="L143">        int count = 0;</span>
+<span class="fc" id="L144">        Boolean end = false;</span>
+        // send a really long message to test length
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        while (end != true) {</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (count == 10000) {</span>
+<span class="fc" id="L148">                end = true;</span>
+            } else {
+<span class="fc" id="L150">                message = message + Double.toString(Math.random());</span>
+<span class="fc" id="L151">                count += 1;</span>
+            }
+        }
+<span class="fc" id="L154">        message = message + &quot; end&quot;;</span>
+<span class="fc" id="L155">        String sender = userName1;</span>
+<span class="fc" id="L156">        String receiver = userName2;</span>
+<span class="fc" id="L157">        JSONObject jobj = new JSONObject();</span>
+<span class="fc" id="L158">        jobj.put(&quot;sender&quot;, sender);</span>
+<span class="fc" id="L159">        jobj.put(&quot;msg&quot;, message);</span>
+
+<span class="fc" id="L161">        String almost_empty = &quot;&quot;;</span>
+
+        // long
+        try {
+<span class="fc" id="L165">            new PostgreSQL_insertChat();</span>
+            // long message
+<span class="fc" id="L167">            PostgreSQL_insertChat.Insert(host, jobj, receiver);</span>
+            // short message
+<span class="fc" id="L169">            jobj.put(&quot;msg&quot;, almost_empty);</span>
+<span class="fc" id="L170">            PostgreSQL_insertChat.Insert(host, jobj, receiver);</span>
+<span class="nc" id="L171">        } catch (Exception e) {</span>
+<span class="nc" id="L172">            System.out.println(e);</span>
+<span class="fc" id="L173">        }</span>
+
+<span class="fc" id="L175">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AudioUtilTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jacoco.exec</a> &gt; <a href="index.source.html" class="el_package">ada.texttospeech</a> &gt; <span class="el_source">AudioUtilTest.java</span></div><h1>AudioUtilTest.java</h1><pre class="source lang-java linenums">package ada.texttospeech;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+
+@RunWith(JUnit4.class)
+<span class="nc" id="L16">public class AudioUtilTest {</span>
+
+  private static AudioInputStream validAudio;
+
+  @Before
+  public void setUp() throws IOException, UnsupportedAudioFileException {
+    validAudio =
+<span class="nc" id="L23">            AudioSystem.getAudioInputStream(</span>
+<span class="nc" id="L24">                    FileSystems.getDefault()</span>
+<span class="nc" id="L25">                            .getPath(&quot;src&quot;, &quot;test&quot;, &quot;java&quot;, &quot;ada&quot;, &quot;texttospeech&quot;, &quot;valid_audio.wav&quot;)</span>
+<span class="nc" id="L26">                            .toFile());</span>
+<span class="nc" id="L27">  }</span>
+
+  @Test
+  public void play_invalidAudio_PlaysNothing() {
+<span class="nc" id="L31">    System.out.println(&quot;This test should not play anything.&quot;);</span>
+<span class="nc" id="L32">    AudioUtil.play(null);</span>
+<span class="nc" id="L33">  }</span>
+
+  @Test
+  public void play_validAudio_Succeeds() {
+<span class="nc" id="L37">    System.out.println(&quot;Playing: \&quot;King Arthur\&quot;&quot;);</span>
+<span class="nc" id="L38">    AudioUtil.play(validAudio);</span>
+<span class="nc" id="L39">  }</span>
+
+  @After
+  public void tearDown() throws IOException {
+<span class="nc" id="L43">    validAudio.close();</span>
+<span class="nc" id="L44">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
