@@ -38,7 +38,7 @@ public class AdaDbMessagesTest {
     @Test
     public void test_insertLongMessage_succeeds() throws SQLException {
         StringBuilder message = new StringBuilder();
-        for (int i = 0; i < 300_000_000; i++) {
+        for (int i = 0; i < 3_000_000; i++) {
             message.append('0');
         }
         insertMessageForUsers("unicorns", "rainbows", message.toString());
