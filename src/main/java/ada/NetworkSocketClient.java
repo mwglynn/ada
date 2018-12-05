@@ -50,6 +50,7 @@ public class NetworkSocketClient implements NetworkSocket {
       clientOutputStream.flush();
     } catch (IOException ioe) {
       ioe.printStackTrace();
+      System.out.println("HERE");
     }
   }
 
