@@ -10,10 +10,11 @@ import org.junit.runners.JUnit4;
 
 import java.sql.*;
 
-import static java.sql.DriverManager.getConnection;
-
+/**
+ * Tests for AdaDB's message handling. In a separate file because generating a long message takes a while.
+ */
 @RunWith(JUnit4.class)
-public class AdaDbInsertMessagesTest {
+public class AdaDbMessagesTest {
 
     // TODO: Better assertions.
     private static AdaDB TEST_DB;
@@ -37,7 +38,7 @@ public class AdaDbInsertMessagesTest {
     @Test
     public void test_insertLongMessage_succeeds() throws SQLException {
         StringBuilder message = new StringBuilder();
-        for (int i = 0; i < 3_000_000; i++) {
+        for (int i = 0; i < 300_000_000; i++) {
             message.append('0');
         }
         insertMessageForUsers("unicorns", "rainbows", message.toString());

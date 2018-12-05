@@ -1,5 +1,7 @@
 package ada;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import org.json.JSONObject;
 
 class TCPHost {
   private ServerSocket serverSocket;
@@ -27,7 +28,7 @@ class TCPHost {
     if (port < 1 || port > 65535) {
       throw new IllegalArgumentException();
     }
-    usernameMap = new Hashtable<NetworkHandle, String>();
+    usernameMap = new Hashtable<>();
     connectedSockets = new ArrayList<>();
     newConnections = new ConcurrentLinkedQueue<>();
     try {
@@ -76,7 +77,7 @@ class TCPHost {
             return false;
           } else if (msg.get().contains("\\username")) {
             String newUsername =
-                msg.get().split("\\s+")[1]; // Currently I'm assuming this is well formed
+                    msg.get().split("\\s+")[1]; // Currently I'm assuming this is well formed
             usernameMap.put(connectedSockets.get(i), newUsername);
           } else {
             JSONObject jobj = new JSONObject();
