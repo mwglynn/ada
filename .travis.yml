@@ -1,5 +1,10 @@
 language: java
 sudo: false
+services:
+- postgresql
+before_script:
+- psql -c "CREATE DATABASE public;" -U postgres
+#   - psql -c "CREATE USER postgres WITH PASSWORD 'postgres';" -U postgres
 script:
 - mvn clean validate compile verify
 before_install:

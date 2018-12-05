@@ -8,6 +8,7 @@ This is a first-phase MVP of the chat-app! The app sets up a simple client and s
 
 
 ```$xslt
+Code Coverage			Jacoco
 Version Control:                Github
 Build Tool:                     Maven 
 Continuous Integration:         TravisCI
@@ -55,33 +56,18 @@ Postgre will be used. It should be installed for the database to function proper
 
 CREATE TABLE IF NOT EXISTS adaUser (
 	ID SERIAL NOT NULL,			-- unique identification 
-	userName VARCHAR(255) UNIQUE NOT NULL, 	-- user picks, pulled from other source (per GUI?)
-						-- TODO: check on default if none
-						-- TODO: may want to remove unique constraint? 
+	userName VARCHAR(255) UNIQUE NOT NULL, 	-- user picks
 	PRIMARY KEY (ID, userName)		-- we may have multiple users with the same userName
 );
 
 CREATE TABLE IF NOT EXISTS adaChat (
 	ID SERIAL NOT NULL,			-- a unique identifier
-	time_stamp TIME NOT NULL,	 
+	time TIME NOT NULL,			-- pulled from postgres function
+	date DATE NOT NULL,			-- pulled from postgres function
 	message TEXT,		
 	sender VARCHAR(255),			-- one sender
-	receiver VARCHAR(255)[],		-- mulitple receivers, this cannot be foreign key (i.e., you can send messages to non-users)
+	receiver VARCHAR(255),			-- stacks up, will pull down with SQL
 	PRIMARY KEY (ID),
-	FOREIGN KEY (sender) REFERENCES adaUser(userName) ON DELETE NO ACTION		-- may want to change to CASCADE
+	FOREIGN KEY (sender) REFERENCES adaUser(userName) ON DELETE NO ACTION
 );
-
----------------------------------------------------/* Simple Insertion Example */
-
-INSERT INTO adaUser (ID, userName) VALUES 
-	(1, 'nathan'),
-	(2, 'kevin'),
-	(3, 'sally')
-;
-
-INSERT INTO adaChat (ID, time_stamp, message, sender, receiver) VALUES 
-	(1, '02:03:04', 'hi there buddy', 'nathan', '{kevin, sally}'),
-	(2, '02:03:05', 'oh nice too yo', 'kevin', '{nathan}'),
-	(3, '02:03:06', 'hi there buddy', 'nathan', '{sally}')
-;
 ```
