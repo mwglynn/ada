@@ -10,16 +10,16 @@ import java.sql.*;
  */
 public class AdaDB {
 
-    private static String HOST;
-    private static String USER_TABLE;
-    private static String CHAT_TABLE;
+    private final String HOST;
+    private final String USER_TABLE;
+    private final String CHAT_TABLE;
 
     public AdaDB(String host, String db_name) {
         // Translated to lower case because it seems to make a difference to
-      // postgres.
+        // postgres.
+        HOST = host;
         USER_TABLE = db_name.toLowerCase() + "usertable";
         CHAT_TABLE = db_name.toLowerCase() + "chattable";
-        HOST = host;
         try {
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
@@ -27,10 +27,6 @@ public class AdaDB {
             e.printStackTrace();
             System.exit(-1);
         }
-    }
-
-    public AdaDB(String host) {
-        new AdaDB(host, "ada");
     }
 
     private Connection getConnection() throws SQLException {
@@ -153,7 +149,8 @@ public class AdaDB {
             connection.setAutoCommit(false);
             PreparedStatement ps =
                     connection.prepareStatement(
-                            "select exists(select id from " + USER_TABLE + " WHERE userName=?)");
+                            "select exists(select id from " + USER_TABLE + " " +
+                                    "WHERE userName=?)");
             ps.setString(1, userName);
 
             ResultSet resultSet = ps.executeQuery();

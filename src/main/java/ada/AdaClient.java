@@ -15,7 +15,6 @@ import java.util.Scanner;
 @SuppressWarnings("WeakerAccess")
 public class AdaClient {
 
-    private final String host;
     private final AdaTextToSpeechClient textToSpeechClient;
     private final NetworkSocketClient client;
     private final NetworkSender sender;
@@ -26,7 +25,6 @@ public class AdaClient {
     public AdaClient(
             String host, AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
-        this.host = host;
         this.textToSpeechClient = textToSpeechClient;
         this.client = client;
         sender = new NetworkSender(client);
