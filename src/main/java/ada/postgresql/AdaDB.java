@@ -12,10 +12,11 @@ public class AdaDB implements Closeable {
     private static String USER_TABLE;
     private static String CHAT_TABLE;
 
-    public AdaDB(String host, String table_name) {
+    public AdaDB(String host, String db_name) {
+        USER_TABLE = db_name + "usertable";
+        CHAT_TABLE = db_name + "chattable";
         HOST = host;
-        USER_TABLE = table_name + "User";
-        CHAT_TABLE = table_name + "Chat";
+        // TODO: Make resistant to caps.
         try {
             /* for now, connect to default postgres */
             Class.forName("org.postgresql.Driver");
@@ -31,25 +32,29 @@ public class AdaDB implements Closeable {
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                "jdbc:postgresql://" + HOST + ":5432", "postgres", "postgres");
+                "jdbc:postgresql://" + HOST + ":5432/", "postgres", "postgres");
     }
+
+    //  private Connection getTempConnection() throws SQLException {
+    //    return getConnection();
+    //  }
 
     public void initPostgres() {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
-            System.out.println("Opened database successfully");
-
             /* execute creation of user */
             String sql =
                     "CREATE TABLE IF NOT EXISTS "
                             + USER_TABLE
                             + " ("
                             + "ID SERIAL NOT NULL,"
-                            + "userName VARCHAR(255) UNIQUE NOT NULL,"
-                            + "PRIMARY KEY (ID, userName))";
+                            + " userName VARCHAR(255) UNIQUE NOT NULL,"
+                            + " PRIMARY KEY (ID, userName))";
+            System.out.println(sql);
             stmt.executeUpdate(sql);
-            System.out.println("- " + USER_TABLE + " executed");
+            connection.commit();
+            System.out.println("- " + USER_TABLE + " created");
 
             /* execute creation of chat */
             sql =
@@ -67,11 +72,25 @@ public class AdaDB implements Closeable {
                             + USER_TABLE
                             + "(userName) ON DELETE NO ACTION)";
             stmt.executeUpdate(sql);
-            stmt.close();
-            System.out.println("- " + CHAT_TABLE + " executed");
+            connection.commit();
+            System.out.println("- " + CHAT_TABLE + " created");
+            System.out.println(" SELECT current_database();");
+            ResultSet s = stmt.executeQuery(" SELECT current_database();");
+            while (s.next()) {
+                System.out.println("Next");
+                System.out.println(s.getString(1));
+                ;
+            }
 
+            //        System.out.println("SELECT * FROM testuser");
+            //        ResultSet r = stmt.executeQuery("\\dt;");
+            //        "SELECT * FROM pg_catalog.pg_tables;
+            //        while (r.next()) {
+            //          System.out.println("NExt");
+            //          System.out.println(r.getString(1));
+            //        }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
         System.out.println("Tables created successfully");
@@ -137,6 +156,7 @@ public class AdaDB implements Closeable {
 
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ps.setString(1, userName);
+                System.out.println(ps.toString());
                 ps.execute();
 
                 connection.commit();
@@ -149,41 +169,40 @@ public class AdaDB implements Closeable {
     }
 
     public boolean checkUser(String userName) {
-        String userExists = "";
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
-            String sql = "select exists(select 1 from " + USER_TABLE + " where username=" + "?" + ");";
-
+            String sql = "select id from " + USER_TABLE + " WHERE userName = '?';";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, userName);
-            ResultSet resultSet = ps.executeQuery();
 
-            while (resultSet.next()) {
-                userExists = resultSet.getString(1);
-            }
-            resultSet.close();
-            stmt.close();
-            connection.commit();
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            //      ps.setString(2, userName);
+            //      System.out.println(ps.toString());
+            System.out.println(sql);
+            ResultSet resultSet = stmt.executeQuery(sql);
+            System.out.println(resultSet.toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return userExists.equals("t");
+        //
+        //      while (resultSet.next()) {
+        //        return resultSet.getString(1).equals("t");
+        //      }
+        //      resultSet.close();
+        //      stmt.close();
+        //      connection.commit();
+        //    } catch (SQLException e) {
+        //      e.printStackTrace();
+        //    }
+        return false;
     }
 
     @VisibleForTesting
     void clear() {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
-            connection.setAutoCommit(false);
-
-            String sql = "DROP TABLE IF EXISTS " + CHAT_TABLE + ", " + USER_TABLE + ";";
-            System.out.println("Dropping Table!" + sql);
-
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.execute();
-
-            connection.commit();
+            // TODO: FIX
+            stmt.execute("DROP TABLE " + CHAT_TABLE + ", " + USER_TABLE + ";");
         } catch (SQLException e) {
             e.printStackTrace();
         }
