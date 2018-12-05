@@ -1,11 +1,17 @@
 package ada.postgresql;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static java.sql.DriverManager.getConnection;
+
+/**
+ * Unit tests for the AdaDB class.
+ */
 @RunWith(JUnit4.class)
 public class AdaDbTest {
 
@@ -19,40 +25,27 @@ public class AdaDbTest {
     // TODO: remove configuration tests and put config in flags.
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         TEST_DB = new AdaDB("localhost", "test");
         TEST_DB.initPostgres();
     }
 
-    //    @Test
-    //    public void testInitPostgres() {
-    //        TEST_DB = new AdaDB("localhost", "test");
-    //        TEST_DB.initPostgres();
-    //    }
+    @Test
+    public void test_validUser_Succeeds() throws Exception {
+        Class.forName("org.postgresql.Driver");
+        getConnection(TEST_HOST, DATABASE_USERNAME, DATABASE_PASSWORD);
+    }
 
     /**
-     * tests setup on your computer.
+     * test user names (manually remove entries later)
      */
-    //    @Test(expected = PSQLException.class)
-    //    public void getConnection_wrongPort_throwsPSQLException() throws Exception {
-    //        Class.forName("org.postgresql.Driver");
-    //        getConnection("jdbc:postgresql://localhost:5555", DATABASE_USERNAME, DATABASE_PASSWORD);
-    //    }
-    //
-    //    @Test(expected = PSQLException.class)
-    //    public void test_wrongUser_throwsPasswordException() throws Exception {
-    //        Class.forName("org.postgresql.Driver");
-    //        getConnection(TEST_HOST, ".", DATABASE_PASSWORD);
-    //    }
-    //
-    //    @Test
-    //    public void test_validUser_Succeeds() throws Exception {
-    //        Class.forName("org.postgresql.Driver");
-    //        getConnection(TEST_HOST, DATABASE_USERNAME, DATABASE_PASSWORD);
-    //    }
-    //
-    //    //    /** test user names (manually remove entries later)
-    //    //     */
+    @Test
+    public void test_checkUser_checksForExistingUser() {
+        Assert.assertFalse(TEST_DB.checkUser("Castille"));
+        TEST_DB.createUser("Castille");
+        Assert.assertTrue(TEST_DB.checkUser("Castille"));
+    }
+
     @Test
     public void createUser_validUsername_succeeds() {
         Assert.assertFalse(TEST_DB.checkUser("credence"));
@@ -96,21 +89,20 @@ public class AdaDbTest {
         Assert.assertTrue(TEST_DB.checkUser(sender));
     }
 
-    //
-    //    @Test
-    //    public void insertMessage_noSender_fails() {
-    //        expectedException.expect(JSONException.class);
-    //        TEST_DB.createUser(TEST_USER);
-    //
-    //        JSONObject jobj = new JSONObject();
-    //        jobj.put("msg", "DROP table adaUser CASCADE");
-    //
-    //        TEST_DB.insert(jobj, TEST_USER);
-    //    }
-    //
+    @Test
+    public void insertMessage_noSender_fails() {
+        expectedException.expect(JSONException.class);
+        String test_user = "Max";
+        TEST_DB.createUser(test_user);
+
+        JSONObject jobj = new JSONObject();
+        jobj.put("msg", "DROP table adaUser CASCADE");
+
+        TEST_DB.insert(jobj, test_user);
+    }
+
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         TEST_DB.clear();
-        TEST_DB.close();
     }
 }

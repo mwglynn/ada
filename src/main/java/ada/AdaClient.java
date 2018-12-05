@@ -5,13 +5,12 @@ import ada.texttospeech.AdaTextToSpeechClient;
 import ada.texttospeech.AudioUtil;
 import org.json.JSONObject;
 
-import java.io.Closeable;
 import java.util.Optional;
 import java.util.Scanner;
 
 /** {@code ada.AdaClient} reads messages from and sends Messages to {@link AdaServer}. */
 @SuppressWarnings("WeakerAccess")
-public class AdaClient implements Closeable {
+public class AdaClient {
 
   private final String host;
   private final AdaTextToSpeechClient textToSpeechClient;
@@ -45,29 +44,29 @@ public class AdaClient implements Closeable {
     while (true) {
       System.out.print("Do you already have an account (y/n):  ");
       switch (input.nextLine()) {
-        case "n": {
-          System.out.print("Please enter a username: ");
-          username = input.nextLine();
-          if (adaDB.createUser(username)) {
-            System.out.println("user created in database!");
-            break label;
-          } else {
-            System.out.println("please try again!");
+          case "n": {
+              System.out.print("Please enter a username: ");
+              username = input.nextLine();
+              if (adaDB.createUser(username)) {
+                  System.out.println("user created in database!");
+                  break label;
+              } else {
+                  System.out.println("please try again!");
+              }
+              break;
           }
-          break;
-        }
-        case "y": {
-          System.out.print("Please enter *your* username: ");
-          /* check if in system */
-          username = input.nextLine();
-          if (adaDB.checkUser(username)) {
-            System.out.println("username validated");
-            break label;
-          } else {
-            System.out.println("username not in system, try again");
+          case "y": {
+              System.out.print("Please enter *your* username: ");
+              /* check if in system */
+              username = input.nextLine();
+              if (adaDB.checkUser(username)) {
+                  System.out.println("username validated");
+                  break label;
+              } else {
+                  System.out.println("username not in system, try again");
+              }
+              break;
           }
-          break;
-        }
         default:
           System.out.println("incorrect selection, please try again!");
           break;
@@ -102,11 +101,6 @@ public class AdaClient implements Closeable {
     } catch (InterruptedException ie) {
       ie.printStackTrace();
     }
-  }
-
-  @Override
-  public void close() {
-    adaDB.close();
   }
 
   private void getMessages(final String username) {

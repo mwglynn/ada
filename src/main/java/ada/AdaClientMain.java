@@ -21,7 +21,8 @@ public class AdaClientMain {
     }
 
     String host = args.length > 0 ? args[0] : "localhost";
-    try (AdaClient client = new AdaClient(host, cloudClient, new NetworkSocketClient(host, PORT))) {
+      try {
+          AdaClient client = new AdaClient(host, cloudClient, new NetworkSocketClient(host, PORT));
       client.run();
     } catch (ConnectException e) {
       System.out.println("Unable to connect to the server.");
