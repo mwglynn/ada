@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaTextToSpeechClientTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jacoco.exec</a> &gt; <a href="index.source.html" class="el_package">ada.texttospeech</a> &gt; <span class="el_source">AdaTextToSpeechClientTest.java</span></div><h1>AdaTextToSpeechClientTest.java</h1><pre class="source lang-java linenums">package ada.texttospeech;
+
+import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
+import com.google.cloud.texttospeech.v1.TextToSpeechClient;
+import com.google.protobuf.ByteString;
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@RunWith(JUnit4.class)
+<span class="fc" id="L27">public class AdaTextToSpeechClientTest {</span>
+
+<span class="fc" id="L29">    private static TextToSpeechClient mockCloudTTSClient = mock(TextToSpeechClient.class);</span>
+    private static AdaTextToSpeechClient clientUnderTest;
+    private static ByteString validTestAudio;
+
+    @Before
+    public void setUp() throws IOException {
+<span class="fc" id="L35">        validTestAudio =</span>
+<span class="fc" id="L36">                ByteString.copyFrom(</span>
+<span class="fc" id="L37">                        IOUtils.toByteArray(</span>
+                                new FileInputStream(
+<span class="fc" id="L39">                                        FileSystems.getDefault()</span>
+<span class="fc" id="L40">                                                .getPath(&quot;src&quot;, &quot;test&quot;, &quot;java&quot;, &quot;ada&quot;, &quot;texttospeech&quot;, &quot;valid_audio.wav&quot;)</span>
+<span class="fc" id="L41">                                                .toFile())));</span>
+<span class="fc" id="L42">        clientUnderTest = new AdaTextToSpeechClient(mockCloudTTSClient);</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    public void getAudio_validAudio_Succeeds() throws Exception {
+<span class="fc" id="L47">        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))</span>
+<span class="fc" id="L48">                .thenReturn(SynthesizeSpeechResponse.newBuilder().setAudioContent(validTestAudio).build());</span>
+
+<span class="fc" id="L50">        Optional&lt;AudioInputStream&gt; response = clientUnderTest.getAudio(&quot;Blah blah blah&quot;);</span>
+<span class="fc" id="L51">        AudioInputStream expectedInputStream =</span>
+<span class="fc" id="L52">                AudioSystem.getAudioInputStream(new ByteArrayInputStream(validTestAudio.toByteArray()));</span>
+
+<span class="fc" id="L54">        assertThat(response).isPresent();</span>
+        //noinspection OptionalGetWithoutIsPresent
+<span class="fc" id="L56">        Assert.assertTrue(IOUtils.contentEquals(response.get(), expectedInputStream));</span>
+<span class="fc" id="L57">    }</span>
+
+    @Test
+    public void getAudio_invalidAudio_isEmpty() {
+<span class="fc" id="L61">        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))</span>
+<span class="fc" id="L62">                .thenReturn(</span>
+<span class="fc" id="L63">                        SynthesizeSpeechResponse.newBuilder().setAudioContent(ByteString.EMPTY).build());</span>
+
+<span class="fc" id="L65">        Optional&lt;AudioInputStream&gt; response = clientUnderTest.getAudio(&quot;Blah blah blah&quot;);</span>
+
+<span class="fc" id="L67">        assertThat(response).isEmpty();</span>
+<span class="fc" id="L68">    }</span>
+
+    @Test
+    public void getAudio_nullInput_isEmpty() {
+<span class="fc" id="L72">        when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any())).thenReturn(null);</span>
+
+<span class="fc" id="L74">        Optional&lt;AudioInputStream&gt; response = clientUnderTest.getAudio(null);</span>
+
+<span class="fc" id="L76">        assertThat(response).isEmpty();</span>
+<span class="fc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
