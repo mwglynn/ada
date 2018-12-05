@@ -41,6 +41,10 @@ google style checker output     /target/checkstyle-checker.xml
 unit testing output             /target/surefire-reports/  
 ```
 
+### 4. Text to Speech
+
+Set GOOGLE_APPLICATION_CREDENTIALS by following the instructions here:
+https://cloud.google.com/docs/authentication/getting-started
 
 ### Build Instructions
 - Build and run ada.AdaServer
