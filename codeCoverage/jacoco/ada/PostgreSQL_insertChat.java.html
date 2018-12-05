@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PostgreSQL_insertChat.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">jacoco.exec</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">PostgreSQL_insertChat.java</span></div><h1>PostgreSQL_insertChat.java</h1><pre class="source lang-java linenums">package ada;
+
+import org.json.JSONObject;
+
+import java.sql.Connection;
+import static java.sql.DriverManager.getConnection;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Timestamp;
+
+
+import static java.sql.DriverManager.getConnection;
+
+<span class="fc" id="L15">public class PostgreSQL_insertChat {</span>
+    public static void Insert(String host, JSONObject jobj, String receiver) {
+<span class="fc" id="L17">        Connection c = null;</span>
+<span class="fc" id="L18">        Statement stmt = null;</span>
+        try {
+<span class="fc" id="L20">            Class.forName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="fc" id="L21">            c = getConnection(&quot;jdbc:postgresql://&quot; + host + &quot;:5432&quot;,</span>
+                    &quot;postgres&quot;, &quot;postgres&quot;);
+<span class="fc" id="L23">            c.setAutoCommit(false);</span>
+
+<span class="fc" id="L25">            String sender = jobj.getString(&quot;sender&quot;);</span>
+<span class="fc" id="L26">            String message = jobj.getString(&quot;msg&quot;);</span>
+
+
+<span class="fc" id="L29">            stmt = c.createStatement();</span>
+<span class="fc" id="L30">            String sql = &quot;INSERT INTO adaChat &quot; +</span>
+                    &quot;(ID, date, time, message, sender, receiver) VALUES (DEFAULT, NOW()::date, NOW()::time,&quot; + &quot;?&quot; + &quot;,&quot; + &quot;?&quot; + &quot;,&quot; + &quot;?&quot; + &quot;);&quot;;
+
+<span class="fc" id="L33">            PreparedStatement ps = c.prepareStatement(sql);</span>
+<span class="fc" id="L34">            ps.setString(1, message);</span>
+<span class="fc" id="L35">            ps.setString(2, sender);</span>
+<span class="fc" id="L36">            ps.setString(3, receiver);</span>
+
+<span class="fc" id="L38">            ps.execute();</span>
+//            stmt.executeUpdate(sql);
+
+<span class="fc" id="L41">            stmt.close();</span>
+<span class="fc" id="L42">            c.commit();</span>
+<span class="fc" id="L43">            c.close();</span>
+<span class="nc" id="L44">        } catch (Exception e) {</span>
+<span class="nc" id="L45">            System.err.println( e.getClass().getName()+&quot;: &quot;+ e.getMessage() );</span>
+<span class="nc" id="L46">            System.exit(0);</span>
+<span class="fc" id="L47">        }</span>
+<span class="fc" id="L48">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
