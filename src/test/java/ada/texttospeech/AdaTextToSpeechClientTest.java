@@ -26,7 +26,8 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnit4.class)
 public class AdaTextToSpeechClientTest {
 
-    private static TextToSpeechClient mockCloudTTSClient = mock(TextToSpeechClient.class);
+    private static TextToSpeechClient mockCloudTTSClient =
+            mock(TextToSpeechClient.class);
     private static AdaTextToSpeechClient clientUnderTest;
     private static ByteString validTestAudio;
 
@@ -37,7 +38,10 @@ public class AdaTextToSpeechClientTest {
                         IOUtils.toByteArray(
                                 new FileInputStream(
                                         FileSystems.getDefault()
-                                                .getPath("src", "test", "java", "ada", "texttospeech", "valid_audio.wav")
+                                                .getPath("src", "test", "java"
+                                                        , "ada",
+                                                        "texttospeech",
+                                                        "valid_audio.wav")
                                                 .toFile())));
         clientUnderTest = new AdaTextToSpeechClient(mockCloudTTSClient);
     }
@@ -48,13 +52,15 @@ public class AdaTextToSpeechClientTest {
         when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
                 .thenReturn(SynthesizeSpeechResponse.newBuilder().setAudioContent(validTestAudio).build());
 
-        Optional<AudioInputStream> response = clientUnderTest.getAudio("Blah blah blah");
+        Optional<AudioInputStream> response = clientUnderTest.getAudio("Blah " +
+                "blah blah");
         AudioInputStream expectedInputStream =
                 AudioSystem.getAudioInputStream(new ByteArrayInputStream(validTestAudio.toByteArray()));
 
         assertThat(response).isPresent();
         //noinspection OptionalGetWithoutIsPresent
-        Assert.assertTrue(IOUtils.contentEquals(response.get(), expectedInputStream));
+        Assert.assertTrue(IOUtils.contentEquals(response.get(),
+                expectedInputStream));
     }
 
     @Test
@@ -64,7 +70,8 @@ public class AdaTextToSpeechClientTest {
                 .thenReturn(
                         SynthesizeSpeechResponse.newBuilder().setAudioContent(ByteString.EMPTY).build());
 
-        Optional<AudioInputStream> response = clientUnderTest.getAudio("Blah blah blah");
+        Optional<AudioInputStream> response = clientUnderTest.getAudio("Blah " +
+                "blah blah");
 
         assertThat(response).isEmpty();
     }
@@ -86,7 +93,8 @@ public class AdaTextToSpeechClientTest {
         when(mockCloudTTSClient.synthesizeSpeech(any(), any(), any()))
                 .thenThrow(InvalidArgumentException.class);
 
-        Optional<AudioInputStream> response = clientUnderTest.getAudio("Whatever");
+        Optional<AudioInputStream> response = clientUnderTest.getAudio(
+                "Whatever");
 
         assertThat(response).isEmpty();
     }

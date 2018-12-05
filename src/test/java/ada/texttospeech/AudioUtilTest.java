@@ -15,31 +15,32 @@ import java.nio.file.FileSystems;
 @RunWith(JUnit4.class)
 public class AudioUtilTest {
 
-  private static AudioInputStream validAudio;
+    private static AudioInputStream validAudio;
 
-  @Before
-  public void setUp() throws IOException, UnsupportedAudioFileException {
-    validAudio =
-            AudioSystem.getAudioInputStream(
-                    FileSystems.getDefault()
-                            .getPath("src", "test", "java", "ada", "texttospeech", "valid_audio.wav")
-                            .toFile());
-  }
+    @Before
+    public void setUp() throws IOException, UnsupportedAudioFileException {
+        validAudio =
+                AudioSystem.getAudioInputStream(
+                        FileSystems.getDefault()
+                                .getPath("src", "test", "java", "ada",
+                                        "texttospeech", "valid_audio.wav")
+                                .toFile());
+    }
 
-  @Test
-  public void play_invalidAudio_PlaysNothing() {
-    System.out.println("This test should not play anything.");
-    AudioUtil.play(null);
-  }
+    @Test
+    public void play_invalidAudio_PlaysNothing() {
+        System.out.println("This test should not play anything.");
+        AudioUtil.play(null);
+    }
 
-  @Test
-  public void play_validAudio_Succeeds() {
-    System.out.println("Playing: \"King Arthur\"");
-    AudioUtil.play(validAudio);
-  }
+    @Test
+    public void play_validAudio_Succeeds() {
+        System.out.println("Playing: \"King Arthur\"");
+        AudioUtil.play(validAudio);
+    }
 
-  @After
-  public void tearDown() throws IOException {
-    validAudio.close();
-  }
+    @After
+    public void tearDown() throws IOException {
+        validAudio.close();
+    }
 }

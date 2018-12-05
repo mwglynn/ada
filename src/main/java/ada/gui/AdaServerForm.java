@@ -19,8 +19,9 @@ public class AdaServerForm {
                 if (server == null) {
                     server = new AdaServer();
                     server.main(null);
-                }else{
-                    JOptionPane.showMessageDialog(null,"Server Already Started");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Server Already " +
+                            "Started");
                 }
             }
         });

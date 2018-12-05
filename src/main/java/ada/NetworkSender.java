@@ -8,7 +8,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 class NetworkSender {
 
     /**
-     * An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO
+     * An unbounded thread-safe queue based on linked nodes. This queue
+     * orders elements FIFO
      * (first-in-first-out).
      */
     private final ConcurrentLinkedQueue<String> outgoingMessages;

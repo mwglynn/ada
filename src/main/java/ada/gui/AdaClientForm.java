@@ -22,10 +22,12 @@ public class AdaClientForm {
                         client = new AdaClientMain();
                         client.main(null);
                     } catch (Exception excp) {
-                        JOptionPane.showMessageDialog(null, "Error ins starting client");
+                        JOptionPane.showMessageDialog(null, "Error ins " +
+                                "starting client");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Client Already Started");
+                    JOptionPane.showMessageDialog(null, "Client Already " +
+                            "Started");
                 }
             }
         });

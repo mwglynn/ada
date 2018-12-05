@@ -11,12 +11,12 @@ import org.junit.runners.JUnit4;
 import java.sql.*;
 
 /**
- * Tests for AdaDB's message handling. In a separate file because generating a long message takes a while.
+ * Tests for AdaDB's message handling. In a separate file because generating
+ * a long message takes a while.
  */
 @RunWith(JUnit4.class)
 public class AdaDbMessagesTest {
 
-    // TODO: Better assertions.
     private static AdaDB TEST_DB;
 
     @Before
@@ -27,7 +27,8 @@ public class AdaDbMessagesTest {
 
     @Test
     public void test_validMessage_succeeds() throws SQLException {
-        insertMessageForUsers("sparkles", "stars", "a totally valid message except for flagrant abuse of capitalization.");
+        insertMessageForUsers("sparkles", "stars", "a totally valid message " +
+                "except for flagrant abuse of capitalization.");
     }
 
     @Test
@@ -44,17 +45,20 @@ public class AdaDbMessagesTest {
         insertMessageForUsers("unicorns", "rainbows", message.toString());
     }
 
-    private void insertMessageForUsers(String sender, String receiver, String message) throws SQLException {
+    private void insertMessageForUsers(String sender, String receiver,
+                                       String message) throws SQLException {
         Assert.assertTrue(TEST_DB.createUser(receiver));
         Assert.assertTrue(TEST_DB.createUser(sender));
 
-        TEST_DB.insert(new JSONObject().put("sender", sender).put("msg", message), receiver);
+        TEST_DB.insert(new JSONObject().put("sender", sender).put("msg",
+                message), receiver);
 
         Connection connection = DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5432/", "postgres", "postgres");
         Statement stmt = connection.createStatement();
 
-        ResultSet resultSet = stmt.executeQuery("select message from testchattable where sender='" + sender + "'");
+        ResultSet resultSet = stmt.executeQuery("select message from " +
+                "testchattable where sender='" + sender + "'");
         Assert.assertTrue(resultSet.next());
         Assert.assertEquals(message, resultSet.getString(1));
     }
