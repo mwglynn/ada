@@ -21,7 +21,7 @@ public class AdaServer {
                         () -> {
                             while (host.Tick()) {
                             }
-                            host.Close();
+                            host.close();
                         });
         hostThread.start();
 

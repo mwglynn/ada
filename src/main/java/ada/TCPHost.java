@@ -2,6 +2,7 @@ package ada;
 
 import org.json.JSONObject;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +11,7 @@ import java.util.Hashtable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-class TCPHost {
+class TCPHost implements Closeable {
     private ServerSocket serverSocket;
     private ArrayList<NetworkHandle> connectedSockets;
     private ConcurrentLinkedQueue<NetworkHandle> newConnections;
@@ -98,7 +99,8 @@ class TCPHost {
         return true;
     }
 
-    void Close() {
+    @Override
+    public void close() {
         shouldListen = false;
         try {
             serverSocket.close();
@@ -113,9 +115,9 @@ class TCPHost {
         }
 
         for (NetworkHandle connectedSocket : connectedSockets) {
-            connectedSocket.sender.Close();
-            connectedSocket.reader.Close();
-            connectedSocket.socket.Close();
+            connectedSocket.sender.close();
+            connectedSocket.reader.close();
+            connectedSocket.socket.close();
         }
     }
 }

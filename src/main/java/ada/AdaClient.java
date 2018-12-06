@@ -98,9 +98,9 @@ public class AdaClient {
         System.out.println("closing out");
 
         /* clean exit */
-        sender.Close();
-        reader.Close();
-        client.Close();
+        sender.close();
+        reader.close();
+        client.close();
 
         try {
             sendMessages.join();

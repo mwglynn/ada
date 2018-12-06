@@ -104,7 +104,7 @@ public class Messages_inputIntegration_Test {
                             //noinspection StatementWithEmptyBody
                             while (host.Tick()) {
                             }
-                            host.Close();
+                            host.close();
                         });
         hostThread.start();
 
