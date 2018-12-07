@@ -124,7 +124,10 @@ public class AdaDB {
     }
 
     public boolean createUser(String userName) {
-        if (!checkUser(userName)) {
+        if (userName == null || userName.isEmpty()) {
+            return false;
+        }
+        if (!userExists(userName)) {
             try (Connection connection = getConnection();
                  Statement stmt = connection.createStatement()) {
                 connection.setAutoCommit(false);
@@ -143,7 +146,7 @@ public class AdaDB {
         return false;
     }
 
-    public boolean checkUser(String userName) {
+    public boolean userExists(String userName) {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);

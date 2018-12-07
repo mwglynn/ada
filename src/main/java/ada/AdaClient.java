@@ -5,6 +5,7 @@ import ada.texttospeech.AdaTextToSpeechClient;
 import ada.texttospeech.AudioUtil;
 import org.json.JSONObject;
 
+import java.io.Closeable;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * {@link AdaServer}.
  */
 @SuppressWarnings("WeakerAccess")
-public class AdaClient {
+public class AdaClient implements Closeable {
 
     private final AdaTextToSpeechClient textToSpeechClient;
     private final NetworkSocketClient client;
@@ -21,6 +22,7 @@ public class AdaClient {
     private final NetworkReader reader;
     private final Scanner input = new Scanner(System.in);
     private final AdaDB adaDB;
+    private Thread sendMessages;
 
     public AdaClient(
             String host, AdaTextToSpeechClient textToSpeechClient,
@@ -34,56 +36,19 @@ public class AdaClient {
 
     public void run() {
 
-        /* DB: log user if new */
-        String username;
-        /*
-         * DB: known bug - multiple logins same person allowed this is not
-         * fully a bug because no two
-         * people can have the same username, so someone would have to lie
-         * and say that they do have an
-         * account when the really do not and then use an existing username
-         * as their own reach goal:
-         * implement authorization mechanism
-         */
-        label:
-        while (true) {
-            System.out.print("Do you already have an account (y/n):  ");
-            switch (input.nextLine()) {
-                case "n": {
-                    System.out.print("Please enter a username: ");
-                    username = input.nextLine();
-                    if (adaDB.createUser(username)) {
-                        System.out.println("user created in database!");
-                        break label;
-                    } else {
-                        System.out.println("please try again!");
-                    }
-                    break;
-                }
-                case "y": {
-                    System.out.print("Please enter *your* username: ");
-                    /* check if in system */
-                    username = input.nextLine();
-                    if (adaDB.checkUser(username)) {
-                        System.out.println("username validated");
-                        break label;
-                    } else {
-                        System.out.println("username not in system, try again");
-                    }
-                    break;
-                }
-                default:
-                    System.out.println("incorrect selection, please try " +
-                            "again!");
-                    break;
-            }
-        }
+        String username = getUsername();
+        sender.SendMessage("\\username " + username);
+        getMessages(username);
 
-        Thread sendMessages =
+        sendMessages =
                 new Thread(
                         () -> {
                             while (!Thread.interrupted()) {
                                 if (input.hasNext()) {
+                                    String message = input.nextLine();
+                                    if (message.equals(":exit:")) {
+                                        return;
+                                    }
                                     sender.SendMessage(input.nextLine());
                                 } else {
                                     input.nextLine();
@@ -91,9 +56,7 @@ public class AdaClient {
                             }
                         });
         sendMessages.start();
-        sender.SendMessage("\\username " + username);
 
-        getMessages(username);
 
         System.out.println("closing out");
 
@@ -102,10 +65,34 @@ public class AdaClient {
         reader.close();
         client.close();
 
-        try {
-            sendMessages.join();
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
+
+    }
+
+    private String getUsername() {
+        while (true) {
+            String usernameProvided;
+            System.out.println("Do you have a username (y/n)?");
+            switch (input.nextLine()) {
+                case "y":
+                    System.out.println("Enter *your* username here!");
+                    usernameProvided = input.nextLine();
+                    if (!adaDB.userExists(usernameProvided)) {
+                        System.out.println(String.format("I have no idea who " +
+                                "this %s is", usernameProvided));
+                    } else {
+                        return usernameProvided;
+                    }
+                    break;
+                case "n":
+                    System.out.println("Enter a username here!");
+                    usernameProvided = input.nextLine();
+                    if (adaDB.createUser(usernameProvided)) {
+                        return usernameProvided;
+                    }
+                    break;
+                default:
+                    System.out.println("Please enter y or n.");
+            }
         }
     }
 
@@ -128,5 +115,20 @@ public class AdaClient {
                 adaDB.insert(message.get(), username);
             }
         } while (true);
+    }
+
+    @Override
+    public void close() {
+        sender.close();
+        reader.close();
+        client.close();
+
+        try {
+            sendMessages.join();
+        } catch (
+                InterruptedException ie) {
+            ie.printStackTrace();
+        }
+
     }
 }
