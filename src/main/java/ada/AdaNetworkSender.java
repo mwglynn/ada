@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * main sending functionality.
  */
-class AdaNetworkSender implements Closeable, NetworkSender {
+class AdaNetworkSender implements Closeable {
 
     /**
      * An unbounded thread-safe queue based on linked nodes. This queue
@@ -30,7 +30,6 @@ class AdaNetworkSender implements Closeable, NetworkSender {
     /**
      * Sends a message.
      */
-    @Override
     public void SendMessage(String msg) {
         if (shouldProcessSendQueue) {
 

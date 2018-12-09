@@ -1,6 +1,5 @@
 package ada;
 
-import ada.postgresql.AdaDB;
 import ada.texttospeech.AdaTextToSpeechClient;
 import com.google.cloud.texttospeech.v1.TextToSpeechClient;
 
@@ -12,7 +11,9 @@ public class AdaClientMain {
     private static final int PORT = 6259;
 
     public static void main(String[] args) {
-        String host = args.length > 0 ? args[0] : "localhost";
+        String host = args.length > 0 ?
+                args[0] :
+                "localhost";
         AdaTextToSpeechClient cloudClient;
 
         try {
@@ -21,11 +22,9 @@ public class AdaClientMain {
         } catch (IOException e) {
             cloudClient = null;
         }
-
-        try (AdaClient client = new AdaClient(new AdaDB(host, "ada"),
-                cloudClient,
-                new NetworkSocketClient(host, PORT))) {
-            client.run();
-        }
+        AdaClient client = new AdaClient(cloudClient,
+                new NetworkSocketClient(host,
+                        PORT));
+        client.run();
     }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * main reader for incoming messages.
  */
-public class AdaNetworkReader implements Closeable, NetworkReader {
+public class AdaNetworkReader implements Closeable {
 
     /**
      * An unbounded thread-safe queue based on linked nodes. This queue orders
@@ -31,7 +31,6 @@ public class AdaNetworkReader implements Closeable, NetworkReader {
     /**
      * Read incoming messages.
      */
-    @Override
     public Optional<String> ReadMessage() {
         if (shouldProcessReceiveQueue && !incomingMessages.isEmpty()) {
             return Optional.ofNullable(incomingMessages.poll());

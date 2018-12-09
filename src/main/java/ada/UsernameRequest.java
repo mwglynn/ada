@@ -10,7 +10,7 @@ abstract class UsernameRequest {
     static UsernameRequest create(String username,
                                   boolean alreadyExists) throws InvalidArgumentException {
         Preconditions.checkArgument(!username.isEmpty());
-        Preconditions.checkArgument(!username.contains("\\s"));
+        Preconditions.checkArgument(!username.contains(" "));
         return new AutoValue_UsernameRequest(username,
                 alreadyExists);
     }
@@ -24,7 +24,7 @@ abstract class UsernameRequest {
     }
 
     public static UsernameRequest deserialize(String response) throws InvalidArgumentException {
-        String[] resp = response.split("\\s");
+        String[] resp = response.split(" ");
         return UsernameRequest.create(resp[0],
                 Boolean.valueOf(resp[1]));
     }

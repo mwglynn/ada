@@ -22,7 +22,6 @@ public class AdaClient {
     private String username;
 
     public AdaClient(
-            String host,
             AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
         this.textToSpeechClient = textToSpeechClient;

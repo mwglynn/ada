@@ -27,7 +27,7 @@ public class UsernameMessageTest {
                 UsernameRequest.deserialize(testRequest.serialize()));
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = IllegalArgumentException.class)
     public void check_createBadUsername_throwsError() {
         UsernameRequest.create("Launcelot " +
                         "Guinevere",
