@@ -14,7 +14,8 @@ public class AdaDB {
     private final String USER_TABLE;
     private final String CHAT_TABLE;
 
-    public AdaDB(String host, String db_name) {
+    public AdaDB(String host,
+                 String db_name) {
         // Translated to lower case because it seems to make a difference to
         // postgres.
         HOST = host;
@@ -31,7 +32,9 @@ public class AdaDB {
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
-                "jdbc:postgresql://" + HOST + ":5432/", "postgres", "postgres");
+                "jdbc:postgresql://" + HOST + ":5432/",
+                "postgres",
+                "postgres");
     }
 
     public void initPostgres() {
@@ -84,12 +87,14 @@ public class AdaDB {
                 }
             }
         } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.err.println(e.getClass()
+                    .getName() + ": " + e.getMessage());
             System.exit(1);
         }
     }
 
-    public void insert(JSONObject jobj, String receiver) {
+    public void insert(JSONObject jobj,
+                       String receiver) {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
@@ -110,9 +115,12 @@ public class AdaDB {
                             + ");";
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, message);
-            ps.setString(2, sender);
-            ps.setString(3, receiver);
+            ps.setString(1,
+                    message);
+            ps.setString(2,
+                    sender);
+            ps.setString(3,
+                    receiver);
 
             ps.execute();
 
@@ -135,7 +143,8 @@ public class AdaDB {
                         connection.prepareStatement(
                                 "INSERT INTO " + USER_TABLE + " (ID, " +
                                         "userName) VALUES (DEFAULT, ?)");
-                ps.setString(1, userName);
+                ps.setString(1,
+                        userName);
                 ps.execute();
                 connection.commit();
                 return true;
@@ -154,7 +163,8 @@ public class AdaDB {
                     connection.prepareStatement(
                             "select exists(select id from " + USER_TABLE + " " +
                                     "WHERE userName=?)");
-            ps.setString(1, userName);
+            ps.setString(1,
+                    userName);
 
             ResultSet resultSet = ps.executeQuery();
             if (resultSet.next()) {
@@ -166,8 +176,10 @@ public class AdaDB {
         return false;
     }
 
-    @VisibleForTesting
-    void clear() {
+    // TODO: A safer version of this would implement a fake AdaDB and not
+    // expose clear as a public method, given that it is not the intended
+    // production usage.
+    public void clear() {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             stmt.execute("DROP TABLE " + CHAT_TABLE + ", " + USER_TABLE + ";");

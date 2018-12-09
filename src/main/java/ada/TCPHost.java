@@ -21,8 +21,8 @@ class TCPHost implements Closeable {
 
     private class NetworkHandle {
         NetworkSocket socket;
-        NetworkReader reader;
-        NetworkSender sender;
+        AdaNetworkReader reader;
+        AdaNetworkSender sender;
     }
 
     TCPHost(int port) {
@@ -53,8 +53,8 @@ class TCPHost implements Closeable {
                 System.out.println("Server got connection");
                 NetworkHandle netHandle = new NetworkHandle();
                 netHandle.socket = new NetworkSocketClient(newConnection);
-                netHandle.reader = new NetworkReader(netHandle.socket);
-                netHandle.sender = new NetworkSender(netHandle.socket);
+                netHandle.reader = new AdaNetworkReader(netHandle.socket);
+                netHandle.sender = new AdaNetworkSender(netHandle.socket);
 
                 newConnections.add(netHandle);
                 usernameMap.put(netHandle, "Unnamed");

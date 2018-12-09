@@ -82,18 +82,18 @@ public class Messages_inputIntegration_Test {
                     "BggQqBEQrJpVGZQAAcFyAwQI1Aj8B6OmqZcZSyd8AAAAAElFTkSuQmCC";
 
     private TCPHost host;
-    private NetworkSender sender1;
-    private NetworkReader reader2;
+    private AdaNetworkSender sender1;
+    private AdaNetworkReader reader2;
 
     @Before
     public void setUp() {
         host = new TCPHost(PORT);
         NetworkSocketClient client1 = new NetworkSocketClient("localhost",
                 PORT);
-        sender1 = new NetworkSender(client1);
+        sender1 = new AdaNetworkSender(client1);
         NetworkSocketClient client2 = new NetworkSocketClient("localhost",
                 PORT);
-        reader2 = new NetworkReader(client2);
+        reader2 = new AdaNetworkReader(client2);
     }
 
     @Test

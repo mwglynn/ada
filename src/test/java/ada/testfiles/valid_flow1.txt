@@ -1,0 +1,4 @@
+"y"
+"riva"
+"Hello!"
+":exit:"
