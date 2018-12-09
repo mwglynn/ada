@@ -73,23 +73,31 @@ public class AdaDB {
         System.out.println("Tables created successfully");
     }
 
-    public void Query(String username) {
+    public String Query(String username) {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
-            System.out.println(username);
+            System.out.println("Querying :" + username);
 
-            String sql = "SELECT * FROM " + CHAT_TABLE;
-            try (ResultSet rs = stmt.executeQuery(sql)) {
+            String sql = "SELECT * FROM " + CHAT_TABLE + " WHERE sender=? OR " +
+                    "receiver=?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1,
+                    username);
+            ps.setString(2,
+                    username);
+            StringBuilder queryResponse = new StringBuilder();
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    System.out.println(rs.getString(4));
+                    queryResponse.append(rs.getString(5) + ": " + rs.getString(4) + "\n");
                 }
+                return queryResponse.toString();
             }
         } catch (Exception e) {
-            System.err.println(e.getClass()
-                    .getName() + ": " + e.getMessage());
+            e.getStackTrace();
             System.exit(1);
         }
+        return "";
     }
 
     public void insert(JSONObject jobj,

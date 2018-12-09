@@ -28,18 +28,7 @@ class NetworkSender {
 
     void SendMessage(String msg) {
         if (shouldProcessSendQueue) {
-
-            /* DB: check for history command */
-            if (msg.equals(":history:")) {
-                System.out.println("coming soon!");
-                //                new HistoryUtil();
-                //                HistoryUtil.main(msg);
-            } else {
-                /* we don't want to send
-                 * our own request for history
-                 */
-                outgoingMessages.add(msg);
-            }
+            outgoingMessages.add(msg);
         }
     }
 

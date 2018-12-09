@@ -72,10 +72,6 @@ class TCPHost implements Closeable {
 
 
     boolean Tick() {
-//        while (!newConnections.isEmpty()) {
-//            connectedSockets.add(newConnections.poll());
-//        }
-
         // Deal with all new user requests coming in.
         Iterator<NetworkHandle> iterator = newConnections.iterator();
         while (iterator.hasNext()) {
@@ -96,36 +92,38 @@ class TCPHost implements Closeable {
             }
         }
 
-        // Forward all new messages.
-        for (int i = 0;
-             i < connectedSockets.size();
-             i++) {
+        for (NetworkHandle connection : usernameMap.keySet()) {
             Optional<String> msg;
-            do {
-                msg = connectedSockets.get(i).reader.ReadMessage();
-                if (msg.isPresent()) {
-                    if (msg.get()
-                            .equals("\\q")) {
-                        return false;
-                    } else {
-                        JSONObject jobj = new JSONObject();
-                        jobj.put("sender",
-                                usernameMap.get(connectedSockets.get(i)));
-                        jobj.put("msg",
-                                msg.get());
-                        String jsonMsg = jobj.toString();
-                        for (int j = 0;
-                             j < connectedSockets.size();
-                             j++) {
-                            if (i != j) {
-                                connectedSockets.get(j).sender.SendMessage(jsonMsg);
-                                databaseManager.insert(jobj,
-                                        usernameMap.get(j));
-                            }
+            msg = connection.reader.ReadMessage();
+            if (msg.isPresent()) {
+                if (msg.get()
+                        .equals("\\q")) {
+                    return false;
+                } else if (msg.get()
+                        .toLowerCase()
+                        .equals(":history:")) {
+                    JSONObject jobj = new JSONObject();
+                    jobj.put("sender",
+                            "query history");
+                    jobj.put("msg",
+                            databaseManager.Query(usernameMap.get(connection)));
+                    connection.sender.SendMessage(jobj.toString());
+                } else {
+                    JSONObject jobj = new JSONObject();
+                    jobj.put("sender",
+                            usernameMap.get(connection));
+                    jobj.put("msg",
+                            msg.get());
+                    String jsonMsg = jobj.toString();
+                    for (NetworkHandle otherConnection : usernameMap.keySet()) {
+                        if (otherConnection != connection) {
+                            otherConnection.sender.SendMessage(jsonMsg);
+                            databaseManager.insert(jobj,
+                                    usernameMap.get(otherConnection));
                         }
                     }
                 }
-            } while (msg.isPresent());
+            }
         }
         return true;
     }

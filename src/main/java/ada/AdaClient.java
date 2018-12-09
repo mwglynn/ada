@@ -60,6 +60,9 @@ public class AdaClient {
         }
         System.out.println(username + " is no longer null!");
 
+        System.out.println("Welcome to Ada! Type into the prompt to chat! To " +
+                "see your chat history, type :history:");
+
         Thread sendMessages =
                 new Thread(
                         () -> {
