@@ -1,6 +1,8 @@
 package ada;
 
+import ada.postgresql.AdaDB;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,18 +84,22 @@ public class Messages_inputIntegration_Test {
                     "BggQqBEQrJpVGZQAAcFyAwQI1Aj8B6OmqZcZSyd8AAAAAElFTkSuQmCC";
 
     private TCPHost host;
-    private AdaNetworkSender sender1;
-    private AdaNetworkReader reader2;
+    private NetworkSender sender1;
+    private NetworkReader reader2;
+    private AdaDB testDb;
 
     @Before
     public void setUp() {
-        host = new TCPHost(PORT);
+        testDb = new AdaDB("localhost",
+                "test");
+        host = new TCPHost(PORT,
+                testDb);
         NetworkSocketClient client1 = new NetworkSocketClient("localhost",
                 PORT);
-        sender1 = new AdaNetworkSender(client1);
+        sender1 = new NetworkSender(client1);
         NetworkSocketClient client2 = new NetworkSocketClient("localhost",
                 PORT);
-        reader2 = new AdaNetworkReader(client2);
+        reader2 = new NetworkReader(client2);
     }
 
     @Test
@@ -116,8 +122,16 @@ public class Messages_inputIntegration_Test {
         } while (!s2.isPresent());
         hostThread.interrupt();
 
-        Assert.assertEquals(LONG_MESSAGE, new JSONObject(s2.get()).getString(
-                "msg"));
-        Assert.assertNotEquals("\uD83D\uDE0A", s2.get());
+        Assert.assertEquals(LONG_MESSAGE,
+                new JSONObject(s2.get()).getString(
+                        "msg"));
+        Assert.assertNotEquals("\uD83D\uDE0A",
+                s2.get());
     }
+
+    @After
+    public void tearDown() {
+        testDb.clear();
+    }
+
 }

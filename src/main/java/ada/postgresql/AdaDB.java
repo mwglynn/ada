@@ -1,6 +1,5 @@
 package ada.postgresql;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.json.JSONObject;
 
 import java.sql.*;
@@ -132,10 +131,7 @@ public class AdaDB {
     }
 
     public boolean createUser(String userName) {
-        if (userName == null || userName.isEmpty()) {
-            return false;
-        }
-        if (!userExists(userName)) {
+        if (!containsUser(userName)) {
             try (Connection connection = getConnection();
                  Statement stmt = connection.createStatement()) {
                 connection.setAutoCommit(false);
@@ -155,7 +151,7 @@ public class AdaDB {
         return false;
     }
 
-    public boolean userExists(String userName) {
+    public boolean containsUser(String userName) {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
@@ -176,9 +172,6 @@ public class AdaDB {
         return false;
     }
 
-    // TODO: A safer version of this would implement a fake AdaDB and not
-    // expose clear as a public method, given that it is not the intended
-    // production usage.
     public void clear() {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {

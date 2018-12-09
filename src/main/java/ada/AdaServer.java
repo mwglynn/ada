@@ -11,8 +11,9 @@ public class AdaServer {
     private static final int port = 6259;
 
     public static void main(String[] args) {
-        TCPHost host = new TCPHost(port);
         AdaDB db = new AdaDB("localhost", "ada");
+        TCPHost host = new TCPHost(port,
+                db);
         /* DB: create tables if not exist */
         db.initPostgres();
 

@@ -41,21 +41,21 @@ public class AdaDbUserTests {
      */
     @Test
     public void test_checkUser_checksForExistingUser() {
-        Assert.assertFalse(TEST_DB.userExists("Castille"));
+        Assert.assertFalse(TEST_DB.containsUser("Castille"));
         TEST_DB.createUser("Castille");
-        Assert.assertTrue(TEST_DB.userExists("Castille"));
+        Assert.assertTrue(TEST_DB.containsUser("Castille"));
     }
 
     @Test
     public void createUser_validUsername_succeeds() {
-        Assert.assertFalse(TEST_DB.userExists("credence"));
+        Assert.assertFalse(TEST_DB.containsUser("credence"));
         Assert.assertTrue(TEST_DB.createUser("credence"));
     }
 
     @Test
     public void createUser_crazySqlCharacters_succeeds() {
         String crazyUsername = "totally'legal";
-        Assert.assertFalse(TEST_DB.userExists(crazyUsername));
+        Assert.assertFalse(TEST_DB.containsUser(crazyUsername));
         Assert.assertTrue(TEST_DB.createUser(crazyUsername));
     }
 
@@ -83,7 +83,7 @@ public class AdaDbUserTests {
 
         TEST_DB.insert(jobj, receiver);
 
-        Assert.assertTrue(TEST_DB.userExists(sender));
+        Assert.assertTrue(TEST_DB.containsUser(sender));
     }
 
     @Test

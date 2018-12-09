@@ -1,12 +1,9 @@
 package ada;
 
-import ada.postgresql.AdaDB;
 import ada.texttospeech.AdaTextToSpeechClient;
 import ada.texttospeech.AudioUtil;
 import org.json.JSONObject;
 
-import java.io.Closeable;
-import java.io.InputStream;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -15,92 +12,108 @@ import java.util.Scanner;
  * {@link AdaServer}.
  */
 @SuppressWarnings("WeakerAccess")
-public class AdaClient implements Closeable {
+public class AdaClient {
 
     private final AdaTextToSpeechClient textToSpeechClient;
+    private final NetworkSocketClient client;
     private final NetworkSender sender;
     private final NetworkReader reader;
-    private final Scanner input;
-    private final AdaDB adaDB;
-    private Thread sendMessages;
+    private final Scanner input = new Scanner(System.in);
+    private String username;
 
     public AdaClient(
-            AdaDB db,
+            String host,
             AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
-        adaDB = db;
-        reader = new AdaNetworkReader(client);
-        sender = new AdaNetworkSender(client);
         this.textToSpeechClient = textToSpeechClient;
-        input = new Scanner(System.in);
+        this.client = client;
+        sender = new NetworkSender(client);
+        reader = new NetworkReader(client);
     }
 
-
-    public AdaClient(
-            AdaDB db,
-            AdaTextToSpeechClient textToSpeechClient,
-            NetworkSocketClient client,
-            InputStream in) {
-        adaDB = db;
-        reader = new AdaNetworkReader(client);
-        sender = new AdaNetworkSender(client);
-        this.textToSpeechClient = textToSpeechClient;
-        input = new Scanner(System.in);
-    }
 
     public void run() {
-        String username = getUsername();
-        sender.SendMessage("\\username " + username);
-        getMessages(username);
 
-        sendMessages =
+        /* DB: log user if new */
+
+        UsernameRequest request = getUsername();
+        System.out.println("Got username " + request.username());
+        sender.SendMessage(request.serialize());
+        while (username == null) {
+            Optional<String> msg = reader.ReadMessage();
+            if (msg.isPresent()) {
+                try {
+                    UsernameResponse response =
+                            UsernameResponse.deserialize(msg.get());
+                    if (response.usernameWasRegistered()) {
+                        username = request.username();
+                    } else {
+                        System.out.println("Try again!");
+                        request = getUsername();
+                        sender.SendMessage(request.serialize());
+                    }
+                } catch (Exception e) {
+                    System.out.println("Try again!");
+                    request = getUsername();
+                    sender.SendMessage(request.serialize());
+                }
+            }
+        }
+        System.out.println(username + " is no longer null!");
+
+        Thread sendMessages =
                 new Thread(
                         () -> {
                             while (!Thread.interrupted()) {
                                 if (input.hasNext()) {
-                                    String message = input.nextLine();
-                                    if (message.equals(":exit:")) {
-                                        System.exit(1);
-                                    }
-                                    sender.SendMessage(message);
+                                    sender.SendMessage(input.nextLine());
                                 } else {
                                     input.nextLine();
                                 }
                             }
                         });
+
         sendMessages.start();
+
+        getMessages(username);
+
+        System.out.println("closing out");
+
+        /* clean exit */
+        sender.Close();
+        reader.Close();
+        client.Close();
+
+        try {
+            sendMessages.join();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 
-    String getUsername() {
+    private UsernameRequest getUsername() {
         while (true) {
-            String usernameProvided;
-            System.out.println("Do you have a username (y/n)?");
-            switch (input.nextLine()) {
-                case "y":
-                    System.out.println("Enter *your* username here!");
-                    usernameProvided = input.nextLine();
-                    if (!adaDB.userExists(usernameProvided)) {
-                        System.out.println(String.format("I have no idea who " +
-                                        "this %s is. Try again!",
-                                usernameProvided));
-                    } else {
-                        return usernameProvided;
-                    }
-                    break;
-                case "n":
-                    System.out.println("Enter a username here!");
-                    usernameProvided = input.nextLine();
-                    if (adaDB.createUser(usernameProvided)) {
-                        return usernameProvided;
-                    }
-                    break;
+            System.out.println("Do you have a username?");
+            String hasUsername = input.nextLine();
+            switch (hasUsername) {
+                case "n": {
+                    System.out.print("Please enter a username: ");
+                    return UsernameRequest.create(input.nextLine(),
+                            false);
+                }
+                case "y": {
+                    System.out.print("Please enter *your* username: ");
+                    return UsernameRequest.create(input.nextLine(),
+                            true);
+                }
                 default:
-                    System.out.println("Please enter y or n.");
+                    System.out.println("Invalid selection; please try " +
+                            "again!");
             }
         }
     }
 
-    void getMessages(final String username) {
+    private void getMessages(final String username) {
         do {
             Optional<JSONObject> message =
                     reader.ReadMessage()
@@ -120,22 +133,12 @@ public class AdaClient implements Closeable {
                     textToSpeechClient.getAudio(parsedMsg)
                             .ifPresent(AudioUtil::play);
                 }
-                adaDB.insert(message.get(),
-                        username);
             }
         } while (true);
     }
 
-    @Override
     public void close() {
-        sender.close();
-        reader.close();
-
-        try {
-            sendMessages.join();
-        } catch (
-                InterruptedException ie) {
-            ie.printStackTrace();
-        }
+        sender.Close();
+        reader.Close();
     }
 }

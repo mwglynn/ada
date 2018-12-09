@@ -7,5 +7,5 @@ interface NetworkSocket {
 
     Optional<String> ReadFromSocket();
 
-    void close();
+    void Close();
 }

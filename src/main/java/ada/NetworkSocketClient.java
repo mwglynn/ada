@@ -1,12 +1,15 @@
 package ada;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
-public class NetworkSocketClient implements NetworkSocket, Closeable {
+public class NetworkSocketClient implements NetworkSocket {
 
     private Socket clientSocket;
     private DataOutputStream clientOutputStream;
@@ -24,12 +27,14 @@ public class NetworkSocketClient implements NetworkSocket, Closeable {
         }
     }
 
-    NetworkSocketClient(String ip, int port) {
+    NetworkSocketClient(String ip,
+                        int port) {
         if (port < 1 || port > 65535) {
             throw new IllegalArgumentException();
         }
         try {
-            clientSocket = new Socket(ip, port);
+            clientSocket = new Socket(ip,
+                    port);
             clientOutputStream =
                     new DataOutputStream(clientSocket.getOutputStream());
             clientInputStream =
@@ -68,7 +73,7 @@ public class NetworkSocketClient implements NetworkSocket, Closeable {
 
     /* Closest thing to a destructor in Java */
     @Override
-    public void close() {
+    public void Close() {
         try {
             clientSocket.close();
         } catch (IOException ioe) {
