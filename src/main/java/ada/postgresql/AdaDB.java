@@ -77,19 +77,16 @@ public class AdaDB {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
-            System.out.println("Querying :" + username);
-
-            String sql = "SELECT * FROM " + CHAT_TABLE + " WHERE sender=? OR " +
-                    "receiver=?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1,
-                    username);
-            ps.setString(2,
-                    username);
             StringBuilder queryResponse = new StringBuilder();
-            try (ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = QueryUtil.GetHistory(connection,
+                    CHAT_TABLE,
+                    username)
+                    .executeQuery()) {
                 while (rs.next()) {
-                    queryResponse.append(rs.getString(5) + ": " + rs.getString(4) + "\n");
+                    queryResponse.append(rs.getString(5));
+                    queryResponse.append(": ");
+                    queryResponse.append(rs.getString(4));
+                    queryResponse.append("\n");
                 }
                 return queryResponse.toString();
             }
