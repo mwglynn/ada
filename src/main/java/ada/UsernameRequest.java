@@ -23,9 +23,14 @@ abstract class UsernameRequest {
         return username() + " " + Boolean.toString(isReturningUser());
     }
 
-    public static UsernameRequest deserialize(String response) throws InvalidArgumentException {
-        String[] resp = response.split(" ");
-        return UsernameRequest.create(resp[0],
-                Boolean.valueOf(resp[1]));
+    public static UsernameRequest deserialize(String response) throws IllegalArgumentException {
+        try {
+            String[] resp = response.split(" ");
+            return UsernameRequest.create(resp[0],
+                    Boolean.valueOf(resp[1]));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(response + " is not a " +
+                    "valid UsernameRequest.");
+        }
     }
 }

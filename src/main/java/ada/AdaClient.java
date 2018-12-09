@@ -15,7 +15,6 @@ import java.util.Scanner;
 public class AdaClient {
 
     private final AdaTextToSpeechClient textToSpeechClient;
-    private final NetworkSocketClient client;
     private final NetworkSender sender;
     private final NetworkReader reader;
     private final Scanner input = new Scanner(System.in);
@@ -25,7 +24,6 @@ public class AdaClient {
             AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
         this.textToSpeechClient = textToSpeechClient;
-        this.client = client;
         sender = new NetworkSender(client);
         reader = new NetworkReader(client);
     }
@@ -44,7 +42,7 @@ public class AdaClient {
                 try {
                     UsernameResponse response =
                             UsernameResponse.deserialize(msg.get());
-                    if (response.usernameWasRegistered()) {
+                    if (response.usernameWasReceived()) {
                         username = request.username();
                     } else {
                         System.out.println("Try again!");
@@ -84,7 +82,6 @@ public class AdaClient {
         /* clean exit */
         sender.Close();
         reader.Close();
-        client.Close();
 
         try {
             sendMessages.join();

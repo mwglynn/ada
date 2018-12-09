@@ -85,7 +85,7 @@ class TCPHost implements Closeable {
                                 newConnection);
 
                 newConnection.sender.SendMessage(response.serialize());
-                if (response.usernameWasRegistered()) {
+                if (response.usernameWasReceived()) {
                     connectedSockets.add(newConnection);
                     iterator.remove();
                 }

@@ -1,6 +1,5 @@
 package ada;
 
-import com.google.api.gax.rpc.InvalidArgumentException;
 import com.google.auto.value.AutoValue;
 import com.google.rpc.Code;
 
@@ -13,17 +12,22 @@ abstract class UsernameResponse {
                 errorStatus);
     }
 
-    abstract boolean usernameWasRegistered();
+    abstract boolean usernameWasReceived();
 
     abstract Code errorStatus();
 
     public String serialize() {
-        return Boolean.toString(usernameWasRegistered()) + " " + errorStatus().getNumber();
+        return Boolean.toString(usernameWasReceived()) + " " + errorStatus().getNumber();
     }
 
-    public static UsernameResponse deserialize(String response) throws InvalidArgumentException {
-        String[] resp = response.split("\\s");
-        return UsernameResponse.create(Boolean.valueOf(resp[0]),
-                Code.forNumber(Integer.valueOf(resp[1])));
+    public static UsernameResponse deserialize(String response) throws IllegalArgumentException {
+        try {
+            String[] resp = response.split("\\s");
+            return UsernameResponse.create(Boolean.valueOf(resp[0]),
+                    Code.forNumber(Integer.valueOf(resp[1])));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(response + " is not a valid " +
+                    "UsernameResponse.");
+        }
     }
 }
