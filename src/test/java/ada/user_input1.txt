@@ -1,0 +1,4 @@
+n
+palomides
+hi
+exit

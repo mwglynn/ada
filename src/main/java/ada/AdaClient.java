@@ -5,6 +5,7 @@ import ada.texttospeech.AudioUtil;
 import org.json.JSONObject;
 
 import java.io.Closeable;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -18,17 +19,28 @@ public class AdaClient implements Closeable {
     private final AdaTextToSpeechClient textToSpeechClient;
     private final NetworkSender sender;
     private final NetworkReader reader;
-    private final Scanner input = new Scanner(System.in);
+    private final Scanner input;
     private String username;
+    private volatile boolean keepSendingMessages = true;
 
     public AdaClient(
             AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
+        input = new Scanner(System.in);
         this.textToSpeechClient = textToSpeechClient;
         sender = new NetworkSender(client);
         reader = new NetworkReader(client);
     }
 
+    public AdaClient(
+            AdaTextToSpeechClient textToSpeechClient,
+            NetworkSocketClient client,
+            InputStream in) {
+        input = new Scanner(in);
+        this.textToSpeechClient = textToSpeechClient;
+        sender = new NetworkSender(client);
+        reader = new NetworkReader(client);
+    }
 
     public void run() {
 
@@ -65,17 +77,18 @@ public class AdaClient implements Closeable {
                 new Thread(
                         () -> {
                             while (!Thread.interrupted()) {
-                                if (input.hasNext()) {
-                                    if (input.nextLine()
-                                            .length() > 3000) {
-                                        System.out.println("Error: Line " +
-                                                "length exceeded. Try " +
-                                                "splitting your message!");
-                                    } else {
-                                        sender.SendMessage(input.nextLine());
-                                    }
+                                String next = input.nextLine();
+                                if (next.equals("exit")) {
+                                    keepSendingMessages = false;
+                                    break;
+                                }
+                                if (next.length() > 3000) {
+                                    System.out.println("Error: Line " +
+                                            "length exceeded. Try " +
+                                            "splitting your message!");
                                 } else {
-                                    input.nextLine();
+                                    System.out.println("Sending " + next);
+                                    sender.SendMessage(next);
                                 }
                             }
                         });
@@ -83,18 +96,6 @@ public class AdaClient implements Closeable {
         sendMessages.start();
 
         getMessages();
-
-        System.out.println("closing out");
-
-        /* clean exit */
-        sender.close();
-        reader.close();
-
-        try {
-            sendMessages.join();
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
     }
 
     private UsernameRequest getUsername() {
@@ -130,17 +131,13 @@ public class AdaClient implements Closeable {
                 String parsedMsg = message.get()
                         .getString("msg");
 
-                // TODO: Not let clients close other clients.
-                if (parsedMsg.equals("exit")) {
-                    return;
-                }
                 System.out.println(parsedSender + ": " + parsedMsg);
                 if (textToSpeechClient != null) {
                     textToSpeechClient.getAudio(parsedMsg)
                             .ifPresent(AudioUtil::play);
                 }
             }
-        } while (true);
+        } while (keepSendingMessages);
     }
 
     @Override
