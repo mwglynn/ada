@@ -1,6 +1,6 @@
 package ada.gui;
 
-import ada.AdaServer;
+import ada.AdaServerMain;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,14 +10,14 @@ import java.awt.event.ActionListener;
 public class AdaServerForm {
     private JButton starButton;
     private JPanel serverPanel;
-    private AdaServer server;
+    private AdaServerMain server;
 
     public AdaServerForm() {
         starButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (server == null) {
-                    server = new AdaServer();
+                    server = new AdaServerMain();
                     server.main(null);
                 } else {
                     JOptionPane.showMessageDialog(null, "Server Already " +

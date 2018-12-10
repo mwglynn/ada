@@ -12,9 +12,9 @@ class QueryUtil {
     static PreparedStatement GetHistory(Connection connection,
                                         String chatTable,
                                         String username) throws SQLException {
-        String sql = "SELECT * FROM " + chatTable + " WHERE sender=? OR " +
-                "receiver=?";
-        PreparedStatement ps = connection.prepareStatement(sql);
+        PreparedStatement ps =
+                connection.prepareStatement("SELECT * FROM " + chatTable
+                        + " " + "WHERE sender=? OR " + "receiver=?");
         ps.setString(1,
                 username);
         ps.setString(2,

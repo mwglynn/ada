@@ -147,7 +147,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>ada.AdaServer</mainClass>
+                            <mainClass>ada.AdaServerMain</mainClass>
                         </configuration>
                     </execution>
                     <execution>

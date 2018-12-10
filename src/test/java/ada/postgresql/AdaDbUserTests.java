@@ -7,6 +7,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.sql.SQLException;
+
 import static java.sql.DriverManager.getConnection;
 
 /**
@@ -22,10 +24,10 @@ public class AdaDbUserTests {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    // TODO: remove configuration tests and put config in flags.
+    // TODO: put config in flags.
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException {
         TEST_DB = new AdaDB("localhost", "test");
         TEST_DB.initPostgres();
     }
@@ -40,27 +42,27 @@ public class AdaDbUserTests {
      * test user names (manually remove entries later)
      */
     @Test
-    public void test_checkUser_checksForExistingUser() {
+    public void test_checkUser_checksForExistingUser() throws SQLException {
         Assert.assertFalse(TEST_DB.containsUser("Castille"));
         TEST_DB.createUser("Castille");
         Assert.assertTrue(TEST_DB.containsUser("Castille"));
     }
 
     @Test
-    public void createUser_validUsername_succeeds() {
+    public void createUser_validUsername_succeeds() throws SQLException {
         Assert.assertFalse(TEST_DB.containsUser("credence"));
         Assert.assertTrue(TEST_DB.createUser("credence"));
     }
 
     @Test
-    public void createUser_crazySqlCharacters_succeeds() {
+    public void createUser_crazySqlCharacters_succeeds() throws SQLException {
         String crazyUsername = "totally'legal";
         Assert.assertFalse(TEST_DB.containsUser(crazyUsername));
         Assert.assertTrue(TEST_DB.createUser(crazyUsername));
     }
 
     @Test
-    public void test_createExistingUser_returnsFalse() {
+    public void test_createExistingUser_returnsFalse() throws SQLException {
         Assert.assertTrue(TEST_DB.createUser("frerin"));
         Assert.assertFalse(TEST_DB.createUser("frerin"));
     }
@@ -70,7 +72,7 @@ public class AdaDbUserTests {
      * insert illegal message
      */
     @Test
-    public void insertMessage_validSql_succeedsAndDoesNotDestroyDatabase() {
+    public void insertMessage_validSql_succeedsAndDoesNotDestroyDatabase() throws SQLException {
         String sender = "Lina";
         String receiver = "Clemency";
 
@@ -87,7 +89,7 @@ public class AdaDbUserTests {
     }
 
     @Test
-    public void insertMessage_noSender_fails() {
+    public void insertMessage_noSender_fails() throws SQLException {
         expectedException.expect(JSONException.class);
         String test_user = "Max";
         TEST_DB.createUser(test_user);

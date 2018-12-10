@@ -20,7 +20,7 @@ public class AdaDbMessagesTest {
     private static AdaDB TEST_DB;
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException {
         TEST_DB = new AdaDB("localhost", "test");
         TEST_DB.initPostgres();
     }

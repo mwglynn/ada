@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class TCPHost_Test {
+public class AdaServer_Test {
 
     private AdaDB testDb;
 
@@ -21,19 +21,19 @@ public class TCPHost_Test {
 
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentPortLowFails() {
-        TCPHost host = new TCPHost(0,
+        AdaServer host = new AdaServer(0,
                 testDb);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentPortHighFails() {
-        TCPHost host = new TCPHost(65536,
+        AdaServer host = new AdaServer(65536,
                 testDb);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalArgumentPortNegativeFails() {
-        TCPHost host = new TCPHost(-1,
+        AdaServer host = new AdaServer(-1,
                 testDb);
     }
 
@@ -42,7 +42,7 @@ public class TCPHost_Test {
         for (int i = 9090;
              i < 9190;
              i++) {
-            TCPHost host = new TCPHost(i,
+            AdaServer host = new AdaServer(i,
                     testDb);
             Assert.assertNotNull(host);
         }

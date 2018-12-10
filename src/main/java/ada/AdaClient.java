@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  * {@code ada.AdaClient} reads messages from and sends Messages to
- * {@link AdaServer}.
+ * {@link AdaServerMain}.
  */
 @SuppressWarnings("WeakerAccess")
 public class AdaClient {
@@ -31,8 +31,7 @@ public class AdaClient {
 
     public void run() {
 
-        /* DB: log user if new */
-
+        /* Prompt for username. */
         UsernameRequest request = getUsername();
         System.out.println("Got username " + request.username());
         sender.SendMessage(request.serialize());
@@ -66,7 +65,14 @@ public class AdaClient {
                         () -> {
                             while (!Thread.interrupted()) {
                                 if (input.hasNext()) {
-                                    sender.SendMessage(input.nextLine());
+                                    if (input.nextLine()
+                                            .length() > 3000) {
+                                        System.out.println("Error: Line " +
+                                                "length exceeded. Try " +
+                                                "splitting your message!");
+                                    } else {
+                                        sender.SendMessage(input.nextLine());
+                                    }
                                 } else {
                                     input.nextLine();
                                 }
@@ -75,7 +81,7 @@ public class AdaClient {
 
         sendMessages.start();
 
-        getMessages(username);
+        getMessages();
 
         System.out.println("closing out");
 
@@ -112,7 +118,7 @@ public class AdaClient {
         }
     }
 
-    private void getMessages(final String username) {
+    private void getMessages() {
         do {
             Optional<JSONObject> message =
                     reader.ReadMessage()

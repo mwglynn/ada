@@ -47,7 +47,7 @@ Set GOOGLE_APPLICATION_CREDENTIALS by following the instructions here:
 https://cloud.google.com/docs/authentication/getting-started
 
 ### Build Instructions
-- Build and run ada.AdaServer
+- Build and run ada.AdaServerMain
 - Build and run **more than one** ada.AdaClient
     - use keyboard input to communicate among the clients
 

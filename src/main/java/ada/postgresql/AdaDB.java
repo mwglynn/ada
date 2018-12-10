@@ -1,5 +1,6 @@
 package ada.postgresql;
 
+import com.google.common.base.Preconditions;
 import org.json.JSONObject;
 
 import java.sql.*;
@@ -15,6 +16,10 @@ public class AdaDB {
 
     public AdaDB(String host,
                  String db_name) {
+        Preconditions.checkArgument(host != null,
+                "Null host!");
+        Preconditions.checkArgument(db_name != null,
+                "Null DB name!");
         // Translated to lower case because it seems to make a difference to
         // postgres.
         HOST = host;
@@ -36,7 +41,7 @@ public class AdaDB {
                 "postgres");
     }
 
-    public void initPostgres() {
+    public void initPostgres() throws SQLException {
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
             connection.setAutoCommit(false);
@@ -66,16 +71,12 @@ public class AdaDB {
                             + USER_TABLE
                             + "(userName) ON DELETE NO ACTION)");
             connection.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(1);
+            System.out.println("Created " + CHAT_TABLE + ", " + USER_TABLE);
         }
-        System.out.println("Tables created successfully");
     }
 
-    public String Query(String username) {
-        try (Connection connection = getConnection();
-             Statement stmt = connection.createStatement()) {
+    public String Query(String username) throws SQLException {
+        try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
             StringBuilder queryResponse = new StringBuilder();
             try (ResultSet rs = QueryUtil.GetHistory(connection,
@@ -90,17 +91,12 @@ public class AdaDB {
                 }
                 return queryResponse.toString();
             }
-        } catch (Exception e) {
-            e.getStackTrace();
-            System.exit(1);
         }
-        return "";
     }
 
     public void insert(JSONObject jobj,
-                       String receiver) {
-        try (Connection connection = getConnection();
-             Statement stmt = connection.createStatement()) {
+                       String receiver) throws SQLException {
+        try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
 
             String sender = jobj.getString("sender");
@@ -125,20 +121,15 @@ public class AdaDB {
                     sender);
             ps.setString(3,
                     receiver);
-
             ps.execute();
 
             connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
         }
     }
 
-    public boolean createUser(String userName) {
+    public boolean createUser(String userName) throws SQLException {
         if (!containsUser(userName)) {
-            try (Connection connection = getConnection();
-                 Statement stmt = connection.createStatement()) {
+            try (Connection connection = getConnection()) {
                 connection.setAutoCommit(false);
                 PreparedStatement ps =
                         connection.prepareStatement(
@@ -149,16 +140,14 @@ public class AdaDB {
                 ps.execute();
                 connection.commit();
                 return true;
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } else {
+            return false;
         }
-        return false;
     }
 
-    public boolean containsUser(String userName) {
-        try (Connection connection = getConnection();
-             Statement stmt = connection.createStatement()) {
+    public boolean containsUser(String userName) throws SQLException {
+        try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
             PreparedStatement ps =
                     connection.prepareStatement(
@@ -171,8 +160,6 @@ public class AdaDB {
             if (resultSet.next()) {
                 return resultSet.getBoolean(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return false;
     }
@@ -182,7 +169,8 @@ public class AdaDB {
              Statement stmt = connection.createStatement()) {
             stmt.execute("DROP TABLE " + CHAT_TABLE + ", " + USER_TABLE + ";");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Drop tables failed, probably because there " +
+                    "are no tables to drop.");
         }
     }
 }
