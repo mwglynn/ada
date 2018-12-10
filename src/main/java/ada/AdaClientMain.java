@@ -22,9 +22,10 @@ public class AdaClientMain {
         } catch (IOException e) {
             cloudClient = null;
         }
-        AdaClient client = new AdaClient(cloudClient,
+        try (AdaClient client = new AdaClient(cloudClient,
                 new NetworkSocketClient(host,
-                        PORT));
-        client.run();
+                        PORT))) {
+            client.run();
+        }
     }
 }

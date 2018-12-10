@@ -16,21 +16,22 @@ public class AdaServerMain {
         try {
             AdaDB db = new AdaDB("localhost",
                     "ada");
-            AdaServer host = new AdaServer(port,
-                    db);
-            /* DB: create tables if not exist */
-            db.initPostgres();
+            try (AdaServer host = new AdaServer(port,
+                    db)) {
+                /* DB: create tables if not exist */
+                db.initPostgres();
 
-            Thread hostThread =
-                    new Thread(
-                            () -> {
-                                while (host.Tick()) {
-                                }
-                                host.close();
-                            });
-            hostThread.start();
+                Thread hostThread =
+                        new Thread(
+                                () -> {
+                                    while (host.Tick()) {
+                                    }
+                                    host.close();
+                                });
+                hostThread.start();
 
-            hostThread.join();
+                hostThread.join();
+            }
         } catch (InterruptedException | SQLException ie) {
             ie.printStackTrace();
         }

@@ -4,6 +4,7 @@ import ada.texttospeech.AdaTextToSpeechClient;
 import ada.texttospeech.AudioUtil;
 import org.json.JSONObject;
 
+import java.io.Closeable;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ import java.util.Scanner;
  * {@link AdaServerMain}.
  */
 @SuppressWarnings("WeakerAccess")
-public class AdaClient {
+public class AdaClient implements Closeable {
 
     private final AdaTextToSpeechClient textToSpeechClient;
     private final NetworkSender sender;
@@ -86,8 +87,8 @@ public class AdaClient {
         System.out.println("closing out");
 
         /* clean exit */
-        sender.Close();
-        reader.Close();
+        sender.close();
+        reader.close();
 
         try {
             sendMessages.join();
@@ -142,8 +143,9 @@ public class AdaClient {
         } while (true);
     }
 
+    @Override
     public void close() {
-        sender.Close();
-        reader.Close();
+        sender.close();
+        reader.close();
     }
 }

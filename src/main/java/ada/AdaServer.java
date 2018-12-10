@@ -25,8 +25,8 @@ class AdaServer implements Closeable {
 
     private class NetworkHandle {
         NetworkSocket socket;
-        AdaNetworkReader reader;
-        AdaNetworkSender sender;
+        NetworkReader reader;
+        NetworkSender sender;
     }
 
     AdaServer(int port,
@@ -58,8 +58,8 @@ class AdaServer implements Closeable {
                 System.out.println("Server got connection");
                 NetworkHandle netHandle = new NetworkHandle();
                 netHandle.socket = new NetworkSocketClient(newConnection);
-                netHandle.reader = new AdaNetworkReader(netHandle.socket);
-                netHandle.sender = new AdaNetworkSender(netHandle.socket);
+                netHandle.reader = new NetworkReader(netHandle.socket);
+                netHandle.sender = new NetworkSender(netHandle.socket);
 
                 newConnections.add(netHandle);
             } catch (IOException ioe) {
@@ -220,7 +220,7 @@ class AdaServer implements Closeable {
         for (NetworkHandle connectedSocket : connectedUsers.keySet()) {
             connectedSocket.sender.close();
             connectedSocket.reader.close();
-            connectedSocket.socket.Close();
+            connectedSocket.socket.close();
         }
     }
 }

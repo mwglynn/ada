@@ -1,12 +1,13 @@
 package ada;
 
+import java.io.Closeable;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * main reader for incoming messages.
  */
-class NetworkReader {
+public class NetworkReader implements Closeable {
 
     /**
      * An unbounded thread-safe queue based on linked nodes. This queue orders
@@ -27,7 +28,10 @@ class NetworkReader {
         receivingThread.start();
     }
 
-    Optional<String> ReadMessage() {
+    /**
+     * Read incoming messages.
+     */
+    public Optional<String> ReadMessage() {
         if (shouldProcessReceiveQueue && !incomingMessages.isEmpty()) {
             return Optional.ofNullable(incomingMessages.poll());
         }
@@ -47,7 +51,8 @@ class NetworkReader {
     /**
      * Closest thing to a destructor in Java.
      */
-    void Close() {
+    @Override
+    public void close() {
         shouldProcessReceiveQueue = false;
         try {
             receivingThread.join();

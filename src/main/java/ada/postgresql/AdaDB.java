@@ -89,6 +89,7 @@ public class AdaDB {
                     queryResponse.append(rs.getString(4));
                     queryResponse.append("\n");
                 }
+                System.out.println(queryResponse.toString());
                 return queryResponse.toString();
             }
         }

@@ -1,11 +1,12 @@
 package ada;
 
+import java.io.Closeable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * main sending functionality.
  */
-class NetworkSender {
+class NetworkSender implements Closeable {
 
     /**
      * An unbounded thread-safe queue based on linked nodes. This queue
@@ -26,7 +27,10 @@ class NetworkSender {
         sendingThread.start();
     }
 
-    void SendMessage(String msg) {
+    /**
+     * Sends a message.
+     */
+    public void SendMessage(String msg) {
         if (shouldProcessSendQueue) {
             outgoingMessages.add(msg);
         }
@@ -43,7 +47,8 @@ class NetworkSender {
     /**
      * Closest thing to a destructor in Java.
      */
-    void Close() {
+    @Override
+    public void close() {
         shouldProcessSendQueue = false;
         try {
             sendingThread.join();
