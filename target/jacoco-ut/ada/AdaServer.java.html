@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaServer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">AdaServer.java</span></div><h1>AdaServer.java</h1><pre class="source lang-java linenums">package ada;
+
+import ada.postgresql.AdaDB;
+import com.google.common.base.Preconditions;
+import com.google.rpc.Code;
+import org.json.JSONObject;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+class AdaServer implements Closeable {
+    private ServerSocket serverSocket;
+    private ConcurrentLinkedQueue&lt;NetworkHandle&gt; newConnections;
+    private volatile boolean shouldListen;
+    private Thread listenForConnectionsThread;
+    private Hashtable&lt;NetworkHandle, String&gt; connectedUsers;
+    private AdaDB databaseManager;
+
+<span class="fc" id="L26">    private class NetworkHandle {</span>
+        NetworkSocket socket;
+        NetworkReader reader;
+        NetworkSender sender;
+    }
+
+    AdaServer(int port,
+<span class="fc" id="L33">              AdaDB adaDB) {</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (port &lt; 1 || port &gt; 65535) {</span>
+<span class="fc" id="L35">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L37">        databaseManager = adaDB;</span>
+<span class="fc" id="L38">        connectedUsers = new Hashtable&lt;&gt;();</span>
+<span class="fc" id="L39">        newConnections = new ConcurrentLinkedQueue&lt;&gt;();</span>
+        try {
+<span class="fc" id="L41">            shouldListen = true;</span>
+<span class="fc" id="L42">            serverSocket = new ServerSocket(port);</span>
+<span class="nc" id="L43">        } catch (IOException ioe) {</span>
+<span class="nc" id="L44">            ioe.printStackTrace();</span>
+<span class="fc" id="L45">        }</span>
+
+<span class="fc" id="L47">        listenForConnectionsThread = new Thread(this::ListenForNewConnections);</span>
+<span class="fc" id="L48">        listenForConnectionsThread.start();</span>
+<span class="fc" id="L49">    }</span>
+
+    private void ListenForNewConnections() {
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        while (shouldListen) {</span>
+            Socket newConnection;
+            try {
+                /* This line blocks until a client connects */
+<span class="fc" id="L56">                newConnection = serverSocket.accept();</span>
+
+<span class="fc" id="L58">                System.out.println(&quot;Server got connection&quot;);</span>
+<span class="fc" id="L59">                NetworkHandle netHandle = new NetworkHandle();</span>
+<span class="fc" id="L60">                netHandle.socket = new NetworkSocketClient(newConnection);</span>
+<span class="fc" id="L61">                netHandle.reader = new NetworkReader(netHandle.socket);</span>
+<span class="fc" id="L62">                netHandle.sender = new NetworkSender(netHandle.socket);</span>
+
+<span class="fc" id="L64">                newConnections.add(netHandle);</span>
+<span class="nc" id="L65">            } catch (IOException ioe) {</span>
+                /* We will hit this whenever the server is shutdown */
+<span class="pc" id="L67">            }</span>
+        }
+<span class="nc" id="L69">    }</span>
+
+
+    boolean Tick() {
+        // Deal with all new user requests coming in.
+<span class="nc" id="L74">        Iterator&lt;NetworkHandle&gt; iterator = newConnections.iterator();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        while (iterator.hasNext()) {</span>
+<span class="nc" id="L76">            NetworkHandle newConnection = iterator.next();</span>
+<span class="nc bnc" id="L77" title="All 8 branches missed.">            if (newConnection == null || newConnection.socket == null || newConnection.sender == null || newConnection.reader == null) {</span>
+<span class="nc" id="L78">                iterator.remove();</span>
+<span class="nc" id="L79">                System.out.println(&quot;Error, null connection.&quot;);</span>
+<span class="nc" id="L80">                continue;</span>
+            }
+<span class="nc" id="L82">            Optional&lt;String&gt; userRequest =</span>
+<span class="nc" id="L83">                    newConnection.reader.ReadMessage();</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">            if (userRequest.isPresent()) {</span>
+<span class="nc" id="L85">                System.out.println(&quot;Gettin my response&quot;);</span>
+<span class="nc" id="L86">                UsernameResponse response =</span>
+<span class="nc" id="L87">                        processNewUserRequest(userRequest.get(),</span>
+                                newConnection);
+
+<span class="nc" id="L90">                newConnection.sender.SendMessage(response.serialize());</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                if (response.usernameWasReceived()) {</span>
+<span class="nc" id="L92">                    iterator.remove();</span>
+                }
+            }
+<span class="nc" id="L95">        }</span>
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        for (NetworkHandle connection : connectedUsers.keySet()) {</span>
+            Optional&lt;String&gt; msg;
+<span class="nc" id="L99">            msg = connection.reader.ReadMessage();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (msg.isPresent()) {</span>
+<span class="nc" id="L101">                if (msg.get()</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                        .equals(&quot;\\q&quot;)) {</span>
+<span class="nc" id="L103">                    return false;</span>
+<span class="nc" id="L104">                } else if (msg.get()</span>
+<span class="nc" id="L105">                        .toLowerCase()</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                        .equals(&quot;:history:&quot;)) {</span>
+<span class="nc" id="L107">                    JSONObject jobj = new JSONObject();</span>
+<span class="nc" id="L108">                    jobj.put(&quot;sender&quot;,</span>
+                            &quot;query history&quot;);
+                    try {
+<span class="nc" id="L111">                        jobj.put(&quot;msg&quot;,</span>
+<span class="nc" id="L112">                                databaseManager.Query(connectedUsers.get(connection)));</span>
+<span class="nc" id="L113">                    } catch (SQLException e) {</span>
+<span class="nc" id="L114">                        jobj.put(&quot;msg&quot;,</span>
+                                &quot;Sorry, no history available!&quot;);
+<span class="nc" id="L116">                    }</span>
+<span class="nc" id="L117">                    connection.sender.SendMessage(jobj.toString());</span>
+<span class="nc" id="L118">                } else {</span>
+<span class="nc" id="L119">                    JSONObject jobj = new JSONObject();</span>
+<span class="nc" id="L120">                    jobj.put(&quot;sender&quot;,</span>
+<span class="nc" id="L121">                            connectedUsers.get(connection));</span>
+<span class="nc" id="L122">                    jobj.put(&quot;msg&quot;,</span>
+<span class="nc" id="L123">                            msg.get());</span>
+<span class="nc" id="L124">                    String jsonMsg = jobj.toString();</span>
+                    for (NetworkHandle otherConnection :
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                            connectedUsers.keySet()) {</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                        if (otherConnection != connection) {</span>
+<span class="nc" id="L128">                            otherConnection.sender.SendMessage(jsonMsg);</span>
+                            try {
+<span class="nc" id="L130">                                databaseManager.insert(jobj,</span>
+<span class="nc" id="L131">                                        connectedUsers.get(otherConnection));</span>
+<span class="nc" id="L132">                            } catch (SQLException e) {</span>
+                                // If insertion fails, log and move on.
+<span class="nc" id="L134">                                e.printStackTrace();</span>
+<span class="nc" id="L135">                            }</span>
+                        }
+<span class="nc" id="L137">                    }</span>
+                }
+            }
+<span class="nc" id="L140">        }</span>
+<span class="nc" id="L141">        return true;</span>
+    }
+
+    private UsernameResponse processNewUserRequest(String request,
+                                                   NetworkHandle handle) throws IllegalArgumentException {
+        UsernameRequest potentialUsername;
+<span class="nc" id="L147">        System.out.println(&quot;Processinggg&quot;);</span>
+        try {
+<span class="nc" id="L149">            potentialUsername = UsernameRequest.deserialize(request);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            Preconditions.checkArgument(potentialUsername.username() != null);</span>
+<span class="nc" id="L151">            Preconditions.checkArgument(!potentialUsername.username()</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    .isEmpty());</span>
+<span class="nc" id="L153">        } catch (Error e) {</span>
+<span class="nc" id="L154">            return UsernameResponse.create(false,</span>
+                    Code.INVALID_ARGUMENT);
+<span class="nc" id="L156">        }</span>
+
+<span class="nc" id="L158">        System.out.println(&quot;Validdddddddddddd&quot;);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (connectedUsers.contains(potentialUsername.username())) {</span>
+<span class="nc" id="L160">            return UsernameResponse.create(false,</span>
+                    Code.ALREADY_EXISTS);
+        }
+<span class="nc" id="L163">        System.out.println(&quot;Not already there&quot;);</span>
+        try {
+<span class="nc bnc" id="L165" title="All 2 branches missed.">            if (potentialUsername.isReturningUser()) {</span>
+                // If already connected or the database doesn't know this
+                // username, return failed response.
+<span class="nc" id="L168">                System.out.println(&quot;Is returning user!&quot;);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                if (!databaseManager.containsUser(potentialUsername.username())) {</span>
+<span class="nc" id="L170">                    System.out.println(&quot;Database does not contain user!&quot;);</span>
+<span class="nc" id="L171">                    return UsernameResponse.create(false,</span>
+                            Code.INVALID_ARGUMENT);
+                } else {
+<span class="nc" id="L174">                    System.out.println(&quot;putting &quot; + potentialUsername.username() + &quot; in the usermap!&quot;);</span>
+<span class="nc" id="L175">                    connectedUsers.put(handle,</span>
+<span class="nc" id="L176">                            potentialUsername.username());</span>
+<span class="nc" id="L177">                    return UsernameResponse.create(true,</span>
+                            Code.OK);
+                }
+            }
+            // Request belongs to a new user.
+            else {
+<span class="nc bnc" id="L183" title="All 2 branches missed.">                if (databaseManager.containsUser(potentialUsername.username())) {</span>
+<span class="nc" id="L184">                    System.out.println(&quot;Already exists!&quot;);</span>
+<span class="nc" id="L185">                    return UsernameResponse.create(false,</span>
+                            Code.ALREADY_EXISTS);
+                } else {
+<span class="nc" id="L188">                    System.out.println(&quot;New user &quot; + potentialUsername.username());</span>
+<span class="nc" id="L189">                    connectedUsers.put(handle,</span>
+<span class="nc" id="L190">                            potentialUsername.username());</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">                    if (!databaseManager.createUser(potentialUsername.username())) {</span>
+<span class="nc" id="L192">                        return UsernameResponse.create(false,</span>
+                                Code.INTERNAL);
+                    }
+<span class="nc" id="L195">                    return UsernameResponse.create(true,</span>
+                            Code.OK);
+                }
+            }
+<span class="nc" id="L199">        } catch (SQLException e) {</span>
+<span class="nc" id="L200">            return UsernameResponse.create(false,</span>
+                    Code.INTERNAL);
+        }
+    }
+
+    @Override
+    public void close() {
+<span class="nc" id="L207">        shouldListen = false;</span>
+        try {
+<span class="nc" id="L209">            serverSocket.close();</span>
+<span class="nc" id="L210">        } catch (IOException ioe) {</span>
+<span class="nc" id="L211">            ioe.printStackTrace();</span>
+<span class="nc" id="L212">        }</span>
+
+        try {
+<span class="nc" id="L215">            listenForConnectionsThread.join();</span>
+<span class="nc" id="L216">        } catch (InterruptedException ie) {</span>
+<span class="nc" id="L217">            ie.printStackTrace();</span>
+<span class="nc" id="L218">        }</span>
+
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        for (NetworkHandle connectedSocket : connectedUsers.keySet()) {</span>
+<span class="nc" id="L221">            connectedSocket.sender.close();</span>
+<span class="nc" id="L222">            connectedSocket.reader.close();</span>
+<span class="nc" id="L223">            connectedSocket.socket.close();</span>
+<span class="nc" id="L224">        }</span>
+<span class="nc" id="L225">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

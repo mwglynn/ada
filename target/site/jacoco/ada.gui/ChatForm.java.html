@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChatForm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada.gui</a> &gt; <span class="el_source">ChatForm.java</span></div><h1>ChatForm.java</h1><pre class="source lang-java linenums">package ada.gui;
+
+import javax.swing.*;
+
+<span class="nc" id="L5">public class ChatForm {</span>
+    private JPanel mainPanel;
+    private JTable table1;
+    private ChatForm c;
+
+    public static void main(String[] args) {
+<span class="nc" id="L11">        ChatForm c = new ChatForm();</span>
+<span class="nc" id="L12">        JFrame frame = new JFrame(&quot;ChatForm&quot;);</span>
+<span class="nc" id="L13">        frame.setSize(500, 500);</span>
+<span class="nc" id="L14">        frame.setResizable(false);</span>
+<span class="nc" id="L15">        frame.setContentPane(c.mainPanel);</span>
+<span class="nc" id="L16">        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+
+<span class="nc" id="L18">        c.mainPanel = new JPanel();</span>
+<span class="nc" id="L19">        c.mainPanel.add(new JTextArea());</span>
+<span class="nc" id="L20">        frame.setVisible(true);</span>
+<span class="nc" id="L21">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

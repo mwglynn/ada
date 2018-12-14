@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NetworkReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">NetworkReader.java</span></div><h1>NetworkReader.java</h1><pre class="source lang-java linenums">package ada;
+
+import java.io.Closeable;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+/**
+ * main reader for incoming messages.
+ */
+public class NetworkReader implements Closeable {
+
+    /**
+     * An unbounded thread-safe queue based on linked nodes. This queue orders
+     * elements FIFO
+     * (first-in-first-out).
+     */
+    private final ConcurrentLinkedQueue&lt;String&gt; incomingMessages;
+
+    private volatile boolean shouldProcessReceiveQueue;
+    private final NetworkSocket clientSocket;
+    private final Thread receivingThread;
+
+<span class="fc" id="L23">    NetworkReader(NetworkSocket socket) {</span>
+<span class="fc" id="L24">        incomingMessages = new ConcurrentLinkedQueue&lt;&gt;();</span>
+<span class="fc" id="L25">        shouldProcessReceiveQueue = true;</span>
+<span class="fc" id="L26">        clientSocket = socket;</span>
+<span class="fc" id="L27">        receivingThread = new Thread(this::ReadAvailable);</span>
+<span class="fc" id="L28">        receivingThread.start();</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Read incoming messages.
+     */
+    public Optional&lt;String&gt; ReadMessage() {
+<span class="nc bnc" id="L35" title="All 4 branches missed.">        if (shouldProcessReceiveQueue &amp;&amp; !incomingMessages.isEmpty()) {</span>
+<span class="nc" id="L36">            return Optional.ofNullable(incomingMessages.poll());</span>
+        }
+<span class="nc" id="L38">        return Optional.empty();</span>
+    }
+
+    /**
+     * Incoming messages are streams.
+     */
+    private void ReadAvailable() {
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        while (shouldProcessReceiveQueue) {</span>
+<span class="fc" id="L46">            clientSocket.ReadFromSocket()</span>
+<span class="fc" id="L47">                    .ifPresent(incomingMessages::add);</span>
+        }
+<span class="nc" id="L49">    }</span>
+
+    /**
+     * Closest thing to a destructor in Java.
+     */
+    @Override
+    public void close() {
+<span class="nc" id="L56">        shouldProcessReceiveQueue = false;</span>
+        try {
+<span class="nc" id="L58">            receivingThread.join();</span>
+<span class="nc" id="L59">        } catch (InterruptedException ie) {</span>
+<span class="nc" id="L60">            ie.printStackTrace();</span>
+<span class="nc" id="L61">        }</span>
+<span class="nc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

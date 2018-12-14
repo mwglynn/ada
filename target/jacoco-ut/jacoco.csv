@@ -1,0 +1,26 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Ada,ada.postgresql,AdaDB,9,344,3,7,4,68,3,10,0,8
+Ada,ada.postgresql,QueryUtil,3,23,0,0,1,5,1,1,1,1
+Ada,ada.gui,ChatForm,42,0,0,0,11,0,2,0,2,0
+Ada,ada.gui,AdaServerForm,40,0,0,0,11,0,2,0,2,0
+Ada,ada.gui,AdaClientForm.new ActionListener() {...},36,0,2,0,10,0,3,0,2,0
+Ada,ada.gui,ClientLogin,42,0,0,0,11,0,2,0,2,0
+Ada,ada.gui,ClientLogin.new ActionListener() {...},7,0,0,0,2,0,2,0,2,0
+Ada,ada.gui,ClientLogin.new ActionListener() {...},7,0,0,0,2,0,2,0,2,0
+Ada,ada.gui,AdaClientForm,40,0,0,0,11,0,2,0,2,0
+Ada,ada.gui,AdaServerForm.new ActionListener() {...},28,0,2,0,6,0,3,0,2,0
+Ada,ada.gui,Ada,7,0,0,0,4,0,3,0,3,0
+Ada,ada.texttospeech,AudioUtil,34,0,2,0,14,0,4,0,3,0
+Ada,ada.texttospeech,AdaTextToSpeechClient,0,57,0,0,0,18,0,4,0,4
+Ada,ada,AdaClient,258,0,21,0,73,0,18,0,7,0
+Ada,ada,NetworkReader,26,38,5,1,10,10,5,2,2,2
+Ada,ada,AdaServer,363,88,43,5,103,21,25,4,3,2
+Ada,ada,AdaClientMain,36,0,2,0,10,0,3,0,2,0
+Ada,ada,NetworkSocketClient,43,78,1,5,19,23,3,5,2,3
+Ada,ada,UsernameRequest,14,51,1,3,2,8,1,5,0,4
+Ada,ada,AdaServer.NetworkHandle,0,6,0,0,0,1,0,1,0,1
+Ada,ada,AutoValue_UsernameResponse,54,40,7,5,10,12,8,4,2,4
+Ada,ada,UsernameResponse,13,41,0,0,2,6,0,4,0,4
+Ada,ada,AutoValue_UsernameRequest,54,40,7,5,10,12,8,4,2,4
+Ada,ada,AdaServerMain,41,0,2,0,14,0,4,0,3,0
+Ada,ada,NetworkSender,33,31,6,2,11,9,6,2,2,2

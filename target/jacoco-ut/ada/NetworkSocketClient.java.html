@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NetworkSocketClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">NetworkSocketClient.java</span></div><h1>NetworkSocketClient.java</h1><pre class="source lang-java linenums">package ada;
+
+import java.io.*;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Optional;
+
+public class NetworkSocketClient implements NetworkSocket, Closeable {
+
+    private Socket clientSocket;
+    private DataOutputStream clientOutputStream;
+    private BufferedReader clientInputStream;
+
+<span class="fc" id="L15">    NetworkSocketClient(Socket socket) {</span>
+        try {
+<span class="fc" id="L17">            clientSocket = socket;</span>
+<span class="fc" id="L18">            clientOutputStream =</span>
+<span class="fc" id="L19">                    new DataOutputStream(clientSocket.getOutputStream());</span>
+<span class="fc" id="L20">            clientInputStream =</span>
+<span class="fc" id="L21">                    new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));</span>
+<span class="nc" id="L22">        } catch (IOException ioe) {</span>
+<span class="nc" id="L23">            ioe.printStackTrace();</span>
+<span class="fc" id="L24">        }</span>
+<span class="fc" id="L25">    }</span>
+
+    NetworkSocketClient(String ip,
+<span class="fc" id="L28">                        int port) {</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (port &lt; 1 || port &gt; 65535) {</span>
+<span class="fc" id="L30">            throw new IllegalArgumentException();</span>
+        }
+        try {
+<span class="fc" id="L33">            clientSocket = new Socket(ip,</span>
+                    port);
+<span class="fc" id="L35">            clientOutputStream =</span>
+<span class="fc" id="L36">                    new DataOutputStream(clientSocket.getOutputStream());</span>
+<span class="fc" id="L37">            clientInputStream =</span>
+<span class="fc" id="L38">                    new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));</span>
+<span class="nc" id="L39">        } catch (ConnectException e) {</span>
+<span class="nc" id="L40">            e.printStackTrace();</span>
+<span class="fc" id="L41">        } catch (UnknownHostException e) {</span>
+<span class="fc" id="L42">            System.out.println(&quot;Please use 127.0.0.1!&quot;);</span>
+            /* e.printStackTrace(); */
+<span class="nc" id="L44">        } catch (IOException ioe) {</span>
+<span class="nc" id="L45">            ioe.printStackTrace();</span>
+<span class="pc" id="L46">        }</span>
+<span class="fc" id="L47">    }</span>
+
+    @Override
+    public void WriteToSocket(String msg) {
+        try {
+<span class="nc" id="L52">            clientOutputStream.writeBytes(msg + &quot;\n&quot;);</span>
+<span class="nc" id="L53">            clientOutputStream.flush();</span>
+<span class="nc" id="L54">        } catch (IOException ioe) {</span>
+            //ioe.printStackTrace();
+<span class="nc" id="L56">        }</span>
+<span class="nc" id="L57">    }</span>
+
+    @Override
+    public Optional&lt;String&gt; ReadFromSocket() {
+        try {
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (clientInputStream.ready()) {</span>
+<span class="nc" id="L63">                return Optional.ofNullable(clientInputStream.readLine());</span>
+            }
+<span class="nc" id="L65">        } catch (IOException ioe) {</span>
+<span class="nc" id="L66">            ioe.printStackTrace();</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">        return Optional.empty();</span>
+    }
+
+    /* Closest thing to a destructor in Java */
+    @Override
+    public void close() {
+        try {
+<span class="nc" id="L75">            clientSocket.close();</span>
+<span class="nc" id="L76">        } catch (IOException ioe) {</span>
+<span class="nc" id="L77">            ioe.printStackTrace();</span>
+<span class="nc" id="L78">        }</span>
+<span class="nc" id="L79">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

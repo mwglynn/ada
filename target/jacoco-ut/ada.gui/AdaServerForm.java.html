@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaServerForm.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada.gui</a> &gt; <span class="el_source">AdaServerForm.java</span></div><h1>AdaServerForm.java</h1><pre class="source lang-java linenums">package ada.gui;
+
+import ada.AdaServerMain;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class AdaServerForm {
+    private JButton starButton;
+    private JPanel serverPanel;
+    private AdaServerMain server;
+
+<span class="nc" id="L15">    public AdaServerForm() {</span>
+<span class="nc" id="L16">        starButton.addActionListener(new ActionListener() {</span>
+            @Override
+            public void actionPerformed(ActionEvent e) {
+<span class="nc bnc" id="L19" title="All 2 branches missed.">                if (server == null) {</span>
+<span class="nc" id="L20">                    server = new AdaServerMain();</span>
+<span class="nc" id="L21">                    server.main(null);</span>
+                } else {
+<span class="nc" id="L23">                    JOptionPane.showMessageDialog(null, &quot;Server Already &quot; +</span>
+                            &quot;Started&quot;);
+                }
+<span class="nc" id="L26">            }</span>
+        });
+<span class="nc" id="L28">    }</span>
+
+    public static void main(String[] args) {
+<span class="nc" id="L31">        JFrame frame = new JFrame(&quot;Ada Server&quot;);</span>
+<span class="nc" id="L32">        frame.setPreferredSize(new Dimension(200, 200));</span>
+<span class="nc" id="L33">        frame.setContentPane(new AdaServerForm().serverPanel);</span>
+<span class="nc" id="L34">        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L35">        frame.setLocationRelativeTo(null);</span>
+<span class="nc" id="L36">        frame.pack();</span>
+<span class="nc" id="L37">        frame.setVisible(true);</span>
+<span class="nc" id="L38">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

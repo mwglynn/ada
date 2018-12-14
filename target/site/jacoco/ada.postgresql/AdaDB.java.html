@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaDB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada.postgresql</a> &gt; <span class="el_source">AdaDB.java</span></div><h1>AdaDB.java</h1><pre class="source lang-java linenums">package ada.postgresql;
+
+import com.google.common.base.Preconditions;
+import org.json.JSONObject;
+
+import java.sql.*;
+
+/**
+ * The Ada Database class holds state for the database and handles queries.
+ */
+public class AdaDB {
+
+    private final String HOST;
+    private final String USER_TABLE;
+    private final String CHAT_TABLE;
+
+    public AdaDB(String host,
+<span class="fc" id="L18">                 String db_name) {</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        Preconditions.checkArgument(host != null,</span>
+                &quot;Null host!&quot;);
+<span class="pc bpc" id="L21" title="1 of 2 branches missed.">        Preconditions.checkArgument(db_name != null,</span>
+                &quot;Null DB name!&quot;);
+        // Translated to lower case because it seems to make a difference to
+        // postgres.
+<span class="fc" id="L25">        HOST = host;</span>
+<span class="fc" id="L26">        USER_TABLE = db_name.toLowerCase() + &quot;usertable&quot;;</span>
+<span class="fc" id="L27">        CHAT_TABLE = db_name.toLowerCase() + &quot;chattable&quot;;</span>
+        try {
+            /* for now, connect to default postgres */
+<span class="fc" id="L30">            Class.forName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="nc" id="L31">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L32">            e.printStackTrace();</span>
+<span class="nc" id="L33">            System.exit(-1);</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
+
+    private Connection getConnection() throws SQLException {
+<span class="fc" id="L38">        return DriverManager.getConnection(</span>
+                &quot;jdbc:postgresql://&quot; + HOST + &quot;:5432/&quot;,
+                &quot;postgres&quot;,
+                &quot;postgres&quot;);
+    }
+
+    public void initPostgres() throws SQLException {
+<span class="fc" id="L45">        try (Connection connection = getConnection();</span>
+<span class="fc" id="L46">             Statement stmt = connection.createStatement()) {</span>
+<span class="fc" id="L47">            connection.setAutoCommit(false);</span>
+            /* execute creation of user */
+<span class="fc" id="L49">            stmt.executeUpdate(</span>
+                    &quot;CREATE TABLE IF NOT EXISTS &quot;
+                            + USER_TABLE
+                            + &quot; (&quot;
+                            + &quot;ID SERIAL NOT NULL,&quot;
+                            + &quot; userName VARCHAR(255) UNIQUE NOT NULL,&quot;
+                            + &quot; PRIMARY KEY (ID, userName))&quot;);
+<span class="fc" id="L56">            connection.commit();</span>
+
+            /* execute creation of chat */
+<span class="fc" id="L59">            stmt.executeUpdate(</span>
+                    &quot;CREATE TABLE IF NOT EXISTS &quot;
+                            + CHAT_TABLE
+                            + &quot; (&quot;
+                            + &quot;ID SERIAL NOT NULL,&quot;
+                            + &quot;time TIME NOT NULL,&quot;
+                            + &quot;date DATE NOT NULL,&quot;
+                            + &quot;message TEXT,&quot;
+                            + &quot;sender VARCHAR(255),&quot;
+                            + &quot;receiver VARCHAR(255),&quot;
+                            + &quot;PRIMARY KEY (ID),&quot;
+                            + &quot;FOREIGN KEY (sender) REFERENCES &quot;
+                            + USER_TABLE
+                            + &quot;(userName) ON DELETE NO ACTION)&quot;);
+<span class="fc" id="L73">            connection.commit();</span>
+<span class="fc" id="L74">            System.out.println(&quot;Created &quot; + CHAT_TABLE + &quot;, &quot; + USER_TABLE);</span>
+        }
+<span class="fc" id="L76">    }</span>
+
+    public String Query(String username) throws SQLException {
+<span class="fc" id="L79">        try (Connection connection = getConnection()) {</span>
+<span class="fc" id="L80">            connection.setAutoCommit(false);</span>
+<span class="fc" id="L81">            StringBuilder queryResponse = new StringBuilder();</span>
+<span class="fc" id="L82">            try (ResultSet rs = QueryUtil.GetHistory(connection,</span>
+                    CHAT_TABLE,
+                    username)
+<span class="fc" id="L85">                    .executeQuery()) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                while (rs.next()) {</span>
+<span class="fc" id="L87">                    queryResponse.append(rs.getString(5));</span>
+<span class="fc" id="L88">                    queryResponse.append(&quot;: &quot;);</span>
+<span class="fc" id="L89">                    queryResponse.append(rs.getString(4));</span>
+<span class="fc" id="L90">                    queryResponse.append(&quot;\n&quot;);</span>
+                }
+<span class="fc" id="L92">                System.out.println(queryResponse.toString());</span>
+<span class="fc" id="L93">                return queryResponse.toString();</span>
+            }
+        }
+    }
+
+    public void insert(JSONObject jobj,
+                       String receiver) throws SQLException {
+<span class="fc" id="L100">        try (Connection connection = getConnection()) {</span>
+<span class="fc" id="L101">            connection.setAutoCommit(false);</span>
+
+<span class="fc" id="L103">            String sender = jobj.getString(&quot;sender&quot;);</span>
+<span class="fc" id="L104">            String message = jobj.getString(&quot;msg&quot;);</span>
+
+<span class="fc" id="L106">            String sql =</span>
+                    &quot;INSERT INTO &quot;
+                            + CHAT_TABLE
+                            + &quot;(ID, date, time, message, sender, receiver) &quot; +
+                            &quot;VALUES (DEFAULT, NOW()::date, NOW()::time,&quot;
+                            + &quot;?&quot;
+                            + &quot;,&quot;
+                            + &quot;?&quot;
+                            + &quot;,&quot;
+                            + &quot;?&quot;
+                            + &quot;);&quot;;
+
+<span class="fc" id="L118">            PreparedStatement ps = connection.prepareStatement(sql);</span>
+<span class="fc" id="L119">            ps.setString(1,</span>
+                    message);
+<span class="fc" id="L121">            ps.setString(2,</span>
+                    sender);
+<span class="fc" id="L123">            ps.setString(3,</span>
+                    receiver);
+<span class="fc" id="L125">            ps.execute();</span>
+
+<span class="fc" id="L127">            connection.commit();</span>
+        }
+<span class="fc" id="L129">    }</span>
+
+    public boolean createUser(String userName) throws SQLException {
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (!containsUser(userName)) {</span>
+<span class="fc" id="L133">            try (Connection connection = getConnection()) {</span>
+<span class="fc" id="L134">                connection.setAutoCommit(false);</span>
+<span class="fc" id="L135">                PreparedStatement ps =</span>
+<span class="fc" id="L136">                        connection.prepareStatement(</span>
+                                &quot;INSERT INTO &quot; + USER_TABLE + &quot; (ID, &quot; +
+                                        &quot;userName) VALUES (DEFAULT, ?)&quot;);
+<span class="fc" id="L139">                ps.setString(1,</span>
+                        userName);
+<span class="fc" id="L141">                ps.execute();</span>
+<span class="fc" id="L142">                connection.commit();</span>
+<span class="fc" id="L143">                return true;</span>
+            }
+        } else {
+<span class="fc" id="L146">            return false;</span>
+        }
+    }
+
+    public boolean containsUser(String userName) throws SQLException {
+<span class="fc" id="L151">        try (Connection connection = getConnection()) {</span>
+<span class="fc" id="L152">            connection.setAutoCommit(false);</span>
+<span class="fc" id="L153">            PreparedStatement ps =</span>
+<span class="fc" id="L154">                    connection.prepareStatement(</span>
+                            &quot;select exists(select id from &quot; + USER_TABLE + &quot; &quot; +
+                                    &quot;WHERE userName=?)&quot;);
+<span class="fc" id="L157">            ps.setString(1,</span>
+                    userName);
+
+<span class="fc" id="L160">            ResultSet resultSet = ps.executeQuery();</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">            if (resultSet.next()) {</span>
+<span class="fc" id="L162">                return resultSet.getBoolean(1);</span>
+            }
+        }
+<span class="nc" id="L165">        return false;</span>
+    }
+
+    public void clear() {
+<span class="fc" id="L169">        try (Connection connection = getConnection();</span>
+<span class="fc" id="L170">             Statement stmt = connection.createStatement()) {</span>
+<span class="fc" id="L171">            stmt.execute(&quot;DROP TABLE &quot; + CHAT_TABLE + &quot;, &quot; + USER_TABLE + &quot;;&quot;);</span>
+<span class="fc" id="L172">        } catch (SQLException e) {</span>
+<span class="fc" id="L173">            System.out.println(&quot;Drop tables failed, probably because there &quot; +</span>
+                    &quot;are no tables to drop.&quot;);
+<span class="fc" id="L175">        }</span>
+<span class="fc" id="L176">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

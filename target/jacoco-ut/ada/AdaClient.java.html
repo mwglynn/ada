@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdaClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Ada</a> &gt; <a href="index.source.html" class="el_package">ada</a> &gt; <span class="el_source">AdaClient.java</span></div><h1>AdaClient.java</h1><pre class="source lang-java linenums">package ada;
+
+import ada.texttospeech.AdaTextToSpeechClient;
+import ada.texttospeech.AudioUtil;
+import org.json.JSONObject;
+
+import java.io.Closeable;
+import java.util.Optional;
+import java.util.Scanner;
+
+/**
+ * {@code ada.AdaClient} reads messages from and sends Messages to
+ * {@link AdaServerMain}.
+ */
+@SuppressWarnings(&quot;WeakerAccess&quot;)
+public class AdaClient implements Closeable {
+
+    private final AdaTextToSpeechClient textToSpeechClient;
+    private final NetworkSender sender;
+    private final NetworkReader reader;
+<span class="nc" id="L21">    private final Scanner input = new Scanner(System.in);</span>
+    private String username;
+
+    public AdaClient(
+            AdaTextToSpeechClient textToSpeechClient,
+<span class="nc" id="L26">            NetworkSocketClient client) {</span>
+<span class="nc" id="L27">        this.textToSpeechClient = textToSpeechClient;</span>
+<span class="nc" id="L28">        sender = new NetworkSender(client);</span>
+<span class="nc" id="L29">        reader = new NetworkReader(client);</span>
+<span class="nc" id="L30">    }</span>
+
+
+    public void run() {
+
+        /* Prompt for username. */
+<span class="nc" id="L36">        UsernameRequest request = getUsername();</span>
+<span class="nc" id="L37">        System.out.println(&quot;Got username &quot; + request.username());</span>
+<span class="nc" id="L38">        sender.SendMessage(request.serialize());</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        while (username == null) {</span>
+<span class="nc" id="L40">            Optional&lt;String&gt; msg = reader.ReadMessage();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (msg.isPresent()) {</span>
+                try {
+<span class="nc" id="L43">                    UsernameResponse response =</span>
+<span class="nc" id="L44">                            UsernameResponse.deserialize(msg.get());</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">                    if (response.usernameWasReceived()) {</span>
+<span class="nc" id="L46">                        username = request.username();</span>
+                    } else {
+<span class="nc" id="L48">                        System.out.println(&quot;Try again!&quot;);</span>
+<span class="nc" id="L49">                        request = getUsername();</span>
+<span class="nc" id="L50">                        sender.SendMessage(request.serialize());</span>
+                    }
+<span class="nc" id="L52">                } catch (Exception e) {</span>
+<span class="nc" id="L53">                    System.out.println(&quot;Try again!&quot;);</span>
+<span class="nc" id="L54">                    request = getUsername();</span>
+<span class="nc" id="L55">                    sender.SendMessage(request.serialize());</span>
+<span class="nc" id="L56">                }</span>
+            }
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">        System.out.println(username + &quot; is no longer null!&quot;);</span>
+
+<span class="nc" id="L61">        System.out.println(&quot;Welcome to Ada! Type into the prompt to chat! To &quot; +</span>
+                &quot;see your chat history, type :history:&quot;);
+
+<span class="nc" id="L64">        Thread sendMessages =</span>
+                new Thread(
+                        () -&gt; {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                            while (!Thread.interrupted()) {</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                                if (input.hasNext()) {</span>
+<span class="nc" id="L69">                                    if (input.nextLine()</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                                            .length() &gt; 3000) {</span>
+<span class="nc" id="L71">                                        System.out.println(&quot;Error: Line &quot; +</span>
+                                                &quot;length exceeded. Try &quot; +
+                                                &quot;splitting your message!&quot;);
+                                    } else {
+<span class="nc" id="L75">                                        sender.SendMessage(input.nextLine());</span>
+                                    }
+                                } else {
+<span class="nc" id="L78">                                    input.nextLine();</span>
+                                }
+                            }
+<span class="nc" id="L81">                        });</span>
+
+<span class="nc" id="L83">        sendMessages.start();</span>
+
+<span class="nc" id="L85">        getMessages();</span>
+
+<span class="nc" id="L87">        System.out.println(&quot;closing out&quot;);</span>
+
+        /* clean exit */
+<span class="nc" id="L90">        sender.close();</span>
+<span class="nc" id="L91">        reader.close();</span>
+
+        try {
+<span class="nc" id="L94">            sendMessages.join();</span>
+<span class="nc" id="L95">        } catch (InterruptedException ie) {</span>
+<span class="nc" id="L96">            ie.printStackTrace();</span>
+<span class="nc" id="L97">        }</span>
+<span class="nc" id="L98">    }</span>
+
+    private UsernameRequest getUsername() {
+        while (true) {
+<span class="nc" id="L102">            System.out.println(&quot;Do you have a username?&quot;);</span>
+<span class="nc" id="L103">            String hasUsername = input.nextLine();</span>
+<span class="nc bnc" id="L104" title="All 3 branches missed.">            switch (hasUsername) {</span>
+                case &quot;n&quot;: {
+<span class="nc" id="L106">                    System.out.print(&quot;Please enter a username: &quot;);</span>
+<span class="nc" id="L107">                    return UsernameRequest.create(input.nextLine(),</span>
+                            false);
+                }
+                case &quot;y&quot;: {
+<span class="nc" id="L111">                    System.out.print(&quot;Please enter *your* username: &quot;);</span>
+<span class="nc" id="L112">                    return UsernameRequest.create(input.nextLine(),</span>
+                            true);
+                }
+                default:
+<span class="nc" id="L116">                    System.out.println(&quot;Invalid selection; please try &quot; +</span>
+                            &quot;again!&quot;);
+            }
+<span class="nc" id="L119">        }</span>
+    }
+
+    private void getMessages() {
+        do {
+<span class="nc" id="L124">            Optional&lt;JSONObject&gt; message =</span>
+<span class="nc" id="L125">                    reader.ReadMessage()</span>
+<span class="nc" id="L126">                            .flatMap(m -&gt; Optional.of(new JSONObject(m)));</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            if (message.isPresent()) {</span>
+<span class="nc" id="L128">                String parsedSender = message.get()</span>
+<span class="nc" id="L129">                        .getString(&quot;sender&quot;);</span>
+<span class="nc" id="L130">                String parsedMsg = message.get()</span>
+<span class="nc" id="L131">                        .getString(&quot;msg&quot;);</span>
+
+                // TODO: Not let clients close other clients.
+<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (parsedMsg.equals(&quot;exit&quot;)) {</span>
+<span class="nc" id="L135">                    return;</span>
+                }
+<span class="nc" id="L137">                System.out.println(parsedSender + &quot;: &quot; + parsedMsg);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                if (textToSpeechClient != null) {</span>
+<span class="nc" id="L139">                    textToSpeechClient.getAudio(parsedMsg)</span>
+<span class="nc" id="L140">                            .ifPresent(AudioUtil::play);</span>
+                }
+            }
+<span class="nc" id="L143">        } while (true);</span>
+    }
+
+    @Override
+    public void close() {
+<span class="nc" id="L148">        sender.close();</span>
+<span class="nc" id="L149">        reader.close();</span>
+<span class="nc" id="L150">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

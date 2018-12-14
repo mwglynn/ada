@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="5.6.1" timestamp="2018-12-14T12:41:22.994">
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\AdaServer.java">
+<violation beginline="65" endline="67" begincolumn="15" endcolumn="13" rule="EmptyCatchBlock" ruleset="Empty Code" package="ada" class="AdaServer" method="ListenForNewConnections" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\AdaServerMain.java">
+<violation beginline="27" endline="28" begincolumn="57" endcolumn="37" rule="EmptyWhileStmt" ruleset="Empty Code" package="ada" class="AdaServerMain" method="main" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyWhileStmt" priority="3">
+Avoid empty while statements
+</violation>
+</file>
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\NetworkSocketClient.java">
+<violation beginline="54" endline="56" begincolumn="11" endcolumn="9" rule="EmptyCatchBlock" ruleset="Empty Code" package="ada" class="NetworkSocketClient" method="WriteToSocket" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/empty.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\gui\ChatForm.java">
+<violation beginline="7" endline="7" begincolumn="20" endcolumn="25" rule="UnusedPrivateField" ruleset="Unused Code" package="ada.gui" class="ChatForm" variable="table1" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'table1'.
+</violation>
+<violation beginline="8" endline="8" begincolumn="22" endcolumn="22" rule="UnusedPrivateField" ruleset="Unused Code" package="ada.gui" class="ChatForm" variable="c" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'c'.
+</violation>
+</file>
+<file name="C:\Users\riva\Documents\git\ada\src\main\java\ada\gui\ClientLogin.java">
+<violation beginline="11" endline="11" begincolumn="24" endcolumn="33" rule="UnusedPrivateField" ruleset="Unused Code" package="ada.gui" class="ClientLogin" variable="textField1" externalInfoUrl="https://pmd.github.io/pmd-5.6.1/pmd-java/rules/java/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'textField1'.
+</violation>
+</file>
+</pmd>

@@ -1,0 +1,8 @@
+ada\texttospeech\AdaTextToSpeechClientTest.class
+ada\AdaServer_Test.class
+ada\NetworkSocketClient_Test.class
+ada\Messages_inputIntegration_Test.class
+ada\postgresql\AdaDbMessagesTest.class
+ada\UsernameMessageTest.class
+ada\postgresql\AdaDbUserTests.class
+ada\texttospeech\AudioUtilTest.class
