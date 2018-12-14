@@ -30,7 +30,7 @@ Class assignments may be found [here](https://github.com/LooseScruz/ada/tree/mas
 
 Please see the following sections for step by step instructions on how to build, test, install and operate this application.
 
-### Usage Instructions - operating
+## Usage Instructions - operating
 Follow the installation instructions for Postgres and text to speech. Both of these services should be install and running prior to using ada. Currently, ada assumes that your username and password are postgres, and that you have a Google Cloud account with sufficient credits.  
 
 - If AdaServer is not running in the cloud, build and run ada.AdaServer:
@@ -40,14 +40,14 @@ Follow the installation instructions for Postgres and text to speech. Both of th
     - use keyboard input to communicate among the clients:
 ```mvn exec java@Client```
 
-When a client is up, it will prompt you to enter username information (User Story 2). At that point you can start sending messages to other clients (User Story 1), which uses text to speech (User Story 3) to audibly speak received messages. If you type `:history:` to see your chat history (User Story 4).
+When a client is up, it will prompt you to enter username information (User Story 2). At that point you can start sending messages to other clients (User Story 1), which uses text to speech (User Story 3) to audibly speak received messages. If you type `:history:`, you will see your chat history appear (User Story 4).
 
-### Text to Speech
+## Text to Speech
 
 Set GOOGLE_APPLICATION_CREDENTIALS by following the instructions here:
 https://cloud.google.com/docs/authentication/getting-started
 
-### Database 
+## Database 
 
 Postgres will be used. It should be installed for the database to function properly. Please follow Postgres instructions for your respective operating system. https://www.postgresql.org
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS adaChat (
 
 # Misc.
 
-### Software Engineering Principles 
+## Software Engineering Principles 
 [![Build Status](https://travis-ci.org/LooseScruz/ada.svg?branch=master)](https://travis-ci.org/LooseScruz/ada)
 
 
@@ -91,7 +91,7 @@ Static Analysis:                PMD
 Unit Testing:                   Junit
 ```
 
-### pre-commit and post-commit
+## pre-commit and post-commit
 
 ```$xslt
 Pre-commit:                     see /PRECOMMIT
@@ -103,7 +103,7 @@ Post-commit:			see /POSTCOMMIT
                                 - mvn clean validate compile verify
 ```
 
-### Reporting
+## Reporting
 
 ```$xslt
 Code Coverage			/codeCoverage/jacoco (latest version is zipped)
