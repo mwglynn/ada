@@ -127,6 +127,39 @@ public class AdaDbUserTests {
         Assert.assertTrue(receiver_history.contains(msg));
     }
 
+    @Test
+    public void query_ObtainsMultipleSentMessages() throws SQLException {
+        String sender = "Lina";
+        String receiver = "Clemency";
+        String msg1 = "LoveLoveLove";
+        String msg2 = "SecretEvilinsecurities";
+
+        TEST_DB.createUser(sender);
+        TEST_DB.createUser(receiver);
+
+        TEST_DB.insert(new JSONObject().put("sender",
+                sender)
+                        .put("msg",
+                                msg1),
+                receiver);
+        TEST_DB.insert(new JSONObject().put("sender",
+                sender)
+                        .put("msg",
+                                msg2),
+                receiver);
+
+
+        String sender_history = TEST_DB.Query(sender);
+        Assert.assertTrue(sender_history.contains(sender));
+        Assert.assertTrue(sender_history.contains(msg1));
+        Assert.assertTrue(sender_history.contains(msg2));
+
+        String receiver_history = TEST_DB.Query(receiver);
+        Assert.assertTrue(receiver_history.contains(sender));
+        Assert.assertTrue(receiver_history.contains(msg1));
+        Assert.assertTrue(receiver_history.contains(msg2));
+    }
+
 
     @Test
     public void query_weirdUsername_ObtainsSentMessages() throws SQLException {
