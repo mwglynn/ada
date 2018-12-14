@@ -100,6 +100,83 @@ public class AdaDbUserTests {
         TEST_DB.insert(jobj, test_user);
     }
 
+    @Test
+    public void query_ObtainsSentMessages() throws SQLException {
+        String sender = "Lina";
+        String receiver = "Clemency";
+        String msg = "LoveLoveLove";
+
+        TEST_DB.createUser(sender);
+        TEST_DB.createUser(receiver);
+
+        JSONObject jobj = new JSONObject();
+        jobj.put("sender",
+                sender);
+        jobj.put("msg",
+                msg);
+
+        TEST_DB.insert(jobj,
+                receiver);
+
+        String sender_history = TEST_DB.Query(sender);
+        Assert.assertTrue(sender_history.contains(sender));
+        Assert.assertTrue(sender_history.contains(msg));
+
+        String receiver_history = TEST_DB.Query(receiver);
+        Assert.assertTrue(receiver_history.contains(sender));
+        Assert.assertTrue(receiver_history.contains(msg));
+    }
+
+
+    @Test
+    public void query_weirdUsername_ObtainsSentMessages() throws SQLException {
+        String sender = "Lina";
+        String receiver = "Sae'lira;";
+        String msg = "LoveLoveLove";
+
+        TEST_DB.createUser(sender);
+        TEST_DB.createUser(receiver);
+
+        JSONObject jobj = new JSONObject();
+        jobj.put("sender",
+                sender);
+        jobj.put("msg",
+                msg);
+
+        TEST_DB.insert(jobj,
+                receiver);
+
+        String sender_history = TEST_DB.Query(sender);
+        Assert.assertTrue(sender_history.contains(sender));
+        Assert.assertTrue(sender_history.contains(msg));
+
+        String receiver_history = TEST_DB.Query(receiver);
+        Assert.assertTrue(receiver_history.contains(sender));
+        Assert.assertTrue(receiver_history.contains(msg));
+    }
+
+    @Test
+    public void query_noHistory_returnsEmpty() throws SQLException {
+        String sender = "Lina";
+        String receiver = "Clemency;";
+        String msg = "LoveLoveLove";
+
+        TEST_DB.createUser(sender);
+        TEST_DB.createUser(receiver);
+
+        String sender_history = TEST_DB.Query(sender);
+        Assert.assertTrue(sender_history.isEmpty());
+
+        String receiver_history = TEST_DB.Query(receiver);
+        Assert.assertTrue(receiver_history.isEmpty());
+    }
+
+    @Test
+    public void query_nonExistingUser_doesNotFailAndReturnsEmpty() throws SQLException {
+        Assert.assertTrue(TEST_DB.Query("Waitwho")
+                .isEmpty());
+    }
+
     @After
     public void tearDown() {
         TEST_DB.clear();
