@@ -55,13 +55,13 @@ Here's some background information on our schema:
 ```$sql
 ---------------------------------------------------/* Creation */
 
-CREATE TABLE IF NOT EXISTS adaUser (
+CREATE TABLE IF NOT EXISTS adausertable (
 	ID SERIAL NOT NULL,			-- unique identification 
 	userName VARCHAR(255) UNIQUE NOT NULL, 	-- user picks
 	PRIMARY KEY (ID, userName)		-- we may have multiple users with the same userName
 );
 
-CREATE TABLE IF NOT EXISTS adaChat (
+CREATE TABLE IF NOT EXISTS adachattable (
 	ID SERIAL NOT NULL,			-- a unique identifier
 	time TIME NOT NULL,			-- pulled from postgres function
 	date DATE NOT NULL,			-- pulled from postgres function
