@@ -35,11 +35,13 @@ Follow the installation instructions for Postgres and text to speech. Both of th
 
 - If AdaServer is not running in the cloud, build and run ada.AdaServer:
 ```mvn exec java@Server```
+
 or, using the GUI, "Run" `AdaServerMain` which is a driver for `AdaServer`. This will validate or create the Postgres tables on initialization. 
 
 - Build and run more than one ada.AdaClient
     - use keyboard input to communicate among the clients:
 ```mvn exec java@Client```
+
 or, using the GUI, "Run" `AdaClientMain` which is a driver for `AdaClient`.
 
 When a client is up, it will prompt you to enter username information (User Story 2). At that point you can start sending messages to other clients (User Story 1), which uses text to speech (User Story 3) to audibly speak received messages. If you type `:history:`, you will see your chat history appear (User Story 4).
