@@ -30,7 +30,7 @@ Class assignments may be found [here](https://github.com/LooseScruz/ada/tree/mas
 
 Please see the following sections for step by step instructions on how to build, test, install and operate this application.
 
-### Usage Instructions - operating
+# Usage Instructions - operating
 Follow the installation instructions for Postgres and text to speech. Both of these services should be install and running prior to using ada. Currently, ada assumes that your username and password are postgres, and that you have a Google Cloud account with sufficient credits.  
 
 - If AdaServer is not running in the cloud, build and run ada.AdaServer:
