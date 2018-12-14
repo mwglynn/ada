@@ -9,6 +9,8 @@ import org.junit.runners.JUnit4;
 
 import java.sql.SQLException;
 
+import static java.sql.DriverManager.getConnection;
+
 /**
  * Tests for the AdaDB user logic.
  */
@@ -30,15 +32,15 @@ public class AdaDbUserTests {
         TEST_DB.initPostgres();
     }
 
+    @Test
+    public void test_validUser_Succeeds() throws Exception {
+        Class.forName("org.postgresql.Driver");
+        getConnection(TEST_HOST, DATABASE_USERNAME, DATABASE_PASSWORD);
+    }
+
     /**
      * test user names (manually remove entries later)
      */
-    @Test
-    public void test_checkUser_checksForNonexistentUser() throws SQLException {
-        Assert.assertFalse(TEST_DB.containsUser("Max"));
-    }
-
-
     @Test
     public void test_checkUser_checksForExistingUser() throws SQLException {
         Assert.assertFalse(TEST_DB.containsUser("Castille"));
@@ -60,27 +62,9 @@ public class AdaDbUserTests {
     }
 
     @Test
-    public void createUser_existing_returnsFalse() throws SQLException {
+    public void test_createExistingUser_returnsFalse() throws SQLException {
         Assert.assertTrue(TEST_DB.createUser("frerin"));
         Assert.assertFalse(TEST_DB.createUser("frerin"));
-    }
-
-    @Test
-    public void insertValidMessage_succeeds() throws SQLException {
-        String sender = "Astolat";
-        String receiver = "Lancelot";
-        String msg = "I prefer oceans, actually.";
-        TEST_DB.createUser(sender);
-        TEST_DB.createUser(receiver);
-
-        TEST_DB.insert(new JSONObject().put("sender",
-                sender)
-                        .put("msg",
-                                msg),
-                receiver);
-        String history = TEST_DB.Query(receiver);
-        Assert.assertTrue(history.contains(sender));
-        Assert.assertTrue(history.contains(msg));
     }
 
 
@@ -91,21 +75,17 @@ public class AdaDbUserTests {
     public void insertMessage_validSql_succeedsAndDoesNotDestroyDatabase() throws SQLException {
         String sender = "Lina";
         String receiver = "Clemency";
-        String msg = "DROP table adaUser CASCADE;";
 
         TEST_DB.createUser(sender);
         TEST_DB.createUser(receiver);
 
         JSONObject jobj = new JSONObject();
         jobj.put("sender", sender);
-        jobj.put("msg",
-                msg);
+        jobj.put("msg", "DROP table adaUser CASCADE;");
 
         TEST_DB.insert(jobj, receiver);
 
-        String history = TEST_DB.Query(receiver);
-        Assert.assertTrue(history.contains(sender));
-        Assert.assertTrue(history.contains(msg));
+        Assert.assertTrue(TEST_DB.containsUser(sender));
     }
 
     @Test

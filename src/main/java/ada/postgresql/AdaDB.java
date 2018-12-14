@@ -34,7 +34,7 @@ public class AdaDB {
         }
     }
 
-    Connection getConnection() throws SQLException {
+    private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(
                 "jdbc:postgresql://" + HOST + ":5432/",
                 "postgres",
