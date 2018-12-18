@@ -66,13 +66,14 @@ public class AdaClient implements Closeable {
                         () -> {
                             while (!Thread.interrupted()) {
                                 if (input.hasNext()) {
-                                    if (input.nextLine()
-                                            .length() > 3000) {
+                                    String nextLine = input.nextLine();
+                                    if (nextLine.length() > 3000) {
                                         System.out.println("Error: Line " +
                                                 "length exceeded. Try " +
                                                 "splitting your message!");
                                     } else {
-                                        sender.SendMessage(input.nextLine());
+
+                                        sender.SendMessage(nextLine);
                                     }
                                 } else {
                                     input.nextLine();
