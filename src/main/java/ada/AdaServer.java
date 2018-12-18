@@ -99,7 +99,7 @@ class AdaServer implements Closeable {
             msg = connection.reader.ReadMessage();
             if (msg.isPresent()) {
                 if (msg.get()
-                        .equals("\\q")) {
+                        .equals("SecretExitMessage")) {
                     return false;
                 } else if (msg.get()
                         .toLowerCase()
