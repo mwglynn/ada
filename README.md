@@ -40,7 +40,7 @@ Follow the installation instructions for Postgres and text to speech. Both of th
 
 - Build and run more than one ada.AdaClient
     - use keyboard input to communicate among the clients:
-```mvn exec:java@Client``` (Uses the Server IP as an argument-- if running the server locally-- `mvn exec:java -Dexec.mainClass="ada.AdaClient"`)
+```mvn exec:java@Client``` (Uses the Server IP as an argument-- if running the server locally-- `mvn exec:java -Dexec.mainClass="ada.AdaClientMain"`)
 
 *or, using an IDE like IntelliJ, "Run" `AdaClientMain` which is a driver for `AdaClient`.*
 
