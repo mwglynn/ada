@@ -31,18 +31,18 @@ Class assignments may be found [here](https://github.com/LooseScruz/ada/tree/mas
 Please see the following sections for step by step instructions on how to build, test, install and operate this application.
 
 # Usage Instructions - operating
-Follow the installation instructions for Postgres and text to speech. Both of these services should be install and running prior to using ada. Currently, ada assumes that your username and password are postgres, and that you have a Google Cloud account with sufficient credits.  
+Follow the installation instructions for Postgres and text to speech. Both of these services should be install and running prior to using ada. Currently, ada assumes that your username and password are postgres, and that you have a Google Cloud account with sufficient credits (not having one will not stop you from running the app, but will prevent you from hearing chats).
 
 - If AdaServer is not running in the cloud, build and run ada.AdaServer:
-```mvn exec java@Server```
+```mvn exec:java@Server```
 
 *or, using a GUI like Intellij, "Run" `AdaServerMain` which is a driver for `AdaServer`. This will validate or create the Postgres tables on initialization.* 
 
 - Build and run more than one ada.AdaClient
     - use keyboard input to communicate among the clients:
-```mvn exec java@Client```
+```mvn exec:java@Client``` (Uses the Server IP as an argument-- if running the server locally-- `mvn exec:java -Dexec.mainClass="ada.AdaClient"`)
 
-*or, using a GUI like Intellij, "Run" `AdaClientMain` which is a driver for `AdaClient`.*
+*or, using an IDE like IntelliJ, "Run" `AdaClientMain` which is a driver for `AdaClient`.*
 
 When a client is up, it will prompt you to enter username information (User Story 2). At that point you can start sending messages to other clients (User Story 1), which uses text to speech (User Story 3) to audibly speak received messages. If you type `:history:`, you will see your chat history appear (User Story 4).
 
