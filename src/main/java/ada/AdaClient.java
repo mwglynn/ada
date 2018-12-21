@@ -18,14 +18,12 @@ public class AdaClient implements Closeable {
     private final AdaTextToSpeechClient textToSpeechClient;
     private final NetworkSender sender;
     private final NetworkReader reader;
-    private Scanner input;
+    private final Scanner input = new Scanner(System.in);
     private String username;
-    private volatile boolean keepSendingMessages = true;
 
     public AdaClient(
             AdaTextToSpeechClient textToSpeechClient,
             NetworkSocketClient client) {
-        input = new Scanner(System.in);
         this.textToSpeechClient = textToSpeechClient;
         sender = new NetworkSender(client);
         reader = new NetworkReader(client);
@@ -73,10 +71,8 @@ public class AdaClient implements Closeable {
                                         System.out.println("Error: Line " +
                                                 "length exceeded. Try " +
                                                 "splitting your message!");
-                                    } else if (nextLine.equals(":exit:")) {
-                                        keepSendingMessages = false;
-                                        break;
                                     } else {
+
                                         sender.SendMessage(nextLine);
                                     }
                                 } else {
@@ -145,13 +141,11 @@ public class AdaClient implements Closeable {
                             .ifPresent(AudioUtil::play);
                 }
             }
-        } while (keepSendingMessages);
+        } while (true);
     }
 
     @Override
     public void close() {
-        // TODO: Make this something that can't actually be sent by a user
-        sender.SendMessage("SecretExitMessage");
         sender.close();
         reader.close();
     }
