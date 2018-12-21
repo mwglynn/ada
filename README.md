@@ -48,7 +48,7 @@ When a client is up, it will prompt you to enter username information (User Stor
 
 # Usage Instructions - testing
 
-`mvn test`
+Run `mvn test`
 
 ### Text to Speech
 
