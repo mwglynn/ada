@@ -46,6 +46,10 @@ Follow the installation instructions for Postgres and text to speech. Both of th
 
 When a client is up, it will prompt you to enter username information (User Story 2). At that point you can start sending messages to other clients (User Story 1), which uses text to speech (User Story 3) to audibly speak received messages. If you type `:history:`, you will see your chat history appear (User Story 4).
 
+# Usage Instructions - testing
+
+`mvn test`
+
 ### Text to Speech
 
 Set GOOGLE_APPLICATION_CREDENTIALS by following the instructions here:
